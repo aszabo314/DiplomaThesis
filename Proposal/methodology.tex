@@ -1,0 +1,24 @@
+\section{Methodology and Approach}
+
+The Aardvark platform already provides a point-cloud-rendering system, as well as an data structure for handling out-of-core point-clouds. As of now, this octree only stores position and color information for each point. The first goal is to extend the octree, so that it caches several other information for each point and cell.  For each cell the centroid is calculated and an rkd-tree is constructed \cite{tobler2011rkd}. Each point gets a normal assigned, which is calculated using Principal Component Analysis \cite{jolliffe2002principal} over a fixed neighborhood size. These steps are executed while building the cache of the point-cloud in order to bypass constant re-computation of this information. 
+\\
+\\
+The next step is to implement a basic picking procedure that selects single points. In order to pick only points that are rendered, the octree is traversed to the render horizon at most. If the bounding box of a node, projected to the screen, intersects with the pick radius, the node is collected as a candidate node. We then project then point to the screen and sieve out all points, whose distance is larger then the pick radius. Finally we pick the point closest to the cursor position. 
+\\
+\\
+The segmentation uses a pick ray from the camera position through the point of the cursor on the near plane. A user controlled focal distance controls a focal plane that is used to select candidate nodes for selection. The algorithm choose nodes, whose bounding boxes intersect the pick ray and the closest distance of the centroid to the focal plane is under a certain threshold. We again traverse the octree to the render horizon at most.
+\\
+\\
+The selection of a node is based on the work of Schnabel et al. presented in \cite{schnabel-2007-efficient}. The approach uses \textbf{RAN}dom \textbf{SA}mpling \textbf{C}onsens (RANSAC) \cite{fischler1981random} to create primitve shapes that fulfill a score function. This score is determined by the number of points in the neighborhood that roughly follow the curvature of the primitive shape.
+\\
+\\
+In order to extract geometric shapes which can be used for visualization and interaction, the boundary for each shape is extracted. The boundary describes the minimal connected area that includes all points that are assigned to the shape. Several approaches for boundary extraction are presented by Jenke et al. \cite{jenke2008surface}, Reisner-Kollmann et al. \cite{reisner2013reconstructing} and by Arikan et al. \cite{arikan-2013-osn}, 
+\\
+\\
+Designing interactions that use the geometric shapes is a key part of this thesis. As mentioned in Section \ref{sec:aim} picking points and selecting regions can be challenging. The geometric information is used to bypass the depth ambiguities of 2D selection metaphors and create simple selections that are constrained by the geometry. 
+Assisted Point Snapping improves the basic picking algorithm (Section \ref{sec:aim}) in the following way: 
+In the Assisted Picking workflow, only a subset of candidate points is considered. Based on the focal distance and cursor position, the algorithm selects the nearest geometric shape as support shape.  
+The set of candidate points now only consists of points that have been assigned to the support shape by the segmentation algorithm. 
+The user now picks points along a primitive shape, thus simplifying the interaction. Considering the overall reduction of candidate points, performance is improved as well. 
+\\
+This approach can be adapted to be used without focal distance. The geometric shape that is assigned to previously picked point functions as support shape. This way it is possible to select all points that are assigned to the same geometric shape with one interaction. 

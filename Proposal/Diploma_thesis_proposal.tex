@@ -20,69 +20,26 @@
 
 \maketitle
 
-\section{Motivation \& Problem Definition}
-Segmentation is a fundamental step in processing point-clouds. Clustering a point-cloud into neighboring regions can help the user to understand local and global structures. Moreover, it can be used to introduce semantic information into a unstructured data, providing the user with more interaction possibilities. Current solutions, such as presented in \cite{schnabel-2007-efficient}, \cite{schnabel-2007-ransac} can already produce precise segmentations of point-clouds. However, the runtime of these algorithms increases with the size of the point-cloud, so producing results for billions of points is not feasible in real-time. However, when looking at raw numbers, the approach by Schnabel et al. \cite{schnabel-2007-ransac} delivers promising results for point-clouds of smaller size (\textless 12.000 points) in a fraction of a second. 
-\\
-Point-cloud datasets have grown in size at such a rapid pace that they are now simply too large to fit into system memory, yet alone graphics card memory. Therefore new solutions for out-of-core representations have emerged. The point-cloud is stored in a cached file on the hard drive and therefore cannot be accessed directly. Based on a culling heuristic, chunks of point-cloud data are loaded into memory when being processed or rendered. This continuous swapping of data yields the memory bandwidth as another potential bottleneck when it comes to performance.
-\\
 
-This thesis presents a top-down approach on detecting shapes from a level-of-detail representation of a point-cloud. Instead of segmenting the whole point-cloud at once, we utilize the users input to extracting regions of interest that can be segmented within a fraction of a second, providing the user with immediate geometrical information on the currently focused area. Moreover, selecting points in point-clouds can be tedious and cumbersome. This thesis presents two interactions, that utilize the geometric information in order to streamline the users workflow. 
-
-
-\section{Aim of the Work}
-
-The target of this diploma thesis to implement a top-down shape detection algorithm that operates on a level-of-detail representation of a point-cloud, such that within a subset of the point-cloud shapes can be detected in near real-time. 
-This approach does not segment the whole point-cloud at once, but a current region of interest, controlled by the user with the cursor position and a focal distance. The point cloud is represented as an octree data structure that is capable of handling out-of-core memory updates for large point clouds. The data is stored in the leave nodes of the octree, inner nodes store a subset of points from its children, thus creating an efficient Level-of-Detail (LoD) representation. Using a LoD-heuristic paired with the users region of interest, a subset of nodes can be collected on which the segmentation algorithm should focus. 
-\\
-The segmentation algorithm is able to extract a minimal set of geometrical primitive shapes (plane, sphere, cylinder), such that each point can be assigned to one of those primitives with a good-enough possibility. This step will follow the algorithm proposed by Schnabel et al. in \cite{schnabel-2007-efficient} and \cite{schnabel-2007-ransac}. 
-\\
+\input{motivation}
+\input{aim}
+\input{methodology}
+\input{stateoftheart}
 
 
 
-% TODO
-% From shape to polygon
-% Collapse similar polygons
-% Guided Picking
-
-%Finding such primitives is one part of the segmentation, the second part is to collapse similar primitives together such that larger homogenous %structures are created. O-snap\cite{arikan-2013-osn} developed by  Arikan et al. at the VRVis proposes a guided approach on on snapping such polygons
-
-
-These shapes enrich the point-cloud with additional semantic information that can be utilized to assist the users' interactions. This thesis describes two exemplary interactions that are simplified by the use of semantic information. 
-\\
-Picking is the method of selecting a point from the point-cloud by using the cursors position as input. It is a challenge to hit the exact position with the cursor, which also contains a projected point. Snapping simplifies Picking by selecting the closest projected point to the cursor within a radius. However, this sometimes leads to the behavior that a point in the back is favored instead of a desired point in the foreground. \textit{Assisted point snapping} utilizes the geometric information of the currently focused region, such that the cursor preferably snaps to points that belong to the detected geometric shapes. 
-\\
-The second interaction deals with the selection of regions. The task of precisely selecting regions of interest in point-clouds can be tedious and frustrating. Using 2D-interaction metaphors only, it is challenging to select spatially neighboring points that share semantic information (e.g. \textit{points on the same plane}), as the system does not know the desired depth boundaries of the selection region. Interactions across multiple views are needed to achieve such a selection. \textit{Assisted region selection} performs a selection on the point-cloud, selecting all points that belong to a certain geometric shape, thus making it possible to interact via the detected shapes with the point-cloud, rather than the points directly. 
-
-
-\section{Methodology and Approach}
-
-The Aardvark platform already provides a point-cloud-rendering system, as well as an data structure for handling out-of-core point-clouds. As of now, this octree only stores position and color information for each point. The first goal is to extend the octree, so that it caches several other information for each point and cell.  For each cell the centroid is calculated and an rkd-tree is constructed \cite{tobler2011rkd}. Each point gets a normal assigned, which is calculated using Principal Component Analysis \cite{jolliffe2002principal} over a fixed neighborhood size. These steps are executed while building the cache of the point-cloud in order to bypass constant re-computation of this information. 
-\\
-\\
-The next step is to implement a basic picking algorithm in order to select single points. In order to pick only points that are rendered, the octree is traversed to the render horizon at most. If the bounding box of a node, projected to the screen, intersects with the pick radius, the node is collected as a candidate node. We then project then point to the screen and sieve out all points, whose distance is larger then the pick radius. Finally we pick the point closest to the cursor position. 
-\\
-\\
-The interactive segmentation uses a pick ray from the camera position through the point of the cursor on the near plane. A user controlled focal distance controls a focal plane that is used to select candidate nodes for selection. The algorithm choose nodes, whose bounding boxes intersect the pick ray and the closest distance of the centroid to the focal plane is under a certain threshold. We again traverse the octree to the render horizon at most.
-\\
-\\
-The selection of a node is based on the work of Schnabel et al. presented in \cite{schnabel-2007-efficient}. The approach uses \textbf{RAN}dom \textbf{SA}mpling \textbf{C}onsens (RANSAC) \cite{fischler1981random} to create primitve shapes that fulfill a score function. This score is determined by the number of points in the neighborhood that roughly follow the curvature of the primitive shape.
-\\
-\\
-In order to create a renderable geometry of those shapes the boundaries of the points on the shapes must be detected. Several approaches are presented by Jenke et al. \cite{jenke2008surface}, Reisner-Kollmann et al. \cite{reisner2013reconstructing} and by Arikan et al. \cite{arikan-2013-osn}, 
-\\
-\\
 
 
 
-\section{Structure of Work}
-\begin{itemize}
-	\item Introduction
-	\item Out-of-core representation of point clouds
-	\item User-based candidate node extraction
-	\item Extraction of geometrical primitives
-	\item Assited user interaction using extracted geometrical shapes
-\end{itemize}
-\section{State-of-the-Art}
+%\section{Structure of Work}
+%\begin{itemize}
+%	\item Introduction
+%	\item Out-of-core representation of point clouds
+%	\item User-based candidate node extraction
+%	\item Extraction of geometrical primitives
+%	\item Assited user interaction using extracted geometrical shapes
+%\end{itemize}
+%\section{State-of-the-Art}
 
 
 \section{Relevance to the Curriculum of Visual Computing}
