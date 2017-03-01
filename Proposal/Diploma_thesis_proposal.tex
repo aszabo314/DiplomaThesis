@@ -49,14 +49,30 @@ The segmentation algorithm is able to extract a minimal set of geometrical primi
 
 These shapes enrich the point-cloud with additional semantic information that can be utilized to assist the users' interactions. This thesis describes two exemplary interactions that are simplified by the use of semantic information. 
 \\
-Picking is the method of selecting a point from the point-cloud by using the cursors position as input. It is a challenge to hit the exact position with the cursor, which also contains a projected point. Snapping simplifies Picking by selecting the closest projected point to the cursor within a radius. However, this sometimes leads to the behavior that a point in the back is favored instead of a desired point in the foreground. Assisted point snapping utilizes the geometric information of the currently focused region, such that the cursor preferably snaps to points that belong to the detected geometric shapes. 
+Picking is the method of selecting a point from the point-cloud by using the cursors position as input. It is a challenge to hit the exact position with the cursor, which also contains a projected point. Snapping simplifies Picking by selecting the closest projected point to the cursor within a radius. However, this sometimes leads to the behavior that a point in the back is favored instead of a desired point in the foreground. \textit{Assisted point snapping} utilizes the geometric information of the currently focused region, such that the cursor preferably snaps to points that belong to the detected geometric shapes. 
 \\
-The second interaction deals with the selection of regions. The task of precisely selecting regions of interest in point-clouds can be tedious and frustrating. Using 2D-interaction metaphors only, it is challenging to select spatially neighboring points that share semantic information (e.g. \textit{points on the same plane}), as the system does not know the desired depth boundaries of the selection region. Interactions across multiple views are needed to achieve such a selection. Assisted region selection performs a selection on the point-cloud, selecting all points that belong to a certain geometric shape, thus making it possible to interact via the detected shapes with the point-cloud, rather than the points directly. 
-
-
+The second interaction deals with the selection of regions. The task of precisely selecting regions of interest in point-clouds can be tedious and frustrating. Using 2D-interaction metaphors only, it is challenging to select spatially neighboring points that share semantic information (e.g. \textit{points on the same plane}), as the system does not know the desired depth boundaries of the selection region. Interactions across multiple views are needed to achieve such a selection. \textit{Assisted region selection} performs a selection on the point-cloud, selecting all points that belong to a certain geometric shape, thus making it possible to interact via the detected shapes with the point-cloud, rather than the points directly. 
 
 
 \section{Methodology and Approach}
+
+The Aardvark platform already provides a point-cloud-rendering system, as well as an data structure for handling out-of-core point-clouds. As of now, this octree only stores position and color information for each point. The first goal is to extend the octree, so that it caches several other information for each point and cell.  For each cell the centroid is calculated and an rkd-tree is constructed \cite{tobler2011rkd}. Each point gets a normal assigned, which is calculated using Principal Component Analysis \cite{jolliffe2002principal} over a fixed neighborhood size. These steps are executed while building the cache of the point-cloud in order to bypass constant re-computation of this information. 
+\\
+\\
+The next step is to implement a basic picking algorithm in order to select single points. In order to pick only points that are rendered, the octree is traversed to the render horizon at most. If the bounding box of a node, projected to the screen, intersects with the pick radius, the node is collected as a candidate node. We then project then point to the screen and sieve out all points, whose distance is larger then the pick radius. Finally we pick the point closest to the cursor position. 
+\\
+\\
+The interactive segmentation uses a pick ray from the camera position through the point of the cursor on the near plane. A user controlled focal distance controls a focal plane that is used to select candidate nodes for selection. The algorithm choose nodes, whose bounding boxes intersect the pick ray and the closest distance of the centroid to the focal plane is under a certain threshold. We again traverse the octree to the render horizon at most.
+\\
+\\
+The selection of a node is based on the work of Schnabel et al. presented in \cite{schnabel-2007-efficient}. The approach uses \textbf{RAN}dom \textbf{SA}mpling \textbf{C}onsens (RANSAC) \cite{fischler1981random} to create primitve shapes that fulfill a score function. This score is determined by the number of points in the neighborhood that roughly follow the curvature of the primitive shape.
+\\
+\\
+In order to create a renderable geometry of those shapes the boundaries of the points on the shapes must be detected. Several approaches are presented by Jenke et al. \cite{jenke2008surface}, Reisner-Kollmann et al. \cite{reisner2013reconstructing} and by Arikan et al. \cite{arikan-2013-osn}, 
+\\
+\\
+
+
 
 \section{Structure of Work}
 \begin{itemize}
