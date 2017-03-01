@@ -24,3 +24,7 @@
 
 
 *.pdf
+*.loa
+*.glsdefs
+*.cls
+*.hd
