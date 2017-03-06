@@ -7,4 +7,6 @@ Schnabel et al. \cite{schnabel-2007-efficient} propose an automated solution tha
 \\
 GlobFit is a system by Li et al. \cite{li2011globfit} that aims to recover a set of locally fitted primitives, obtained by RANSAC, along with their global mutual relations. The authors work under the assumption that primitives occur repeatedly, so global relations are iteratively learned and enforced on the local relations. 
 
-Graph-based methods have the advantage of providing high accuracy
+Graph-based methods have the advantage of providing robust segmentation while being highly efficient. Golovinskiy et al. \cite{golovinskiy2009min} build a 3D graph from a point-cloud using k-nearest neighbors A soft penalty is used to extract the background and foreground and a min-cut is performed to detect the final segmented object interactively. 
+
+Strom et al. \cite{strom2010graph} extend the graph-theoretic segmentation method from \cite{felzenszwalb2004efficient} from image domain into point-cloud domain. This paper introduces a dynamic segment union criterion based on surface color and normals to produce a quality segmentation. 
