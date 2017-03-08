@@ -2,7 +2,7 @@
 \label{sec:aim}
 
 The target of this diploma thesis to implement a top-down shape detection algorithm that operates on a level-of-detail representation of a point-cloud, such that within a subset of the point-cloud shapes can be detected in near real-time. 
-This approach extracts regions of interest, indicated by the users curor, current viewport a focal distance. The point cloud is represented as an octree data structure that is capable of handling out-of-core memory updates of the dataset. The points are stored in the leave nodes of the octree, inner nodes store a subset of points from its children, thus creating an efficient Level-of-Detail (LoD) representation. Using a LoD-heuristic paired with the users region of interest, a subset of nodes can be collected on which the segmentation algorithm should focus. 
+This approach extracts regions of interest, indicated by the users curor, current viewport a focal distance. The point cloud is represented as an octree data structure that is capable of handling out-of-core memory updates of the dataset. The points are stored in the leave nodes of the octree, inner nodes store a subset of points from its children, thus creating an efficient LoD representation. Using a LoD-heuristic paired with the users region of interest, a subset of nodes can be collected on which the segmentation algorithm should focus. 
 \\
 The segmentation algorithm is able to extract a minimal set of geometrical primitive shapes (plane, sphere, cylinder), such that with a certain probability, each point can be assigned to one of those primitives shapes. This step will follow the algorithm proposed by Schnabel et al. in \cite{schnabel-2007-efficient} and \cite{schnabel-2007-ransac}. 
 \\
