@@ -2,11 +2,11 @@
 \label{sec:aim}
 The target of this diploma thesis is to utilize a shape detection algorithm for point-cloud to enrich the dataset with geometric information. This information is used to assist the user's interactions.
 \\
-The point-cloud is stored in an octree data structure that can handle out-of-core memory updates of the dataset. The points are stored in the leave nodes of the octree, inner nodes store a subset of points from its children, thus creating an multi-scale LoD representation of the point-cloud.
+The point-cloud is stored in an octree data structure that can handle out-of-core memory updates of the dataset. The points are stored in the leave nodes of the octree, inner nodes store a subset of points from its children, thus creating a multi-scale LoD representation of the point-cloud.
 \\
-The implemented technique selects an octree node of the octree as region of interest from the currently rendered part of the point-cloud, indicated by the user's cursor. For this subset of points the shape detection algorithm is able to produce results within interactive time ($<500ms$).
+The implemented technique selects an octree node of the octree the as region of interest from the currently rendered part of the point-cloud, indicated by the user's cursor. For this subset of points the shape detection algorithm is able to produce results within interactive time ($<500ms$).
 \\
-The shape detection in an octree node is based on the work of Schnabel et al. presented in \cite{schnabel-2007-efficient}. The approach uses \textbf{RAN}dom \textbf{SA}mpling \textbf{C}onsens (RANSAC) \cite{fischler1981random} to extract a minimal set primitve shapes that describe geometric structures. Each primitive fulfills a score function, which is determined by the number of points in the neighborhood that roughly follow the curvature of the primitive shape.
+The shape detection in an octree node is based on the work of Schnabel et al. presented in \cite{schnabel-2007-efficient}. The approach uses \textbf{RAN}dom \textbf{SA}mpling \textbf{C}onsens (RANSAC) \cite{fischler1981random} to extract a minimal set of primitive shapes that describe geometric structures. Each primitive fulfills a score function, which is determined by the number of points in the neighborhood that roughly follow the curvature of the primitive shape.
 \\
 These primitive shapes enrich the point-cloud with additional semantic information that can be utilized to assist the user's interactions. This thesis proposes three exemplary interactions that are simplified by the use of semantic information. 
 \\
@@ -21,4 +21,4 @@ The first way is to pick a point directly without geometric assistance, the syst
 The second way is to not pick a point, but rather pick a geometric shape and select all points that belong to this shape. 
 \\
 \subsection{Local LoD increase}
-To gain further insight in the data the user needs to locally increase the level-of-detail. This can be achieved by expanding the render horizon for the selected octree nodes. However, this increases the resolution within this node consistently, thus increasing the noise in the data as well. \textit{Local Lod increase} utilizes the geometric information and increases the  point resolution in an octree node for geometric primitives only
+To gain further insight into the data the user needs to locally increase the level-of-detail. This can be achieved by expanding the render horizon for the selected octree nodes. However, this increases the resolution within this node consistently, thus increasing the noise in the data as well. \textit{Local Lod increase} utilizes the geometric information and increases the  point resolution in an octree node for geometric primitives only

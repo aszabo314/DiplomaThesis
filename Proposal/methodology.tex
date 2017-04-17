@@ -1,16 +1,16 @@
 \section{Methodology and Approach}
 
-The Aardvark platform already provides a point-cloud-rendering system, as well as an data structure for handling out-of-core point-clouds. As of now, this octree only stores position and color information for each point. The aardvark also provides an extensive mathematical library which is used for ray casting and geometry intersection tests. 
+The Aardvark platform already provides a point-cloud-rendering system, as well as a data structure for handling out-of-core point-clouds. As of now, this octree only stores position and color information for each point. The aardvark also provides an extensive mathematical library which is used for ray casting and geometry intersection tests. 
 \\
 \begin{itemize}
 \item 
-The first step is to extend the octree datastructure to cache information rather than constantly re-computate. 
+The first step is to extend the octree data structure to cache information rather than performing constant re-computations. 
 \begin{itemize}
-	\item Calculate normal per point using Principal Component Analiysis\cite{jolliffe2002principal} 
-	\item Build rkd-tree\cite{tobler2011rkd} per octree node
+	\item Calculate normal per point using Principal Component Analiysis\cite{jolliffe2002principal}.
+	\item Build rkd-tree\cite{tobler2011rkd} per octree node.
 \end{itemize}
 \item 
-In order to draw comparisons between interaction techniques the first interaction to be implemented is a basic picking algorithm. We collect nodes that intersect the pick ray, transform each point to the screen and compare the distances to the cursor position. One goal is to identify tasks that can be executed parallel in order to maximize CPU-usage during interaction. 
+In order to draw comparisons between interaction techniques the first interaction to be implemented is a basic picking algorithm. We collect nodes that intersect the pick ray, transform each point to the screen and compare the distances to the cursor position. One goal is to identify tasks that can be executed parallel in order to maximize CPU-usage during the interaction. 
 \item 
 The identification of a region of interest is the next step. Again a raycast is performed. The result of this operation is one octree node that represents the current region of interest, which the user focuses on. In this subset of points, shapes are then detected using the algorithm by Schnabel et al.\cite{schnabel-2007-efficient}.
 \item
