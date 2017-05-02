@@ -1,21 +1,22 @@
 \section{Methodology and Approach}
 
-The Aardvark platform already provides a point-cloud-rendering system, as well as a data structure for handling out-of-core point-clouds. The aardvark also provides an extensive mathematical library which is used for ray casting and geometry intersection tests. 
+The Aardvark platform already provides a point-cloud rendering system, as well as a data structure for handling out-of-core point clouds. Aardvark also provides an extensive mathematical library, which is used for ray casting and geometry intersection tests. 
 \\
 \begin{itemize}
 \item 
 By now, the octree data structures stores only position and color information for each point. The first step is to extend the octree data structure to cache additional information in order to avoid constant re-computations. 
 \begin{itemize}
-	\item Calculate normal per point using Principal Component Analysis\cite{jolliffe2002principal}.
-	\item Build rkd-tree\cite{tobler2011rkd} per octree node.
+	\item Calculate normal per point using Principal Component Analysis \cite{jolliffe2002principal}.
+	\item In order to effiviently search for points within an octree node, a	
+	rkd-tree by Tobler \cite{tobler2011rkd} is built for every octree node.
 \end{itemize}
 \item 
-In order to draw comparisons between interaction techniques the first interaction to be implemented is a basic picking algorithm. We collect nodes that intersect the pick ray, transform each point to the screen and pick the point with the shortest distance to the cursor position. An additional goal is to identify tasks that can be executed parallel in order to maximize CPU-usage during the interaction. 
+In order to draw comparisons between interaction techniques, the first interaction to be implemented is a basic picking algorithm. We collect nodes that intersect the pick ray, transform each point to the screen and pick the point with the shortest distance to the cursor position. 
 \item 
-The identification of a region of interest is the next step. Again a raycast is performed. The result of this operation is one octree node that represents the current region of interest, which the user focuses on. In this subset of points, shapes are then detected using the algorithm by Schnabel et al.\cite{schnabel-2007-efficient}.
+The identification of a region of interest is the next step. Again a raycast is performed. The result of this operation is one octree node that represents the current region of interest, which the user focuses on. In this subset of points, shapes are then detected using the algorithm by Schnabel et al. \cite{schnabel-2007-efficient}.
 \item
-The next step of this thesis is to implement point/region selection techniques that utilize the geometric information of the point-cloud. 
-Firstly, the point picking is enhanced by preferably picking points on geometric primitives, thus eliminating possible depth ambiguities in the previous picking algorithm. 
+The next step of this thesis is to implement point/region selection techniques that utilize the geometric information of the point cloud. 
+First, point picking is enhanced by preferably picking points on geometric primitives, thus eliminating possible depth ambiguities in the previous picking algorithm. 
 The selection of regions based on geometric information is implemented as well.
 \item
 The final step is to implement the \textit{Local LoD increase} interaction. This  concept aims to assist the user by locally increasing the level of detail along a geometric primitive. 

@@ -1,21 +1,22 @@
 \section{State of the Art}
-Extensive research has been performed on shape detection and segmentation of point-clouds. Model-based methods aim to segment the point-cloud into a set of geometric shapes, where points belonging to the same shape share the same mathematical representation. 
+The most prominent goal for shape detection and segmentation research in point clouds is reconstruction of 3D objects. Extensive research has been performed with this goal in mind. 
 \\
-Tarsha-Kurdi\cite{tarsha2007hough} analyses the performance of 3D hough-transform and RANSAC for detecting roof planes from airborne laser data. The RANSAC proves to be more robust to noise and more efficient.
 \\
-Schnabel et al. \cite{schnabel-2007-efficient} propose an automated solution that utilizes RANSAC to extract a minimal set of primitive shapes that approximates the global structure of the point-cloud.  
+Schnabel et al. \cite{schnabel-2007-efficient} propose an automated solution that utilizes RANSAC to extract a minimal set of primitive shapes that approximates the global structure of the point cloud. This approach has evolved into one of the most prominent shape detection algorithms.
+\\
+\\
+Tarsha-Kurdi \cite{tarsha2007hough} analyses the performance of the 3D Hough-transform and RANSAC for detecting roof planes from airborne laser data. RANSAC proves to be more robust to noise and more efficient.
+\\
 \\
 GlobFit is a system by Li et al. \cite{li2011globfit} that aims to recover a set of locally fitted primitives, obtained by RANSAC, along with their global mutual relations. The authors work under the assumption that primitives occur repeatedly, so global relations are iteratively learned and enforced on the local relations. 
 \\
-O-Snap by Arikan et al. \cite{arikan-2013-osn} utilizes Schnabel's algorithm to extract an initial model from a point-cloud used in a reconstruction and modeling pipeline. Local adjacency relations of the extracted shapes is used to snap polygon elements together, while simultaneously fitting the input point cloud to ensure the planarity of the polygons. 
-
-Graph-based methods have the advantage of providing robust segmentation while being highly efficient. Golovinskiy et al. \cite{golovinskiy2009min} build a 3D graph from a point-cloud using k-nearest neighbors A soft penalty is used to extract the background and foreground and a min-cut is performed to detect the final segmented object interactively. 
-
-Strom et al. \cite{strom2010graph} extend the graph-theoretic segmentation method from \cite{felzenszwalb2004efficient} from image domain into point-cloud domain. This paper introduces a dynamic segment union criterion based on surface color and normals to produce a quality segmentation. 
-
-Qiu and Neumann propose an exemplar-based 3D shape segmentation algorithm  \cite{qiu2016exemplar}. The approach makes full use of pre-segmented example shapes to guide the segmentation of target shapes. This machine learning method only needs a relatively small training set of about 20 examples per class.  
-
-Lastly, Hackel et al. \cite{hackel2016fast} propose a fast semantic segmentation approach for point-clouds with strongly varying density. The authors assign point-wise semantic labels based on appropriate definitions of a point's multi-scale neighborhood, thus obtaining an expressive feature set. 
-By extracting semantic classification at an early stage, the information can later be used to provide class-specific a priori models for shape detection and object extraction. 
+\\
+O-Snap by Arikan et al. \cite{arikan-2013-osn} utilizes Schnabel's algorithm to extract an initial model from a point cloud used in a reconstruction and modeling pipeline. Local adjacency relations of the extracted shapes are used to snap polygon elements together, while simultaneously fitting the input point cloud to ensure the planarity of the polygons. 
+\\
+\\
+Golvinskiy et al. \cite{golovinskiy2009shape} utilize graph-based methods to recognize shapes in urban environments in 3D point clouds. The authors are able to detect objects, such as cars, newspaper boxes and traffic lights. They create potential object locations by clustering nearby points, before the point cloud is segmented into foreground an background. For each cluster a feature vector is built, prior to using it as input for a trained classifier. 
+\\
+\\
+Lastly, Oesau et al. \cite{oesau2016planar} propose an alternative approach to detect planar shapes in point clouds using region growing. A shape is represented as a set of points and an associated fitting plane. Points from the neighborhood are added consecutively to the plane or merging two shapes, thus growing the region. 
 
 

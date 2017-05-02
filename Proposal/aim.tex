@@ -1,27 +1,25 @@
 \section{Aim of the Work}
 \label{sec:aim}
-The target of this diploma thesis is to utilize a shape detection algorithm for point-clouds to enrich the dataset with geometric information. This shape detection is continuously performed on a subset of points, for which the algorithm delivers results within a fraction of a second. This information is used to assist the user's interactions.
+The target of this diploma thesis is to utilize a shape-detection algorithm for point-clouds to enrich the dataset with geometric information. This shape detection is continuously performed on a subset of points, for which the algorithm delivers results within a fraction of a second. This information is used to assist the user's interactions.
 \\
-The point-cloud is stored in an octree data structure that can handle out-of-core memory updates of the dataset. The points are stored in the leaf nodes of the octree. Inner nodes contain a subset of points from its children, thus creating a multi-scale LoD representation of the point-cloud.
+The point cloud is stored in an octree data structure that can handle out-of-core memory updates of the dataset. The points are stored in the leaf nodes of the octree. Inner nodes contain a subset of points from its children, thus creating a multi-scale LoD representation of the point cloud.
 \\
-The implemented technique selects a node of the octree as region of interest from the currently rendered subset of the point-cloud, indicated by the user's cursor. For this subset the shape detection algorithm is able to produce results within interactive time ($<500ms$).
+The implemented technique selects a node of the octree as region of interest from the currently rendered subset of the point cloud, indicated by the user's cursor. For this subset the shape-detection algorithm is able to produce results within interactive time ($<500ms$).
 \\
-The shape detection in an octree node is based on the work of Schnabel et al. presented in \cite{schnabel-2007-efficient}. The approach uses \textbf{RAN}dom \textbf{SA}mpling \textbf{C}onsens (RANSAC) \cite{fischler1981random} to extract a minimal set of primitive shapes that describe geometric structures. Each shape fulfills a score function, which is determined by the number of points in the neighborhood that roughly follow the curvature of the primitive shape.
+The shape detection in an octree node is based on the work of Schnabel et al. \cite{schnabel-2007-efficient}. This approach uses \textbf{RAN}dom \textbf{SA}mpling \textbf{C}onsens (RANSAC) \cite{fischler1981random} to extract a minimal set of primitive shapes that describe geometric structures. Each shape is build from a set of support points, which roughly follow the curvature of the primitive shape. 
 \\
 In order to extract geometric shapes that can be used for visualization and interaction, the boundary for each shape is extracted. The boundary describes the minimal connected area that includes all points assigned to one shape. Several approaches for boundary extraction are presented by Jenke et al. \cite{jenke2008surface},
-Reisner-Kollmann et al. \cite{reisner2013reconstructing} and by Arikan et al. \cite{arikan-2013-osn}.
+Reisner-Kollmann et al. \cite{reisner2013reconstructing} and Arikan et al. \cite{arikan-2013-osn}.
 \\
-These primitive shapes enrich the point-cloud with additional semantic information that can be utilized to assist the user's interactions. This thesis proposes three exemplary interactions that are simplified by the use of semantic information. 
+\subsection{Assisted user interactions}
+The user performs a raycast through the octree, where each intersecting node and shape gets a score assigned based on the LoD-level and position on the pick ray. The geometric shape with the best score is selected. The support points of this shape describe a small subset of the point cloud on which interactions can be performed intuitively. 
 \\
-\subsection{Assisted point snapping}
-Picking is the method of selecting a single point from the point-cloud by using the cursor's position as input. It is challenging to hit the exact position of a projected point with the cursor. Snapping simplifies Picking by selecting the closest point to the cursor within a pick radius in pixel space. However, this can lead to the behavior that a point in the back is favored instead of a desired point in the foreground. 
-\textit{Assisted point snapping} utilizes the geometric information of the currently focused region, such that the cursor preferably snaps to points that belong a detected primitive shape. Based on a custom focal distance the algorithm selects the nearest geometric shape that intersects with the pick ray as support shape. 
+\subsubsection{Assisted point snapping}
+Picking is the method of selecting a single point from the point cloud by using the cursor's position as input. It is challenging to hit the exact position of a projected point with the cursor. Snapping simplifies picking by selecting the closest point to the cursor within a pick radius in pixel space. However, this can lead to the behavior that a point in the back is favored instead of a desired point in the foreground. 
+\textit{Assisted point snapping} utilizes the geometric information of the currently focused region, such that the cursor preferably snaps to points that belong to a geometric shape. This can easily be achieved by performing the original picking approach on a subset of points, created by the shape's support points.
 \\
-\subsection{Assisted region selection}
-The second interaction deals with the selection of regions. The task of precisely selecting regions of interest in point-clouds can be tedious and cumbersome. Using 2D-interaction metaphors only, it is challenging to select spatially neighboring points that share semantic information (e.g. \textit{points on the same plane}), as the system does not know the desired depth boundaries of the selection region. Interactions across multiple views are needed to achieve such a selection. \textit{Assisted region selection} performs a selection on the point-cloud, selecting all points that belong to a certain geometric shape, thus making it possible to interact via the detected shapes with the point-cloud, rather than the points directly. 
-This technique is designed in two ways: 
-The first way is to pick a point directly without geometric assistance, the system then selects all points that share the same geometric shape.
-The second way is to not pick a point, but rather pick a geometric shape and select all points that belong to this shape. 
+\subsubsection{Assisted region selection}
+The second interaction deals with the selection of regions. The task of precisely selecting regions of interest in point clouds can be tedious and cumbersome. Using 2D-interaction metaphors only, it is challenging to select spatially neighboring points that share semantic information (e.g, \textit{points on the same plane}), as the system does not know the desired depth boundaries of the selection region. Interactions across multiple views are needed to achieve such a selection. \textit{Assisted region selection} performs a selection on the point cloud, that allows the user to select regions of points on the surface of a geometric shape, thus eliminating the depth-range problem of the original region selection approach. 
 \\
-\subsection{Local LoD increase}
-To gain further insight into the data the user needs to locally increase the level-of-detail. This can be achieved by expanding the render horizon for the selected octree nodes. However, this increases the resolution within this node consistently, thus increasing the noise in the data as well. \textit{Local Lod increase} utilizes the geometric information and increases the  point resolution in an octree node for geometric primitives only
+\subsubsection{Local LoD increase}
+To gain further insight into the data, the user sometimes needs to locally increase the level of detail. This can be achieved by increasing the level of detail manually beyond the LoD-culling border in the octree. This, however, increases the resolution within this node consistently, thus increasing the noise in the data as well. \textit{Local Lod increase} utilizes the geometric information and increases the  point resolution on the surface of a geometric shape. 
