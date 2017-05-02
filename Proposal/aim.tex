@@ -6,7 +6,7 @@ The point cloud is stored in an octree data structure that can handle out-of-cor
 \\
 The implemented technique selects a node of the octree as region of interest from the currently rendered subset of the point cloud, indicated by the user's cursor. For this subset the shape-detection algorithm is able to produce results within interactive time ($<500ms$).
 \\
-The shape detection in an octree node is based on the work of Schnabel et al. \cite{schnabel-2007-efficient}. This approach uses \textbf{RAN}dom \textbf{SA}mpling \textbf{C}onsens (RANSAC) \cite{fischler1981random} to extract a minimal set of primitive shapes that describe geometric structures. Each shape is build from a set of support points, which roughly follow the curvature of the primitive shape. 
+The shape detection in an octree node is based on the work of Schnabel et al. \cite{schnabel-2007-efficient}. This approach uses \textbf{RAN}dom \textbf{SA}mpling \textbf{C}onsens (RANSAC) \cite{fischler1981random} to extract a minimal set of primitive shapes that describe geometric structures. Each shape is built from a set of support points, which roughly follow the curvature of the primitive shape. 
 \\
 In order to extract geometric shapes that can be used for visualization and interaction, the boundary for each shape is extracted. The boundary describes the minimal connected area that includes all points assigned to one shape. Several approaches for boundary extraction are presented by Jenke et al. \cite{jenke2008surface},
 Reisner-Kollmann et al. \cite{reisner2013reconstructing} and Arikan et al. \cite{arikan-2013-osn}.
