@@ -52,12 +52,12 @@
 %  {title before name}{name}{title after name}{gender}
 %  where both titles are optional (i.e. can be given as empty brackets {}).
 \setauthor{}{\authorname}{BSc.}{male}
-\setadvisor{Pretitle}{Forename Surname}{Posttitle}{male}
+\setadvisor{Pretitle}{Michael Wimmer}{Posttitle}{male}
 
 % For bachelor and master theses:
-\setfirstassistant{Pretitle}{Forename Surname}{Posttitle}{male}
-\setsecondassistant{Pretitle}{Forename Surname}{Posttitle}{male}
-\setthirdassistant{Pretitle}{Forename Surname}{Posttitle}{male}
+%\setfirstassistant{Pretitle}{Forename Surname}{Posttitle}{male}
+%\setsecondassistant{Pretitle}{Forename Surname}{Posttitle}{male}
+%\setthirdassistant{Pretitle}{Forename Surname}{Posttitle}{male}
 
 % For dissertations:
 \setfirstreviewer{Pretitle}{Forename Surname}{Posttitle}{male}
@@ -131,14 +131,14 @@
 % Switch to arabic numbering and start the enumeration of chapters in the table of content.
 \mainmatter
 
-\chapter{Introduction}
-\todo{Enter your text here.}
 
-\chapter{Additional Chapter}
-\todo{Enter your text here.}
+\input{Introduction/Introduction.tex} 
+\input{Related_Work/Related_work.tex}
+\input{Data_Structures/Data_Structures.tex}
+\input{Shape_Detection/Shape_Detection.tex}
+\input{Interactions/Interactions.tex}
 
-% Remove following line for the final thesis.
-\input{intro.tex} % A short introduction to LaTeX.
+
 
 \backmatter
 
