@@ -1,1 +1,18 @@
 \chapter{Shape Detection}
+\section{Overview}
+
+
+\section{Efficient RANSAC for Point-Cloud Shape Detection}
+Schnabel et. al\cite{schnabel-2007-efficient} propose an automated way for detecting simple primitive shapes in unstructured point clouds. The point cloud is decomposed into a set of shapes and a set unused points. The algorithm supports the following primitive shapes: 
+\begin{itemize}
+	\item Plane
+	\item Sphere
+	\item Cylinder
+	\item Cone
+	\item Torus
+\end{itemize} 
+
+\textbf{RAN}dom \textbf{SA}mpling \textbf{C}onsens (RANSAC) was first discussed by Fischler and Bolles\cite{fischler1981random} as a paradigm for model fitting for image analysis and automated cartography. However, this approach can be generalized for points with an origin other than images. 
+
+The shape detection utilizes RANSAC to repeatedly take a minimal set of points that describe a primitive shape. Points that are within a distance $\epsilon$ and whose
+whose normals do not deviate from the normal of the shape more than a given angle $\alpha$.
