@@ -26,18 +26,22 @@ The task of precisely selecting regions or points of interest in point clouds ca
 select spatially neighboring points that follow the same curvature (e.g, points on a wall), as the system does not know the desired depth boundaries of the selection region. Interactions across multiple views are needed to achieve such a selection.  Methods that use 3D information, such as a volumetric brush by Weyrich et. al\cite{weyrich2004post}, can ease such tasks. By consulting the depth buffer each frame the brush follows the curvature of the geometry. However, by reading pixels from the GPU the rendering process is stalled. This technique reacts to occlusion such that the brush follows geometry in front of the wall, thus view changes are still required.
 
 
-
-
-
-
-
-
 %Point clouds often lack distinct geometric features such as normal vectors. Normal vectors are significant for shape detection, since they introduce information on the local curvature to the point cloud. Additional post-processing steps are needed to enrich the octree's nodes with additional information such as point density, centroids and a datastructure for efficient point queries. 
 
 
-
-
 \section{Contributions}
+The main contribution of this diploma thesis is the implementation of an alternative way of detecting shapes on multiple level-of-details in point clouds. Instead of performing shape detection on the complete point cloud at once, we use an approach that lets the user control the region in which shapes should be detected. By reducing those regions to a suitable size, a well-known shape detection algorithm can return meaningful results in interactive time, such that the user is presented with immediate feedback on his selection. 
+\\
+\\
+Shapes are detected on multiple level-of-details in the point cloud. In order to create larger connected shapes, a clustering algorithm that takes shapes from different level-of-details, is implemented to present the user information of larger scale. 
+\\
+\\
+This thesis proposes several improvements to commonly known user interactions. \textif{Point Picking} and \textit{Region Selection} are improved by consulting the local geometry of the point cloud to assist the user. By using a shape as support the interaction dimensions are reduced to the parameter space of the shapes, allowing to easily exclude unwanted points from interactions. 
+\\
+\\
+Additionally, we introduce a novel interaction technique that allows the user to locally increment the level-of-detail along a shape beyond the culling border. This helps the user to explore the structure of the point cloud in more detail. 
+
+
 \section{Structure of the Work}
 
 
