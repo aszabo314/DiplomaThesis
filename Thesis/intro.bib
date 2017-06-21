@@ -1,3 +1,21 @@
+@article{elseberg2013one,
+  title={One billion points in the cloud--an octree for efficient processing of 3D laser scans},
+  author={Elseberg, Jan and Borrmann, Dorit and N{\"u}chter, Andreas},
+  journal={ISPRS Journal of Photogrammetry and Remote Sensing},
+  volume={76},
+  pages={76--88},
+  year={2013},
+  publisher={Elsevier}
+}
+@inproceedings{rusu20113d,
+  title={3d is here: Point cloud library (pcl)},
+  author={Rusu, Radu Bogdan and Cousins, Steve},
+  booktitle={Robotics and Automation (ICRA), 2011 IEEE International Conference on},
+  pages={1--4},
+  year={2011},
+  organization={IEEE}
+}
+
 @article{marshall2001robust,
 	title={Robust segmentation of primitives from range data in the presence of geometric degeneracy},
 	author={Marshall, David and Lukacs, Gabor and Martin, Ralph},
@@ -7,6 +25,27 @@
 	pages={304--314},
 	year={2001},
 	publisher={IEEE}
+}
+
+@article{freeman1975determining,
+  title={Determining the minimum-area encasing rectangle for an arbitrary closed curve},
+  author={Freeman, Herbert and Shapira, Ruth},
+  journal={Communications of the ACM},
+  volume={18},
+  number={7},
+  pages={409--413},
+  year={1975},
+  publisher={ACM}
+}
+@article{andrew1979another,
+  title={Another efficient algorithm for convex hulls in two dimensions},
+  author={Andrew, Alex M},
+  journal={Information Processing Letters},
+  volume={9},
+  number={5},
+  pages={216--219},
+  year={1979},
+  publisher={Elsevier}
 }
 
 @article{fischler1981random,
@@ -44,6 +83,85 @@
 	classification, meshing, simplification, approximation and reverse engineering.}
 }
 
+@ARTICLE{schnabel-2007-ransac,
+	author = {Schnabel, Ruwen and Wahl, Roland and Klein, Reinhard},
+	title = {RANSAC Based Out-of-Core Point-Cloud Shape Detection for City-Modeling},
+	journal = {Schriftenreihe des DVW, Terrestrisches Laser-Scanning (TLS 2007)},
+	year = {2007},
+	abstract = {We describe an out-of-core version of our previous work on primitive shape detection in
+	point-clouds.}
+}
+
+@phdthesis{scheiblauer-thesis,
+  title =      "Interactions with Gigantic Point Clouds",
+  author =     "Claus Scheiblauer",
+  year =       "2014",
+  abstract =   "During the last decade the increased use of laser
+               range-scanners for sampling the environment has led to
+               gigantic point cloud data sets. Due to the size of such data
+               sets, tasks like viewing, editing, or presenting the data
+               have become a challenge per se, as the point data is too
+               large to fit completely into the main memory of a customary
+               computer system. In order to accomplish these tasks and
+               enable the interaction with gigantic point clouds on
+               consumer grade computer systems, this thesis presents novel
+               methods and data structures for efficiently dealing with
+               point cloud data sets consisting of more than 109 point
+               samples.   To be able to access point samples fast that are
+               stored on disk or in memory, they have to be spatially
+               ordered, and for this a data structure is proposed which
+               organizes the points samples in a level-of-detail hierarchy.
+               Point samples stored in this hierarchy cannot only be
+               rendered fast, but can also be edited, for example existing
+               points can be deleted from the hierarchy or new points can
+               be inserted. Furthermore, the data structure is memory
+               efficient, as it only uses the point samples from the
+               original data set. Therefore, the memory consumption of the
+               point samples on disk, when stored in this data structure,
+               is comparable to the original data set. A second data
+               structure is proposed for selecting points. This data
+               structure describes a volume inside which point samples are
+               considered to be selected, and this has the advantage that
+               the information about a selection does not have to be stored
+               at the point samples.   In addition to these two previously
+               mentioned data structures, which represent novel
+               contributions for point data visualization and manipulation,
+               methods for supporting the presentation of point data sets
+               are proposed. With these methods the user experience can be
+               enhanced when navigating through the data. One possibility
+               to do this is by using regional meshes that employ an
+               out-of-core texturing method to show details in the
+               mesoscopic scale on the surface of sampled objects, and
+               which are displayed together with point clouds. Another
+               possibility to increase the user experience is to use graphs
+               in 3D space, which helps users to orient themselves inside
+               point cloud models of large sites, where otherwise it would
+               be difficult to find the places of interest. Furthermore,
+               the quality of the displayed point cloud models can be
+               increased by using a point size heuristics that can mimic a
+               closed surface in areas that would otherwise appear
+               undersampled, by utilizing the density of the rendered
+               points in the different areas of the point cloud model.  
+               Finally, the use of point cloud models as a tool for
+               archaeological work is proposed. Since it becomes
+               increasingly common to document archaeologically interesting
+               monuments with laser scanners, the number application areas
+               of the resulting point clouds is raising as well. These
+               include, but are not limited to, new views of the monument
+               that are impossible when studying the monument on-site,
+               creating cuts and floor plans, or perform virtual
+               anastylosis.   All these previously mentioned methods and
+               data structures are implemented in a single software
+               application that has been developed during the course of
+               this thesis and can be used to interactively explore
+               gigantic point clouds.",
+  address =    "Favoritenstrasse 9-11/186, A-1040 Vienna, Austria",
+  school =     "Institute of Computer Graphics and Algorithms, Vienna
+               University of Technology",
+  keywords =   "point-based rendering, out-of-core rendering, data
+               structures, complexity analysis",
+  URL =        "https://www.cg.tuwien.ac.at/research/publications/2014/scheiblauer-thesis/",
+}
 @mastersthesis{SCHUETZ-2016-POT,
 	title =      "Potree: Rendering Large Point Clouds in Web Browsers",
 	author =     "Markus Sch{"u}tz",

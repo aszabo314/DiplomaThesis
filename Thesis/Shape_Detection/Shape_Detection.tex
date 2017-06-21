@@ -3,13 +3,12 @@
 The shape detection runs automatically in the background. It is designed such that the user receives imminent feedback of local geometry for the region under the mouse cursor. The approach utilizes an automated shape detection algorithm that is capable of detecting different types of primitive shapes. This algorithm is designed to find shapes in point clouds that consist of several million points within minutes. However, when looking at the performance for smaller samples, results can be achieved at interactive time rates. 
 Section \ref{sec:schnabel} describes the shape detection algorithm. 
 Shape detection is performed one small regions at once. Section \ref{sec:candidateNodes} describes a heuristic on how to choose such a region using the user's cursor position and view as input. This efficiently changes the usecase from an automated shape detection to a user-controlled shape detection. 
-In order to use the detected shapes for rendering and interactions, the shapes must be postprocessed. 
-Since some of the shapes are of infinite size the, those shapes need to be refitted to fit the corresponding support points. Section\ref{sec:Refitting} goes into detail for each shape. 
+In order to use the detected shapes for rendering and interactions, the shapes must be postprocessed. Since some of the shapes are of infinite size the, those shapes need to be refitted to fit the corresponding support points. Section\ref{sec:Refitting} goes into detail for each shape. 
 
 \section{Efficient RANSAC for Point-Cloud Shape Detection}
 \label{sec:schnabel}
 The section gives a brief overview over the algorithm used to detect primitive shapes. 
-Schnabel et. al\cite{schnabel-2007-efficient} propose an automated way for detecting simple primitive shapes in unstructured point clouds. The point cloud is decomposed into a set of shapes and a set unused points. The algorithm supports detection of planes, spheres, cylinders, cones, and tori. 
+Schnabel et. al\cite{schnabel-2007-efficient} propose an automated way for detecting simple primitive shapes in unstructured point clouds. The point cloud is decomposed into a set of shapes and a set of unused points. The algorithm supports detection of planes, spheres, cylinders, cones, and tori. 
 
 \textbf{RAN}dom \textbf{SA}mpling \textbf{C}onsens (RANSAC) was first discussed by Fischler and Bolles\cite{fischler1981random} as a paradigm for model fitting for image analysis and automated cartography. However, this approach can be generalized for points with an origin other than images. The shape detection utilizes RANSAC to repeatedly take a minimal set of points to build a primitive shape $\Psi$ and checks if the points in the region roughly follow the curvature of the shape. 
 
@@ -74,10 +73,49 @@ A raycast is performed, in order to select nodes that intersect with the cursor.
 The ray is constructed from the cursor's position on the near plane $p$ and the vector pointing from the camera to $p$. This ray is referred to as pick ray. 
 An octree is an ideal data structure to perform a raycast. If the parent does not intersect the ray, neither will the children. This can be used to accelerate the process and prematurely eliminate nodes. The raycast on the octree can be performed with logarithmic cost. The raycast collects all nodes that intersect the pick ray. 
 
-To choose the most suitable node as candidate node we eliminate all nodes from the raycast result that do not fulfill the previous constraints. For all remaining nodes a key is created from the LoD-level and the projected distance to the nearplane. The LoD-level is larger the smaller the node is and the more detail it contains. This heuristic favors nodes with larger LoD-level so that the user receives geometric information for the most detailed parts that he is currently exploring. The projected nearplane distance is used to select between nodes with the same LoD-level. The node closest to the nearplane is favored Algorithm \ref{alg:candidateNodeHeuristic} showcases the selection heuristic that is executed for each intersecting node that intersects the pick ray. 
+To choose the most suitable node as candidate node we eliminate all nodes from the raycast result that do not fulfill the previous constraints. The LoD-level is larger the smaller the node is. This heuristic favors nodes with larger LoD-level so that the user receives geometric information for the most detailed parts that are currently explored. The projected nearplane distance is used to select between nodes with the same LoD-level. The node closest to the nearplane is favored Algorithm ~\ref{alg:candidateNodeHeuristic} showcases the selection heuristic that is executed for each node that intersects the pick ray. It selects the node closest to the nearplane and the highest LoD-level. 
 
+\begin{algorithm}
+	
+	\KwData{raycastResults : OctreeNode[]}
+	\KwResult{node : OctreeNode}
+	node 	= null\;
+	level = 0\;
+	npd 	= 1.0\;
+\ForEach{currentNode in raycastResults}
+	{
+		isVisible = performViewFrustumCulling(node)\;
+		\If{isVisible}{
+			
+			currentNpd = calculateDistanceToNearPlane(node)	\;
+			currentLevel = node.getLodLevel()\;
+			\If{currentLevel > level \textbf{or} (currentLevel == level \textbf{and} currentNpd < npd)}{
+				node \leftarrow currentNode\;
+				
+				level \leftarrow currentLevel\;
+				
+				npd \leftarrow currentNpd\;
+				
+			}
+		}
+	}
+\caption{selectCandidateNode}
+\label{alg:candidateNodeHeuristic}
+\end{algorithm}
 
-
+The selection of a suitable candidate node is highly dependent on the camera's position. When zooming out, the camera moves away from the scene, thus reducing the render horizon and therefore reducing the maximum level-of-detail. By ranking different nodes that fulfill the candidate criteria, even when the view does not change, a multi-scale representation of the local geometry is constructed over time, creating a level-of-detail for primitive shapes as well. 
 
 \section{Refitting}
 \label{sec:Refitting}
+Planes, cylinder and cones are infinite shapes. Therefore, in order to use those shapes for rendering and interactions, it is necessary to create finite representations for each shape. Each shape is provided with the corresponding support points, thus those points can be used to refit the shape. 
+Spheres and Tori are finite by definition. Therefore they do not require to refitted. 
+
+\subsection{Refitting planes}
+Planes, however, are represented by a point and a vector. All support points are projected onto the plane, thus reducing the fitting problem to two dimensions. The procedure starts by computing the convex hull of the projected points with the help of Andrew's monotone chain 2d convex hull algorithm\cite{andrew1979another}. 
+More complex polygons can be computed, however, for this purpose, a quad is sufficient. This quad is obtained by using the minimum-bounding-rectangle algorithm by Freeman\cite{freeman1975determining}. 
+
+\subsection{Refitting cylinder}
+A cylinder is defined by a center $p$, direction vector $v$ and a radius $r$. The height of the cylinder is infinite. To create a finite representation that encloses all support points, the two points whose difference in height is maximum. This is achieved by projecting all points onto the axis $a = p + vt$ of the cylinder, and select the points $p_{min}$, where $t$ is minimum and $p_{max}$, where $t$ is maximum. The distance $d$ between $p_{min}$ and $p_{max}$ is the height of the enclosing cylinder. The cylinder is refitted such that the new center is set to $p' = p_{min}$ and the $d$ is encoded in the length of the new direction vector:$v' = \frac{v}{|v|}d$. The radius stays the same. 
+
+\subsection{Refitting cones}
+A cone is defined by it's apex $c$, axis direction $v$ and opening angle $\theta$. Similar to the cylinder, all support points are projected to the axis and the points $p_{min}, p_{max}$ with minimum and maximum $t$ are selected. Since the apex of a cone is fixed, the range cannot be encoded using $c$ and $v$. The range is stored separately and range checks are performed when rendering or interacting with cones. 
