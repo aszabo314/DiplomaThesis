@@ -3,15 +3,25 @@
 Creating new interactions is a key topic for this thesis. Many proven interaction techniques have emerged over time, such as \textit{Point Picking} or \textit{Region Selection}. 
 %% TODO: define pick ray
 
-\section{Shape-Assisted Point Picking}
+\section{Point Picking}
 
 \textit{Point Picking} describes an interaction, where the user is interested in selecting one point from the scene at a time. Usually, a second cursor is automatically moved to the next closest point on the nearplane. Only points within a certain pick radius $r$ are considered to be candidates. 
 The user only interacts with points that are presented on the screen and are in close proximity to the pick ray. Therefore the octree must be filtered such that only nodes are considered that are in close proximity to the pick ray. In ordinary way is to perform a raycast through the octree and collect all nodes that intersect the pick ray. 
-
 \\
 A simple way is to perform a raycast through the octree and collect all nodes whose bounding boxes intersect the pick ray. However, consider the case, that the pick ray does not intersect a node's bounding box, but the distance of the box to the ray is smaller than the pick radius. Some points might exist that are considered to be candidates, but due to the nature of a raycast, are discarded. This introduces the possibility that points that can be the pick result, are not considered. One solution to overcome this problem is to use a conecast instead. 
 \\
 A circle on the nearplane is the projection of a cone in world space. In order to compute the cone-box intersection for the conecast a plane is constructed from the cone's apex and direction. For the user interaction, this plane is the nearplane of the camera. The corners of the box are projected onto this plane and the convex hull polygon is calculated. The intersection then is determined by the intersection of the polygon with the pick circle. 
 \\
-Picking a point from a node can be achieved in various ways. A common way to introduce consistency over various distances, is to project the points to the nearplane and select the point with the shortest distance to the cursor's position. Projecting each point for the intersecting nodes can result in several thousand point transformations per frame. A way to improve the computation time is to use a datastructure, such as an rKdTree\cite{tobler2011rkd} to accelerate point queries. 
+Picking a point from a node can be achieved in various ways. A common way to introduce consistency over various depths, is to project the points to the nearplane and select the point with the shortest distance to the cursor's position. Projecting each point for the intersecting nodes can result in several thousand point transformations per frame. A way to improve the computation time is to use a datastructure, such as an rKdTree\cite{tobler2011rkd} to accelerate point queries. 
 \\
+
+\subsection{Shape-Assisted Point Picking}
+Picking comes with the disadvantage that all points are treated equally. Certain constellations of points can influence the picking interaction in a negative way. Points that occlude structures of interest force the user to change the view in order to pick the desired point. In some cases a point in the background is favored over a desired point on a structure. 
+ \textit{Shape-Assisted Point Picking} utilizes primitive shapes to let the user preferably pick a point that is part of a structure. The user selects a cluster of shapes which reduces the amount of possible candidate points to only those points that belong to this shape. 
+\\
+Instead of performing a cone- or raycast on the octree, only those nodes are taken into account, whose bounding boxes intersect the shape cluster, thus reducing the number of nodes. Points that are not in proximity to the intersection point of the pick ray with the shape cluster, are discarded, leaving only a handful of points. Those points are again projected onto the nearplane and the point closest to the cursor's position is picked. 
+\\
+If no point is picked, classic Point Picking can be executed to ensure a consistent picking interaction. 
+\\
+This interaction comes not only with interaction benefits, computation time also is drastically reduced. Usually a shape cluster consists of less nodes than a raycast since the cluster's extension is limited to a region in the point cloud. Points within a node are also reduced such that the expensive computations are executed only for candidate points. 
+
