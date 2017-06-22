@@ -1,9 +1,11 @@
-\chapter{Shape Detection}
+\chapter{User-controlled Shape Detection}
+\newpage
 \section{Overview}
-The shape detection runs automatically in the background. It is designed such that the user receives imminent feedback of local geometry for the region under the mouse cursor. The approach utilizes an automated shape detection algorithm that is capable of detecting different types of primitive shapes. This algorithm is designed to find shapes in point clouds that consist of several million points within minutes. However, when looking at the performance for smaller samples, results can be achieved at interactive time rates. 
-Section \ref{sec:schnabel} describes the shape detection algorithm. 
-Shape detection is performed one small regions at once. Section \ref{sec:candidateNodes} describes a heuristic on how to choose such a region using the user's cursor position and view as input. This efficiently changes the usecase from an automated shape detection to a user-controlled shape detection. 
-In order to use the detected shapes for rendering and interactions, the shapes must be postprocessed. Since some of the shapes are of infinite size the, those shapes need to be refitted to fit the corresponding support points. Section\ref{sec:Refitting} goes into detail for each shape. 
+The shape detection runs automatically in the background. It is designed in such a way that the user receives imminent feedback of local geometry for the region under the mouse cursor. The approach utilizes an automated shape detection algorithm that is capable of detecting different types of primitive shapes. This algorithm is designed to find shapes in point clouds that consist of several million points within minutes. However, when looking at the performance for smaller samples, results can be achieved at interactive time rates. Section \ref{sec:schnabel} describes the shape detection algorithm in detail. 
+\\
+Shape detection is performed one small regions only. Section \ref{sec:candidateNodes} describes a heuristic on how to choose such a region, using the user's cursor position and camera view as input. This effectively changes the task of shape detection from an automated approach to an user-controlled interaction.
+\\ 
+In order to use the detected shapes for rendering and interactions, the shapes must be postprocessed. Since some of the shapes are of infinite size, they need to be refitted to  encapsulate the corresponding support points and create a minimal boundary. Section\ref{sec:Refitting} describes this task. 
 
 \section{Efficient RANSAC for Point-Cloud Shape Detection}
 \label{sec:schnabel}
@@ -25,7 +27,7 @@ For each type of shape the following rule applies: A shape is only considered as
 	In order to create a cylinder a minimal set of two points  $p_0, p_1$ with corresponding normal vectors $n_0, n_1$ is used. The direction $d$ of the axis is established by $d = n_0 \times n_1$. The origin $c$ of the cylinder is created by projecting the parametric lines $p_0 + tn_0$ and $p_1 + sn_1$ onto the plane $d \cdot x = 0$ and taking their intersection as origin $c$. The radius is the shortest distance between $p_0$ and the axis $c + ud$
 	
 	\item \textbf{Cone}:
-	For simplicity, an cone the minimal set for a cone consists of three points $p_0, p_1, p_2$, rather than two. From each point-normal pair a plane is created. The intersection of the three planes defines the apex $c$. To describe the direction of the axis a plane is constructed from the points \{$c +  \frac{p_0 - c}{||p_0 - c||}$, $c +  \frac{p_1 - c}{||p_1 - c||}$, $c +  \frac{p_2 - c}{||p_2 - c||}$\}. The normal of this plane is the direction $d$ of the cone axis. The opening angle is given as $\omega = \frac{\sum_{i}^{max} (p_i - c)\cdot d}{3}$
+	For simplicity, the minimal set for a cone consists of three points $p_0, p_1, p_2$, rather than two. For each point-normal pair, a plane is created. The intersection of the three planes defines the apex $c$. To describe the direction of the axis a plane is constructed from the points \{$c +  \frac{p_0 - c}{||p_0 - c||}$, $c +  \frac{p_1 - c}{||p_1 - c||}$, $c +  \frac{p_2 - c}{||p_2 - c||}$\}. The normal of this plane is the direction $d$ of the cone axis. The opening angle is given as $\omega = \frac{\sum_{i}^{max} (p_i - c)\cdot d}{3}$
 	
 	\item \textbf{Torus}:
 	A minimal set of four points with normals is used, one more than theoretically necessary However, this eases the computation.
@@ -54,7 +56,7 @@ All points that are within a distance $\epsilon$ are taken into account. However
 	\label{table:schnabel_performance}
 \end{table}
 
-Table \ref{table:schnabel_performance} describes the statistical results obtained by Schnabel et. al\cite{schnabel-2007-efficient} for different models. $|P|$ is the number of points, $\epsilon$ the distance threshold, $\alpha$ the maximum normals deviation, $\tau$ is the minimum number of support points, $\|Psi|$ the number of shapes found, $|R|$ the number of RANSAC iterations. It can be seen that for small a small number of points and weaker constraints the algorithm returns plausible results within a fraction of a second. We utilize this feature the detect shapes in our application for small regions at a time to give immediate feedback to the user. 
+Table \ref{table:schnabel_performance} describes the statistical results for different models. $|P|$ is the number of points, $\epsilon$ the distance threshold, $\alpha$ the maximum normals deviation, $\tau$ is the minimum number of support points, $\|Psi|$ the number of shapes found, $|R|$ the number of RANSAC iterations. It can be seen that for small a small number of points and weaker constraints the algorithm returns plausible results within a fraction of a second. We utilize this feature the detect shapes in our application for small regions at a time to give immediate feedback to the user. 
 
 
 \section{Selecting Candidate Nodes}
@@ -73,7 +75,7 @@ A raycast is performed, in order to select nodes that intersect with the cursor.
 The ray is constructed from the cursor's position on the near plane $p$ and the vector pointing from the camera to $p$. This ray is referred to as pick ray. 
 An octree is an ideal data structure to perform a raycast. If the parent does not intersect the ray, neither will the children. This can be used to accelerate the process and prematurely eliminate nodes. The raycast on the octree can be performed with logarithmic cost. The raycast collects all nodes that intersect the pick ray. 
 
-To choose the most suitable node as candidate node we eliminate all nodes from the raycast result that do not fulfill the previous constraints. The LoD-level is larger the smaller the node is. This heuristic favors nodes with larger LoD-level so that the user receives geometric information for the most detailed parts that are currently explored. The projected nearplane distance is used to select between nodes with the same LoD-level. The node closest to the nearplane is favored Algorithm ~\ref{alg:candidateNodeHeuristic} showcases the selection heuristic that is executed for each node that intersects the pick ray. It selects the node closest to the nearplane and the highest LoD-level. 
+To choose the most suitable candidate node, all nodes from the raycast result are eliminated that do not fulfill the previous constraints. The LoD-level is larger the smaller the node is. The heuristic favors nodes with larger LoD-level so that the user receives geometric information for the most detailed parts of the currently explored region first. The projected distance to the nearplane is used to select between nodes with the same LoD-level. The node closest to the nearplane is favored. Algorithm ~\ref{alg:candidateNodeHeuristic} showcases the selection heuristic that is executed for each node that intersects the pick ray. It selects the node closest to the nearplane and the highest LoD-level.
 
 \begin{algorithm}
 	
@@ -82,19 +84,17 @@ To choose the most suitable node as candidate node we eliminate all nodes from t
 	node 	= null\;
 	level = 0\;
 	npd 	= 1.0\;
-\ForEach{currentNode in raycastResults}
+\ForEach{currentNode \normalfont{\textbf{in}} raycastResults}
 	{
 		isVisible = performViewFrustumCulling(node)\;
 		\If{isVisible}{
 			
 			currentNpd = calculateDistanceToNearPlane(node)	\;
 			currentLevel = node.getLodLevel()\;
-			\If{currentLevel > level \textbf{or} (currentLevel == level \textbf{and} currentNpd < npd)}{
-				node \leftarrow currentNode\;
-				
-				level \leftarrow currentLevel\;
-				
-				npd \leftarrow currentNpd\;
+			\If{currentLevel > level \normalfont{\textbf{or}} (currentLevel == level \normalfont{\textbf{and}} currentNpd < npd)}{
+				node $\leftarrow$ currentNode\;
+				level $\leftarrow$ currentLevel\;
+				npd $\leftarrow$ currentNpd\;
 				
 			}
 		}

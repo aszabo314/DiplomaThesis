@@ -11,7 +11,6 @@ Point-cloud datasets have grown in size at such a rapid rate that they are now s
 \\
 The objective of shape detection is to find homogeneous regions in point clouds with similar characteristics to help the user understand local and global structures. Moreover, it can be used to introduce semantic information into unstructured data, providing the user with more interaction possibilities. Current solutions, such as presented by Schnabel et al.\cite{schnabel-2007-efficient}\cite{schnabel-2007-ransac}, can already produce precise segmentation of point clouds. The complexity of these algorithms increases with the size of the point cloud, making the computation for billions of points infeasible in real-time. However, when looking at raw numbers, the approach delivers promising results for point clouds of smaller size (<12.000 points) in a fraction of a second.
 While the research fields of representation and rendering of point-clouds, as well as shape detection and segmentation,  have received tremendous interest lately, less research was focused on interactions and real-time processing. 
-
 \\
 This thesis proposes an alternative approach for multi-scale shape detection on local regions in point clouds and presents several interaction techniques that utilize semantic information in order to assist the user's workflow. This thesis is developed using the Aardvark platform, which is a fully functional incremental rendering engine written in F\#. Therefore this thesis showcases some functional aspects for computer graphics as well. 
 
@@ -35,8 +34,8 @@ The main contribution of this diploma thesis is the implementation of an alterna
 \\
 Shapes are detected on multiple level-of-details in the point cloud. In order to create larger connected shapes, a clustering algorithm that takes shapes from different level-of-details, is implemented to present the user information of larger scale. 
 \\
-\\
-This thesis proposes several improvements to commonly known user interactions. \textif{Point Picking} and \textit{Region Selection} are improved by consulting the local geometry of the point cloud to assist the user. By using a shape as support the interaction dimensions are reduced to the parameter space of the shapes, allowing to easily exclude unwanted points from interactions. 
+\\ 
+This thesis proposes several improvements to commonly known user interactions. \textit{Point Picking} and \textit{Region Selection} are improved by consulting the local geometry of the point cloud to assist the user. By using a shape as support the interaction dimensions are reduced to the parameter space of the shapes, allowing to easily exclude unwanted points from interactions. 
 \\
 \\
 Additionally, we introduce a novel interaction technique that allows the user to locally increment the level-of-detail along a shape beyond the culling border. This helps the user to explore the structure of the point cloud in more detail. 
@@ -44,6 +43,6 @@ Additionally, we introduce a novel interaction technique that allows the user to
 
 \section{Structure of the Work}
 
-
+TODO
 
 
