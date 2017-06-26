@@ -3,6 +3,7 @@
 Creating new interactions is a key topic for this thesis. Many proven interaction techniques have emerged over time, such as \textit{Point Picking} or \textit{Region Selection}. 
 %% TODO: define pick ray
 %% TODO: define candidate global
+%% TODO: define point belongs to a shape
 \section{Point Picking}
 
 \textit{Point Picking} describes an interaction, where the user is interested in selecting a single point from the scene at a time. A \textit{pick ray} describes a ray originating from the mouse position whose direction is the view direction. The pick radius $r$ denotes the maximum distance of a point to the pick ray in order for the point to be considered a candidate point. Depending on the use case the pick radius $r$ can be depended on the depth value. There are multiple ways of implementing this interaction with varying results. 
@@ -23,15 +24,14 @@ A circle on the nearplane is the projection of a cone in world space. The corner
 
 
 
-
-
 \subsection{Shape-Assisted Point Picking}
-Picking comes with the disadvantage that all points are treated equally. Certain constellations of points can influence the picking interaction in a negative way. Points that occlude structures of interest force the user to change the view in order to pick the desired point. In some cases a point in the background is favored over a desired point on a structure. 
- \textit{Shape-Assisted Point Picking} utilizes primitive shapes to let the user preferably pick a point that is part of a structure. The user selects a cluster of shapes which reduces the amount of possible candidate points to only those points that belong to this shape. 
+Picking comes with the disadvantage that some constellations of points can influence the picking interaction in a negative way. Points that occlude structures of interest force the user to change the view in order to pick the desired point. In some cases, a point in the background is favored over a desired point on a structure. 
+ \textit{Shape-Assisted Point Picking} utilizes primitive shapes to let the user preferably pick a point that is part of a structure. The user selects a cluster of shapes, thus reducing the amount of possible candidate points to only those that belong to this shape. 
 \\
-Instead of performing a cone- or raycast on the octree, only those nodes are taken into account, whose bounding boxes intersect the shape cluster, thus reducing the number of nodes. Points that are not in proximity to the intersection point of the pick ray with the shape cluster, are discarded, leaving only a handful of points. Those points are again projected onto the nearplane and the point closest to the cursor's position is picked. 
+Instead of performing a cone- or raycast on the octree, only those nodes are taken into account, whose bounding boxes intersect the shape cluster. Each point that does not fulfill the score function from Section \ref{sec:scorefun} for the particular canidate shape is discarded as well, leaving only a handful of points. Due to the curvature of shape, the distances are measured in world space. The pick radius is calculated by unprojecting the pick circle to the intersection point of the pick ray with the shape cluster. Only points are considered that lie in the pick sphere, constructed by the intersection point and the pick radius. The point closest to the intersection point is then picked. 
+
 \\
 If no shape cluster is selected as support shape, classic Point Picking can be executed to ensure a consistent picking interaction. 
 \\
-This interaction comes not only with interaction benefits, computation time also is drastically reduced. Usually a shape cluster consists of less nodes than a raycast since the cluster's extension is limited to a region in the point cloud. Points within a node are also reduced such that the expensive computations are executed only for candidate points. 
+This interaction comes not only with interaction benefits, computation time also is drastically reduced. Usually a shape cluster consists of less nodes than a raycast since the cluster's extension is limited to a region in the point cloud. Points within a node are also reduced such that intersections and distance measures are computed only for candidate points. 
 
