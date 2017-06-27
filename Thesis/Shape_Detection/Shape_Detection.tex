@@ -108,12 +108,11 @@ The selection of a suitable candidate node is highly dependent on the camera's p
 
 \section{Refitting}
 \label{sec:Refitting}
-Planes, cylinder and cones are infinite shapes. Therefore, in order to use those shapes for rendering and interactions, it is necessary to create finite representations for each shape. Each shape is provided with the corresponding support points, thus those points can be used to refit the shape. 
-Spheres and Tori are finite by definition. Therefore they do not require to refitted. 
+Planes, cylinder and cones are infinite shapes. Therefore, in order to use those shapes for rendering and interactions, it is necessary to create finite representations for each shape. Each shape comes with the corresponding set of support points that are used to refit the shape. Spheres and Tori are finite by definition. Therefore they do not require refitting. 
 
 \subsection{Refitting planes}
 Planes, however, are represented by a point and a vector. All support points are projected onto the plane, thus reducing the fitting problem to two dimensions. The procedure starts by computing the convex hull of the projected points with the help of Andrew's monotone chain 2d convex hull algorithm\cite{andrew1979another}. 
-More complex polygons can be computed, however, for this purpose, a quad is sufficient. This quad is obtained by using the minimum-bounding-rectangle algorithm by Freeman\cite{freeman1975determining}. 
+More complex polygons can be computed. However, for this purpose, a quad is sufficient. The quad is obtained by using the minimum-bounding-rectangle algorithm by Freeman\cite{freeman1975determining}. 
 
 \subsection{Refitting cylinder}
 A cylinder is defined by a center $p$, direction vector $v$ and a radius $r$. The height of the cylinder is infinite. To create a finite representation that encloses all support points, the two points whose difference in height is maximum. This is achieved by projecting all points onto the axis $a = p + vt$ of the cylinder, and select the points $p_{min}$, where $t$ is minimum and $p_{max}$, where $t$ is maximum. The distance $d$ between $p_{min}$ and $p_{max}$ is the height of the enclosing cylinder. The cylinder is refitted such that the new center is set to $p' = p_{min}$ and the $d$ is encoded in the length of the new direction vector:$v' = \frac{v}{|v|}d$. The radius stays the same. 
