@@ -54,13 +54,14 @@ Figure \ref{fig:picking} shows the different picking methods, described in Secti
   }
 \caption{Two-dimensional illustration of various picking methods. Candidate points are colored in green, other points are colored in red. The areas in red describe the different volumes in which candidate points are located. (a) showcases a picking process using a simple raycast. The ray combined with a radius constructs a cylinder in world space which contains all candidate points, (b) uses a cone instead. (c) utilizes a selected shape (dark blue) in order to further filter the candidate points to only follow the curvature of the shape. A spherecast is then performed on the filtered points using the unprojected pick radius as radius to select the final set of candidate points. }
 \label{fig:picking}
-
 \end{figure}
 
 
 \section{Region Selection}
+
 Region Selection aims to not pick a single point at once, but select a set of points, that are spatial neighbors
-The design for the \textit{Shape-Assisted Region Selection} is guided by one seemingly simple example task: \textit{Select all points that belong to this wall}. A wall can intersect with other building elements such as roof, balconies or the ground. In regions close to intersections, it is tedious and cumbersome to only select points on the desired structure. Using two-dimensional interaction metaphors, selecting spatially neighboring points along the same curvature, is particularly challenging, since the system does not know the desired depth boundaries for the selection region. In this chapter the benefits of using support shapes for two- and three-dimensional interaction metaphor are discussed. 
+The design for the \textit{Shape-Assisted Region Selection} is guided by one seemingly simple example task: \textit{Select points that belong to this wall only}. A wall can intersect with other building elements such as roof, balconies or the ground. In regions close to intersections, it is tedious and cumbersome to only select points on the desired structure. Using two-dimensional interaction metaphors, selecting spatially neighboring points along the same curvature, is particularly challenging, since the system does not know the desired depth boundaries for the selection region. In this chapter the benefits of using support shapes for two- and three-dimensional interaction metaphor are discussed. 
+
 
 \subsection{Volumetric Brush}
 
@@ -68,13 +69,40 @@ The \textit{Volumetric Brush} by Weyrich et. al\cite{weyrich2004post} is designe
 \\
 Since this technique follows the foremost geometry only, sudden depth changes occur if the area of interest is occluded by different geometry. Thus view changes are still required to achieve the example task. In regions close to intersections with other structures, such as below the roof, the user must control the size of the volume in order to not select points on neighboring structures. 
 
-\subsection{Lasso}
 
-The \textit{Lasso} is a common two-dimensional interaction metaphor. The user draws a polygon onto the screen. All points, whose projection lie inside the polygon are selected. Much like \textit{Point Picking}, points are projected onto the nearplane and and the intersection between the point and the polygon determines if the point is selected. Since this interaction is plain two-dimensional, the selection creates a volume that extrudes the polygon along the view direction. All points that lie within this volume are selected. 
+\subsection{Lasso Selection}
 
-% TODO
-%%The task of precisely selecting regions or points of interest in point clouds can be tedious and cumbersome. Using 2D-interaction metaphors only, it is challenging to
-%%select spatially neighboring points that follow the same curvature (e.g, points on a wall), as the system does not know the desired depth boundaries of the selection %%region. Interactions across multiple views are needed to achieve such a selection. Methods that use three-dimensional information, such as a volumetric brush by Weyrich %%et. al\cite{weyrich2004post}, can ease such tasks. By consulting the depth buffer each frame the brush follows the curvature of the geometry. 
+The \textit{Lasso Selection} is a common two-dimensional interaction metaphor used for multiple geometry-based applications. While it is an effective technique to selected regions in 2D, drawbacks appear when porting the interaction to 3D. The user draws a polygon onto the screen. All points, whose projection lie inside this polygon, are selected. Much like \textit{Point Picking}, points are projected onto the nearplane and and the intersection between the point and the polygon determines if the point is selected. The combination of a two-dimensional polygon and the projection of points describes an three-dimensional area. The polygon is extruded in the view direction up to a user-defined distance. All points that lie within this volume are selected. Figure \ref{fig:lasso_sketch} showcases the volume created by a lasso polygon drawn onto the screen.
+
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.8\textwidth]{Interactions/lasso_sketch.png}%7
+	\caption{The user draws a polygon(red) on the screen(light blue). The constructed three-dimensional area(yellow) contains all points, whose projection lie inside the lasso polygon. }
+	\label{fig:lasso_sketch}
+\end{figure}
+
+
+\begin{figure}
+\centering
+\subcaptionbox{ \label{fig:lasso1}}{%
+  \includegraphics[width=0.5\textwidth]{Interactions/lasso1.png}%7
+  }\par\medskip
+\subcaptionbox{ \label{fig:lasso2}}{%
+  \includegraphics[width=0.5\textwidth]{Interactions/lasso2.png}%
+  }\par\medskip        
+\subcaptionbox{ \label{fig:lasso3}}{%
+  \includegraphics[width=0.5\textwidth]{Interactions/lasso3.png}%
+  }
+	
+\caption{(a) - (c) show a lasso selection performed on a point cloud. In (a) the user draws a polygon onto the screen. In (b) the selected points are visualized in red. Figure (c) showcases the selection from a different angle. All points that are projected to the area of the polygon, are selected. This results in the unintentional selection of points that are obscured by objects in the foreground.}
+\label{fig:lasso}
+\end{figure}
+
+
+Figure \ref{fig:lasso} shows a lasso selection performed on a point cloud. The user draws a polygon onto the screen. The selected points are highlighted in red. When changing the view, selected points that where occluded when drawing the lasso, appear. The user must control the selection distance by hand in order to minimize this effect. However, the in order to solve the task of only selecting points on the wall, further lasso selections must be used to remove points from the selection that where selected unintentionally. 
+
+
 
 
 
