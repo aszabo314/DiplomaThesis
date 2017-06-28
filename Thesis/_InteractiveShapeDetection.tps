@@ -11,14 +11,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1657
-NormalPos.bottom=850
+NormalPos.right=1342
+NormalPos.bottom=552
 Class=LaTeXView
 Document=Interactions\Interactions.tex
 
 [Frame0_View0,0]
-TopLine=81
-Cursor=10567
+TopLine=85
+Cursor=8100
 
 [Frame1]
 Flags=0
@@ -29,13 +29,13 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1657
-NormalPos.bottom=850
+NormalPos.right=1342
+NormalPos.bottom=552
 Class=LaTeXView
 Document=_InteractiveShapeDetection.tex
 
 [Frame1_View0,0]
-TopLine=119
+TopLine=120
 Cursor=6683
 
 [Frame2]
@@ -47,13 +47,13 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1657
-NormalPos.bottom=850
+NormalPos.right=1342
+NormalPos.bottom=552
 Class=LaTeXView
 Document=Introduction\Introduction.tex
 
 [Frame2_View0,0]
-TopLine=15
+TopLine=17
 Cursor=3903
 
 [Frame3]
@@ -65,13 +65,13 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1657
-NormalPos.bottom=850
+NormalPos.right=1342
+NormalPos.bottom=552
 Class=LaTeXView
 Document=Shape_Detection\Shape_Detection.tex
 
 [Frame3_View0,0]
-TopLine=122
+TopLine=137
 Cursor=8059
 
 [Frame4]
@@ -83,8 +83,8 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1657
-NormalPos.bottom=850
+NormalPos.right=1342
+NormalPos.bottom=552
 Class=BibTeXView
 Document=intro.bib
 
