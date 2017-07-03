@@ -17,7 +17,7 @@ Class=LaTeXView
 Document=Interactions\Interactions.tex
 
 [Frame0_View0,0]
-TopLine=110
+TopLine=101
 Cursor=11355
 
 [Frame1]
@@ -54,7 +54,7 @@ Document=Shape_Detection\Shape_Clustering.tex
 
 [Frame2_View0,0]
 TopLine=76
-Cursor=8452
+Cursor=8347
 
 [Frame3]
 Flags=0
@@ -71,10 +71,10 @@ Class=LaTeXView
 Document=Shape_Detection\Shape_Detection.tex
 
 [Frame3_View0,0]
-TopLine=138
-Cursor=13694
+TopLine=136
+Cursor=12843
 
 [SessionInfo]
 FrameCount=4
-ActiveFrame=3
+ActiveFrame=2
 

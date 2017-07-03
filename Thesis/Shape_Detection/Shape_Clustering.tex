@@ -90,5 +90,4 @@ Figure \ref{fig:regionGrowingPlanes} shows an exemplary illustration on region g
 	\label{fig:regionGrowingConeCylinder}
 \end{figure}
 
-
-The region growing component of the clustering heavily depends on the $\epsilon$ distance threshold. 
+The region growing component of the clustering heavily depends on the $\epsilon$ distance threshold. However, a proper distance threshold that mirrors the region's topology well is the density of an octree node as described in Section \ref{sec:shapeDetectionParameterSelection}. For this task we chose the density of the node of the base shape, more specific: $\epsilon = density \cdot 2.0$.
