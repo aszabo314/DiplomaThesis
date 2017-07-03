@@ -8,7 +8,10 @@ Many proven interaction techniques have emerged over time, such as \textit{Point
 %% TODO: define candidate global
 %% TODO: define point belongs to a shape
 
-\section{Shape Picking}
+\section{Shape Picking and Clustering}
+
+
+
 
 \section{Shape-Assisted Point Filtering}
 \label{sec:pointFiltering}
@@ -124,7 +127,7 @@ Figure \ref{fig:lasso_assisted} shows the workflow for selecting points on a sha
   }\par\medskip        
 \subcaptionbox{ \label{fig:lasso_assisted3}}{%
   \includegraphics[width=0.5\textwidth]{Interactions/lasso_assisted3.png}%
-  }
+}
 \caption{(a) - (c) show a \textit{Shape-Assisted Lasso Selection} performed on a point cloud. The front facing wall is selected as support shape by the user. The shape cluster is visualized in light red. In (a) the user draws a polygon onto the screen after selecting a shape as support shape. (b) shows the selected points visualized in red from the same point of view. Upon view change, it can be seen that this interaction only selects points that belong the the shape cluster. }
 \label{fig:lasso_assisted}
 \end{figure}
@@ -166,8 +169,4 @@ By adding smaller nodes of higher level-of-detail, the overall detail in the sce
 \\
 
 \textit{Shape-Assisted Local Level-of-Detail Increment} utilizes a selected shape cluster to amplify detail only on structures of interest. The user selects a primitive shape as support shape. Instead of performing a raycast, the nodes on the render horizon that intersect the support shape, are collected. From these nodes, only those are added to the scene that belong to the support shape, determined by the score function describes in Section \ref{sec:scorefun}. 
-
-
-
-
 
