@@ -1,6 +1,6 @@
 \section{Shape Matching}
 \label{sec:shapeMatching}
-Since the shape detection works on multiple scales and shapes are extracted for local regions only, a heuristic is needed to determine if shapes from neighboring nodes belong to the same structure. While on a low level-of-detail, a wall is only exists in a single octree node, on higher level, a node will only contain parts of the wall, other parts are be detected in neighboring nodes. Therefore, only fragments of the same structure are detected within a node. This section presents a set of matching functions to determine if two shapes are matching, meaning that they originate from the same geometry. Only shapes of the same type can be matching. Therefore it is not neccessary to define functions to match e.g. a plane shape with a cone shape, since the result will always be \verb|false|. 
+Since shape detection performs on multiple scales and shapes are extracted for local regions only, a heuristic is needed to determine if shapes from different nodes belong to the same structure. While on a low level-of-detail, a wall is contained by a single octree node, on higher level, a node will only contain parts of the wall and mutliple nodes contain a primitive shape belonging to this wall. This section presents a set of matching functions to determine if two shapes are matching, e.g. originate from the same geometry. Only shapes of the same type can be matching.  Therefore it is not neccessary to define functions to match e.g. a plane shape with a cone shape, since the result will always be \verb|false|. 
 \\
 \\
 As the primitive shapes are represented by only a handful of parameters, it is sufficient to determine the matching of these parameters.  Therefore, we firstly define elementary matching functions for floats, vectors, positions and axis. Since matching is an approximation of mathematical equality, each matching function's result is determined by comparing a computation result to a threshold $\epsilon$. If a matching function returns \verb|true|, the input values are considered to be matching. 
@@ -19,12 +19,12 @@ As the primitive shapes are represented by only a handful of parameters, it is s
 \end{itemize}
 
 
-Now that the necessary elementary matching functions are defined, it is easy to define matching functions for two primitive shapes based on the elementary matching functions. 
+With the elementary matching functions defined, it is easy to define matching functions for two primitive shapes based on the elementary matching functions:
 
 \begin{itemize}
 \item \textbf{Matching plane shapes}: 
-A plane shape is reduced to a quad that encloses all support points. For distance computation, the plane is used, rather than the quad. 
-Foreach corner of each quad, the distance to the other plane is calculated. From those eight values the largest distance $d$ is chosen. Two plane shapes are matching, if the direction vectors are matching in retrospect to a threshold value $\epsilon_1$ and $d$ is smaller than or equal to a threshold value $\epsilon_2$.
+A plane shape contains to a quad that encloses all support points. For distance computation, the plane is used, rather than the quad. 
+For each corner of each quad, the distance to the other plane is calculated. From those eight values the largest distance $d$ is chosen. Two plane shapes are matching, if the direction vectors are matching in retrospect to a threshold value $\epsilon_1$ and $d$ is smaller than or equal to a threshold value $\epsilon_2$.
 \item \textbf{Matching cylinder shapes}: 
 Cylinder consist of an axis and a radius. Two cylinder shapes are matching if both radii and both axes are matching. 
 \item \textbf{Matching cone shapes}:
@@ -67,6 +67,28 @@ In order to find matching shapes, the octree is consulted and all shapes are col
 \end{figure}
 
 A cluster of shapes can be seen as an $\epsilon$-connected component such as in graph theory. From all shapes that match the base shape, a complete graph is created. The set of shapes creates the set of vertices. In a complete graph, an edge exists for any pair of vertices. The weight of an edge is determined by the closest distance between the two shapes. A cluster is created by growing a region in a graph, adding only vertices that connect to the current region via an edge, whose weight is smaller than $\epsilon$. This creates a cluster of shapes, ensuring that the distance to the closest neighboring shape is at maximum $\epsilon$. 
+\\
+Figure \ref{fig:regionGrowingPlanes} shows an exemplary illustration on region growing for planes. The distance between two plane shapes is measured as the closest distance between the two bounding quads. The distances for cylinder and cone shapes are calculated differently. While for plane shape, the closest world space distance is used, matching cylinder and cone shapes use the distance between two start/end points. The matching heuristic already confirms that the shapes lie on the same axis and share a similar radius. Therefore, instead of a three-dimensional world distance, a one-dimensional distance along the axis is sufficient to build a shape cluster. Figure \ref{fig:regionGrowingConeCylinder} showcases clusters for both, cylinder shapes and cone shapes. 
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\textwidth]{Shape_Detection/regionGrowingPlanes.png}
+	\caption{A cluster of plane shapes created by computing the $\epsilon$-connected component. Planes that belong to the cluster are colored in turquoise.}
+	\label{fig:regionGrowingPlanes}
+\end{figure}
 
 
+\begin{figure}
+\centering
+\subcaptionbox{ \label{fig:regionGrowingCylinder}}{%
+  \includegraphics[width=0.3\textwidth]{Shape_Detection/regionGrowingCylinder.png}%7
+  }
+\subcaptionbox{ \label{fig:regionGrowingCone}}{%
+  \includegraphics[width=0.5\textwidth]{Shape_Detection/regionGrowingCone.png}%
+  }
+	\caption{This figure shows a cylinder cluster and a cone cluster build from matching shapes. Shapes that belong to the cluster are colored in turqoise.}
+	\label{fig:regionGrowingConeCylinder}
+\end{figure}
 
+
+The region growing component of the clustering heavily depends on the $\epsilon$ distance threshold. 

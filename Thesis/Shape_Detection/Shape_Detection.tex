@@ -106,6 +106,7 @@ To choose the most suitable candidate node, all nodes from the raycast result ar
 
 The selection of a suitable candidate node is highly dependent on the camera's position. When zooming out, the camera moves away from the scene, thus reducing the render horizon and therefore reducing the maximum level-of-detail. By ranking different nodes that fulfill the candidate criteria, even when the view does not change, a multi-scale representation of the local geometry is constructed over time, creating a level-of-detail for primitive shapes as well. 
 
+
 \section{Refitting}
 \label{sec:Refitting}
 Planes, cylinder and cones are infinite shapes. Therefore, in order to use those shapes for rendering and interactions, it is necessary to create finite representations for each shape. Each shape comes with the corresponding set of support points that are used to refit the shape. Spheres and Tori are finite by definition. Therefore they do not require refitting. 
@@ -121,6 +122,13 @@ A cylinder is defined by a center $p$, direction vector $v$ and a radius $r$. Th
 A cone is defined by it's apex $c$, axis direction $v$ and opening angle $\theta$. Similar to the cylinder, all support points are projected to the axis and the points $p_{min}, p_{max}$ with minimum and maximum $t$ are selected. Since the apex of a cone is fixed, the range cannot be encoded using $c$ and $v$. The range is stored separately and range checks are performed when rendering or interacting with cones. 
 
 
+\section{Shape Detection Parameter Selection}
+\label{sec:shapeDetectionParameterSelection}
+This section briefly discusses the issue of selecting optimal parameter for the shape detection. The $\epsilon$ parameter creates a region around of with $\epsilon$ that follows the curvature of the shape. All points within this $\epsilon$ band are considered to be candidates. The authors propose to use the point cloud's bounding boxes largest dimension times $0.1$ as $\epsilon$. However, using such a static parameter yield problems with extremely sparse regions and regions that are populated very densely. In this thesis, shape detection is performed dynamically on local region of the point cloud. We chose to use the local density of a octree node as $\epsilon$. The density is calculated per octree node by averaging the distance of each point to its nearest neighbor. Thus, nodes that are populated more densely, create finer geometry. 
+
+The $\alpha$ parameter is used to determine the deviation between two directions. As the normals are the same at different level-of-detail, this parameter is static. We use an $\alpha$ value of $0.95$. 
+
+The minimum number of support points per shape is set to $250$.
 
 
 
