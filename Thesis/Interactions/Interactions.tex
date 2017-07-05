@@ -88,6 +88,7 @@ The result of \textit{Shape-assisted Point Picking} can be seen in Figure \ref{f
 
 \section{Region Selection}
 \label{sec:regionSelection}
+
 Region Selection aims to not pick a single point at once, but select a set of points, that are spatial neighbors
 The design for the \textit{Shape-Assisted Region Selection} is guided by one seemingly simple example task: \textit{Select points that belong to this wall only}. A wall can intersect with other building elements such as roof, balconies or the ground. In regions close to intersections, it is tedious and cumbersome to only select points on the desired structure. Using two-dimensional interaction metaphors, selecting multiple spatially neighboring points along the same curvature is particularly challenging due to the system not knowing the desired depth boundaries for the selection region. In this section, the benefits of using support shapes for two- and three-dimensional interaction metaphors to select regions of points,  are discussed. 
 
@@ -127,6 +128,7 @@ Figure \ref{fig:lasso} shows a lasso selection performed on a point cloud. The u
 
 
 \subsection{Shape-Assisted Lasso Selection}
+
 The aim of this interaction is to provide a smaller set of points on which a \textit{Lasso Selection} is performed.  To reduce the number of candidate nodes and discard points that do not belong the selected shape cluster, the octree nodes are again filtered using the technique described in Section \ref{sec:pointFiltering}. On this reduced set, a \textit{Lasso Selection} is performed. The result of this interaction is a selection that mimics a \textit{Lasso Selection}, with the benefit of not selecting 'through' the point cloud. The depth ambiguities of the \textit{Lasso Selection} are circumvented by introducing a min-max depth range defined by the local curvature of the shape cluster. 
 
 Figure \ref{fig:lasso_assisted} shows the workflow for selecting points on a shape. The shape is selected beforehand by the user. A lasso is drawn on the screen which selects all points that lie within the lasso and belong to the selected point cluster. In Figure \ref{fig:lasso_assisted3}, it can be seen that contrary to Figure\ref{fig:lasso3}, no points that do not belong to the shape cluster are selected. 
