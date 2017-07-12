@@ -1,5 +1,5 @@
 \chapter{Interactions}
-
+\label{chap:interactions}
 Creating new interactions is a key topic in this thesis. Classic two-dimensional interaction metaphors, such as \textit{Lasso Selection} and \textit{Point Picking} are limited since no information on the desired depth is at hand. Therefore those interactions must either guess the desired depth boundaries or ignore them. Furthermore, such interactions lack the possibility to mask out unwanted points from the selection, thus leading to regularly selection of unwanted points. To counter that many view changes are necessary in order to only select points that are of interest. Using a primitive shape as a proxy, the user can easily interact with the point cloud, such that only points are considered which belong the support shape. 
 \\
 Many interactions share similar techniques and naming conventions. Therefore, some terms that are used throughout this chapter are defined in Section \ref{sec:termDefinitions}. Sections \ref{sec:pointPicking} and \ref{sec:regionSelection} describe the pros and cons of current state-of-the-art two-dimensional interactions and proposes improvements using the detected primitive shapes as support shapes. Furthermore, Section \ref{sec:lod_increment} proposes a technique to locally increment the \textit{level-of-detail} along structures of interest to amplify details. 
