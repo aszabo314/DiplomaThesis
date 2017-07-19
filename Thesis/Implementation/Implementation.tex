@@ -7,8 +7,8 @@ TODO!
 
 
 \section{Functional Programming}
-\label{sec:funprog
-}
+\label{sec:funprog}
+
 Functional programming is a paradigm that views every expression as a mathematical function. The result of each expression is either an elemental datatype or a functional type. A core difference to other programming paradigms is the equality of function and data, such that functions can be used as input for other functions and have a distinct type defined by its parameters and result. A simple example of a function in \verb|F#|: 
 
 \begin{lstlisting}[language=FSharp]
@@ -136,20 +136,17 @@ The Aardvark platform already implements functionality to handle out-of-core dat
 	
 	let stored : thunk<'a> = db.ref data
 \end{lstlisting}
-When a thunk is loaded from the database its content is not loaded into memory yet. Only when accessing the data directly, it is loaded into memory. 
-\\
-The data is held in memory as long as a thunk lives. Therefore it is crucial to keep track of unused thunks and dispose them regularly, thus freeing memory. 
- 
+When a thunk is loaded from the database its content is not loaded into memory yet. Only when accessing the data directly, it is loaded into memory. The data is held in memory as long as the thunk lives. Therefore it is crucial to keep track of unused thunks and dispose them regularly, thus freeing memory. 
+
 
 \section{Functional Out-of-core Octree}
 
-The structure of the octree is already described in Chapter \ref{chap:octree}. However, this section describes implementation details of the octree, such as data types and additional functionalities. 
-TODO!!
+Chapter \ref{chap:octree} already provides information on the capabilities of the octree. This section describes implementation details of the octree's structure using out-of-core mechanics and custom parametric functions for convenient octree queries. 
 
 
 \subsection{Structure}
 
-The octree's out-of-core capability is managed by an interleaved structure of thunks. Each \verb|OctreeNode| contains an array of points. However, the array is not stored directly, it is stored as a \verb|thunk<Point[]>|. It's children are stored as an array of thunks (\verb|thunk<OctreeNode>[]|). While the points are stored in one reference, the reason for storing the node's children in separate thunks is to not load all children into memory when only a subset of children is accessed. Other information such as the centroid, density and the detected primitive shapes are stored as thunks as well. 
+The octree's out-of-core capability is managed by an interleaved structure of thunks. Each \verb|OctreeNode| contains an array of points. However, the array is not stored directly, it is stored as a \verb|thunk<Point[]>|. It's children are stored as an array of thunks (\verb|thunk<OctreeNode>[]|). The points are stored as a single thunk, the reason for storing the node's children in separate thunks is to not load all children into memory when only a subset of children is accessed. Other information such as the centroid, density, an rkd tree, and the detected primitive shapes are stored as thunks as well. 
 
 
 \subsection{Elemental functions}
@@ -170,6 +167,7 @@ The decision function takes as input the octree node, it's grid cell and its uni
 
 
 \subsubsection{Map}
+
 Usually, the \verb|map| function is used for generic data structures to create a projection for each element and returns a data structure of the same type with the projected elements. Since the octree is not generic, the \verb|map| function returns the projection for each node of the octree as an array of \verb|'T| where \verb|'T| is the type of the projection. 
 The functions's definition looks as follows: 
 
@@ -178,6 +176,7 @@ let map (projection : OctreeNode -> GridCell -> int[] -> 'T) (tree: Octree) : ('
 \end{lstlisting}
 
 Contrary to the filter function, the \verb|map| function does not return a new octree since the type of the projection must not necessarily be hierarchical. Therefore an array of \verb|'T| is returned instead. 
+
 
 \subsubsection{Choose}
 
@@ -252,6 +251,32 @@ Additionally, not only the children are collected, but depending on a depth valu
 \subsection{Raycast}
 
 An octree is an ideal data structure to accelerate ray casting. The hierarchical structure ensures that only a minimum set of nodes is tested for intersection. If the ray does not intersect the parent's bounding box, it does not intersect the children's bounding boxes as well. The raycast is implemented using the octree's \verb|choose| function with a decision function that performs the intersection with the bounding box and returns a \verb|RaycastHit| structure containing all necessary information on the raycast hit. 
+
+
+\section{Sequential Computation Applicator}
+
+The octree changes occur on a regular basis in this application from multiple sources. The shape detection coroutine continuously inserts detected primitive shapes into the octree, resulting in a new octree every time. User interactions change the point set by selecting regions of interest. To synchronize the octree access, locking mechanics can be used. However, such mechanics can get confusing easily, especially when the application grows. 
+\\
+All changes to the octree are dependent on the state of the octree that, in the meantime, may be changed by an operation from a different thread. Furthermore, since a new octree is created every time, the result of an operation may be overlooked when a second operation starts while the first operation has not yet finished. All subsequent operations depend on the result of the previous operation, thus a structure is needed that handles such dependent operations. 
+\\
+The \verb|Sequential Computation Applicator| is a structure that provides a synchronized way of processing sequential operations. The applicator's functionality is synchronized such that multiple threads can dispatch operations on the octree. The \verb|Sequential Computation Applicator| is a wrapper around a \verb|ModRef<'T>| that invokes changes on the value regularly. 
+In this case, the type of the applicator wraps around a \verb|ModRef<Octree>|. 
+
+All dispatched operations are sequentially processed and the \verb|ModRef|'s value is changed after an operation is completed, thus notifying the Aardvark engine. 
+The \verb|Sequential Computation Applicator| provides the functions to dispatch an operation, as well as to dispatch an operation with high priority, thus enqueueing the operation on the front. 
+
+\begin{lstlisting}[language = FSharp]
+
+    member public this.DispatchPrioritized(computation : 'T -> 'T, timeout : int, timeoutCallback  : unit -> unit) = ...
+
+    member public this.Dispatch(computation : 'T -> 'T, timeout : int, timeoutCallback  : unit -> unit) = ...
+   
+\end{lstlisting}
+
+The type \verb|'T| is the generic type of the \verb|Sequential Computation Applicator|, in this case, it is \verb|Octree|. A computation function is dispatched that takes a \verb|'T|, the current value, and projects it to a new \verb|'T|. 
+Additionally, an operation can be shut down after a certain time. If this is the case the \verb|timeoutCallback| is invoked in order to clean up properly. 
+
+
 
 \section{Multi-Threaded Environment}
 
