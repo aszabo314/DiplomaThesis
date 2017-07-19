@@ -17,8 +17,8 @@ Class=LaTeXView
 Document=_InteractiveShapeDetection.tex
 
 [Frame0_View0,0]
-TopLine=18
-Cursor=3120
+TopLine=169
+Cursor=7729
 
 [Frame1]
 Flags=0
@@ -35,8 +35,8 @@ Class=LaTeXView
 Document=Implementation\Implementation.tex
 
 [Frame1_View0,0]
-TopLine=205
-Cursor=13613
+TopLine=191
+Cursor=12416
 
 [Frame2]
 Flags=0
@@ -54,11 +54,11 @@ Document=Octree\Octree.tex
 
 [Frame2_View0,0]
 TopLine=0
-Cursor=53
+Cursor=5015
 
 [SessionInfo]
 FrameCount=3
-ActiveFrame=1
+ActiveFrame=0
 
 [Bookmarks]
 Shape_Detection\Shape_Clustering.tex=79 
