@@ -3,7 +3,7 @@ TODO!
 
 
 \section{System Design}
-TODO!
+The software developed for this thesis is a stand-alone point-cloud viewer that allows the user to interact with the point cloud. The application consists of three strands that are executed in parallel. 
 
 
 \section{Functional Programming}
@@ -250,12 +250,12 @@ Additionally, not only the children are collected, but depending on a depth valu
 
 \subsection{Raycast}
 
-An octree is an ideal data structure to accelerate ray casting. The hierarchical structure ensures that only a minimum set of nodes is tested for intersection. If the ray does not intersect the parent's bounding box, it does not intersect the children's bounding boxes as well. The raycast is implemented using the octree's \verb|choose| function with a decision function that performs the intersection with the bounding box and returns a \verb|RaycastHit| structure containing all necessary information on the raycast hit. 
+An octree is an ideal data structure to accelerate ray casting. The hierarchical structure ensures that only a minimum set of nodes is tested for intersection. If the ray does not intersect the parent's bounding box, it does not intersect the children's bounding boxes as well. The raycast on the octree can be performed with logarithmic cost. The raycast is implemented using the octree's \verb|choose| function with a decision function that performs the intersection with the bounding box and returns a \verb|RaycastHit| structure containing all necessary information on the raycast hit. 
 
 
 \section{Sequential Computation Applicator}
 
-The octree changes occur on a regular basis in this application from multiple sources. The shape detection coroutine continuously inserts detected primitive shapes into the octree, resulting in a new octree every time. User interactions change the point set by selecting regions of interest. To synchronize the octree access, locking mechanics can be used. However, such mechanics can get confusing easily, especially when the application grows. 
+The octree receives changes on a regular basis from multiple sources in this application. The shape detection coroutine continuously inserts detected primitive shapes into the octree, resulting in a new octree every time. User interactions change the point set by selecting regions of interest. To synchronize the octree access, locking mechanics can be used. However, such mechanics can get confusing easily, especially when the application grows. 
 \\
 All changes to the octree are dependent on the state of the octree that, in the meantime, may be changed by an operation from a different thread. Furthermore, since a new octree is created every time, the result of an operation may be overlooked when a second operation starts while the first operation has not yet finished. All subsequent operations depend on the result of the previous operation, thus a structure is needed that handles such dependent operations. 
 \\
@@ -263,24 +263,79 @@ The \verb|Sequential Computation Applicator| is a structure that provides a sync
 In this case, the type of the applicator wraps around a \verb|ModRef<Octree>|. 
 
 All dispatched operations are sequentially processed and the \verb|ModRef|'s value is changed after an operation is completed, thus notifying the Aardvark engine. 
-The \verb|Sequential Computation Applicator| provides the functions to dispatch an operation, as well as to dispatch an operation with high priority, thus enqueueing the operation on the front. 
+The applicator provides the interfaces to dispatch an operation, as well as to dispatch an operation with high priority, thus enqueueing the operation on the front. 
 
 \begin{lstlisting}[language = FSharp]
 
-    member public this.DispatchPrioritized(computation : 'T -> 'T, timeout : int, timeoutCallback  : unit -> unit) = ...
+    member public this.DispatchPrioritized(computation : 'T -> 'T) (timeout : int) (timeoutCallback  : unit -> unit) : unit = ...
 
-    member public this.Dispatch(computation : 'T -> 'T, timeout : int, timeoutCallback  : unit -> unit) = ...
+    member public this.Dispatch(computation : 'T -> 'T) (timeout : int) (timeoutCallback  : unit -> unit) : unit = ...
    
 \end{lstlisting}
 
-The type \verb|'T| is the generic type of the \verb|Sequential Computation Applicator|, in this case, it is \verb|Octree|. A computation function is dispatched that takes a \verb|'T|, the current value, and projects it to a new \verb|'T|. 
-Additionally, an operation can be shut down after a certain time. If this is the case the \verb|timeoutCallback| is invoked in order to clean up properly. 
-
+The type \verb|'T| is the generic type of the \verb|Sequential Computation Applicator|, in this case, it is \verb|Octree|. A computation is dispatched that takes a \verb|'T|, and projects it to a new \verb|'T|. The input parameter on execution is the current value of the octree. 
+Additionally, an operation can be shut down after a defined timeout in milliseconds. If this is the case the \verb|timeoutCallback| is invoked to allow clean up and error handling. 
 
 
 \section{Multi-Threaded Environment}
 
+Multi-threading can be achieved on multiple scales, depending on the tasks need. The application uses three basic threads that run in parallel. 
+\\
+The Aardvark rendering engine, combined with the \verb|IMod| evaluation system and user interactions build the main thread of the application. One pitfall of the \verb|IMod| system is that it only reacts to changes in the system, however, to invoke procedures after a certain time without changes is not possible directly. 
+\\
 
 
+The \textit{user-guided shape detection} from Section \ref{sec:user_guided_sd} relies on the camera not changing for a certain amount of time. 
+A separate thread continuously checks for changes and, if a shape detection should be performed and dispatches the computation to the applicator thread, 
+\\
+The \textit{sequential computation applicator} performs changes dispatched to it in an sequential order. It receives computations from several thread and performs them in the background. The thread transacts the changes to the main thread once a computation has finished. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\textwidth]{Implementation/multiThreading.png}
+    \caption{The main thread controls the rendering, mod evaluation and interactions. Point selections from interactions are handed to the applicator thread. The shape detection is invoked by a separate thread and dispatched on the applicator thread as well.  }
+    \label{fig:multiThreading}
+\end{figure}
+
+As Figure \ref{fig:multiThreading} shows, multiple thread are dispatching computations to the applicator thread. However, only this thread transacts changes to the main thread. The shape detection invoker thread works independently of the main thread. 
+
+
+The second technique of parallelization that is used is to identify similar tasks that are executed in parallel for multiple instances, such as per-point or per-node computations. As long as shared resources are not written into, such tasks can easily performed in parallel. The input is an array of elements and a task to be executed for each element. The result is an array of the results of the computation for each element. The function's signature looks as follows: 
+\\
+\begin{lstlisting}[language = FSharp]
+module Parallel = 
+  let map (computation : 'T1->'T2)(array : 'T1[]) : 'T2[]= ...
+\end{lstlisting}
+The technique is realized as an parallel implementation of f\#s \verb|map| function for arrays. 
+
+\verb|Parallel.map| is used when point or node conversions are needed, such as projecting points to screen space or calculating the distances of points to a shape. 
+
+
+\section{Point-Cloud Rendering}
+
+Modern point cloud's often contain several billion points. Current GPUs are not able to handle such amounts of point. The culling heuristic in Section \ref{sec:renderHorizon} already reduces the set of nodes to a handful that are manageable for the GPU and can be drawn in real time. However, the point data may still be located on the hard drive and must be loaded into memory. 
+\\
+The Aardvark platform already contains a \textit{level-of-detail} point cloud rendering system that can handle out-of-core datasets. The rendering system uses a cache to store nodes that were rendered previously. Once a frame is redrawn, all nodes that are rendered are collected and for new nodes the data must be loaded into the memory. New nodes are added to the cache, nodes that are not used in this, are kept in the cache until the memory consumption requires to remove unused data. For each node new to the cache, a thread is started to load the point data into memory. The frame is drawn even tough not all nodes are loaded. The frame is redrawn once the outstanding data is loaded onto the GPU, thus popping effects occur when the view changes drastically. 
+\\
+\\
+Mathematically, a point has no a extent, therefore it cannot be depicted directly. A common way to draw points is to identify them as splats of certain size and shape. In this thesis the points are represented by a sphere imposter. For each point, a camera-aligned quad is created in a geometry shader, whose size is the diameter of the sphere, pixels that are outside the radius of the sphere are discarded. 
+\\
+Popping effects occur when when the view changes and overlapping imposters change their order. To counter such popping effects, the sphere is given a depth displacement that extrudes a sphere in world space, such that the depth value follows the curvature of the sphere, causing the imposters to intersect properly. Figure \ref{fig:point_sprites} shows a direct comparison of using spheres and circular splats. 
+
+
+\begin{figure}
+\centering
+\subcaptionbox{ \label{fig:picking_raycast}}{%
+  \includegraphics[width=0.48\textwidth]{Implementation/pointCircles.png}%7
+  }
+\subcaptionbox{ \label{fig:picking_conecast}}{%
+  \includegraphics[width=0.48\textwidth]{Implementation/pointSpheres.png}%
+  }
+  
+\caption{This figure shows a direct comparison of using (a) circular splats and (b) sphere imposters with depth displacement. In (b) the intersections between points are visible due to the spherical shape, whereas points that are little below other points are almost completely occluded.  }
+\label{fig:point_sprites}
+\end{figure}
+
+ 
 \section{Interaction Workflow}
 \section{Benchmarks}

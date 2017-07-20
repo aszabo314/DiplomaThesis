@@ -48,7 +48,7 @@ The centroid of a node provides an indicator on the distribution of points in th
 The density describes the average distance between a point and its nearest neighbor. The density increases with higher \textit{level-of-detail} since more points are contained in a smaller region. To find the nearest neighbor, again, the node's rkd-tree is used. 
 
 
-\section{Culling at the Render Horizon}
+\section{Octree Culling and Render Horizon}
 \label{sec:renderHorizon}
 
 As a point cloud normally contains more data than the GPU is able to render, only nodes are rendered that contribute to the currently viewed scene. The result of this operation is a new octree that contains only nodes that are currently rendered. 
@@ -64,8 +64,8 @@ A simple, yet powerful culling heuristic is view frustum culling. Nodes that are
 \end{figure}
 
 
-The \textit{Render horizon} describes a cut that separates the octree into a rendered part and an unrendered part. The nodes where some of its children are affected by the cut create the render horizon. Nodes along the render horizon share the property that one of its direct children contains points that are are not rendered anymore. This property is useful when additional information should be displayed. 
+The \textit{Render horizon} describes a cut that separates the octree into a rendered part and an unrendered part. The nodes of which some of the children are affected by the cut create the render horizon. Nodes along the render horizon share the property that one of its direct children contains points that are are not rendered anymore. This property is useful when additional information should be displayed. 
 \\
 Figure \ref{fig:renderHorizon} showcases an exemplary cut, displayed as a dashed line, through an octree along with its created render horizon. Nodes that are rendered, are colored in turquoise. A dashed line originating from a node indicates that the node contains children which are not rendered. Nodes whose border is colored in magenta belong to the set of nodes of the render horizon. Those nodes contain edges that are intersected by the cut. 
-
-
+\\
+As the rendered parts of the octree are needed for multiple tasks in the application, culling is performed only once per frame. The result of the culling procedure is an octree that only contains the nodes that are currently rendered, thus interactions that rely on visible data must only be performed on this octree without performing culling operations twice. 

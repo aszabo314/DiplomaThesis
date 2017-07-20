@@ -1,5 +1,6 @@
 \section{Shape Matching}
 \label{sec:shapeMatching}
+
 Since shape detection if performed on multiple scales and shapes are extracted for small regions at a time, a heuristic is needed to determine if shapes from different nodes belong to the same structure. While on a low \textit{level-of-detail}, a wall may be contained by a single octree node, on a higher level, a node will only contain parts of the wall and multiple nodes contain primitive shapes that share this wall. This section presents a set of matching functions to determine if two shapes originate from the same geometry with a certain tolerance. Only shapes of the same type can be matching. Therefore it is not necessary to define functions to match e.g. a plane shape with a cone shape since the result will always be \verb|false|. 
 
 
