@@ -10,7 +10,7 @@ An octree is a hierarchical datastructure in which each node represents a spatia
 
 \section{Node Split Ruling}
 
-Numerous decision rules exist that determine whether a node should be split. A node is split if the point count exceeds a threshold $n$.  For various reason, a decision based on the number of points in a node is favored. In order to keep the amount of streamed data roughly the same and have loading times vary only a little, chunks of data should be of roughly the same size as well. This allows to estimate the load time in advantage since the approximate size of a chunk is known. Having nodes of mostly the same size allows the runtime of procedures to be consistent that heavily depend on the size of the node.  In this application a point count $n = 5000$ is chosen. 
+Numerous decision rules exist that determine whether a node should be split. A node is split if the point count exceeds a threshold $n$.  For various reason, a decision based on the number of points in a node is favored. In order to keep the amount of streamed data roughly the same and have loading times vary only a little, chunks of data should be of roughly the same size as well. This allows to estimate the load time in advantage since the approximate size of a chunk is known. Having nodes of mostly the same size allows the runtime of procedures that heavily depend on the size of the node to be consistent . In this application, a point count $n = 5000$ is chosen. 
 \\
 \\
 If a node is partitioned, it's elements are replaced by a random subset of points of size $n$ from its children, thus creating an efficient \textit{level-of-detail} representation of the point cloud on multiple scales. 
@@ -25,7 +25,7 @@ Loading data into memory can only be done as long as free memory is available. U
 
 \section{Octree Postprocessing}
 
-Common point cloud datasets mostly only contain information on position and color. In order to enrich the dataset with additional information, some calculations are performed after build process is complete. 
+Common point cloud datasets mostly only contain information on position and color and lack distinct geometric features such as normal vectors. Normal vectors are significant for shape detection, since they introduce information on the local curvature to the point cloud.  In order to enrich the dataset with additional information, some calculations are performed after the octree build process is complete. 
 
 
 \subsection{rkd-Tree}

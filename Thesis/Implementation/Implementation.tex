@@ -1,9 +1,11 @@
 \chapter{Implementation}
-TODO!
+\label{chap:implementation}
 
-
-\section{System Design}
-The software developed for this thesis is a stand-alone point-cloud viewer that allows the user to interact with the point cloud. The application consists of three strands that are executed in parallel. 
+This chapter gives an overview on implementation details for this thesis. the implementation of the application is guided by the \textit{functional-first} programming paradigm. \textit{Functional-first} takes inspiration from functional programming, as well as other paradigms, such as object-oriented programming. However, the majority of the application is written purely functional, with connections to non-functional components, such as .NET libraries for multi threading or Schnabel et. al's shape detection implementation\cite{schnabel-2007-software}. 
+\\
+This chapter starts with an introduction to functional programming and the programming language \verb|F#|\cite{FSharp} before introducing the key features of the Aardvark platform\cite{aardvark} that is used as rendering engine for this application in Section \ref{sec:aardvark}. The main data structure for in the application is an octree that stores point cloud and handles it's the out-of-core functionality. A set of functions that simplify querying with the octree is proposed in Section \ref{funcOctree}. 
+\\
+Multiple coroutines are performed in the background that produce a stream of data for the point cloud. The multi-threaded architecture of the application is discussed in Section \ref{sec:multithreading}. Section \ref{sec:rendering} concludes this chapter by briefly discussing implementation details of the point-cloud rendering system. 
 
 
 \section{Functional Programming}
@@ -35,6 +37,7 @@ Functional programming tries to mitigate mutations as much as possible. Mutation
 
 
 \section{Aardvark}
+\label{sec:aardvark}
 
 The Aardvark platform\cite{aardvark} is a functional-first incremental rendering engine in active development at the VRVis Zentrum für Virtual Reality und Visualisierung\cite{vrvis}. It is an implementation of research results on the field of incremental rendering \cite{, lazy} and semantic shader composition\cite{haaser2014cosmo, haaser2014semantic}. 
 
@@ -140,6 +143,7 @@ When a thunk is loaded from the database its content is not loaded into memory y
 
 
 \section{Functional Out-of-core Octree}
+\label{sec:funcOctree}
 
 Chapter \ref{chap:octree} already provides information on the capabilities of the octree. This section describes implementation details of the octree's structure using out-of-core mechanics and custom parametric functions for convenient octree queries. 
 
@@ -278,6 +282,7 @@ Additionally, an operation can be shut down after a defined timeout in milliseco
 
 
 \section{Multi-Threaded Environment}
+\label {sec:multithreading}
 
 Multi-threading can be achieved on multiple scales, depending on the tasks need. The application uses three basic threads that run in parallel. 
 \\
@@ -312,6 +317,7 @@ The technique is realized as an parallel implementation of f\#s \verb|map| funct
 
 
 \section{Point-Cloud Rendering}
+\label{sec:rendering}
 
 Modern point cloud's often contain several billion points. Current GPUs are not able to handle such amounts of point. The culling heuristic in Section \ref{sec:renderHorizon} already reduces the set of nodes to a handful that are manageable for the GPU and can be drawn in real time. However, the point data may still be located on the hard drive and must be loaded into memory. 
 \\
@@ -335,7 +341,3 @@ Popping effects occur when when the view changes and overlapping imposters chang
 \caption{This figure shows a direct comparison of using (a) circular splats and (b) sphere imposters with depth displacement. In (b) the intersections between points are visible due to the spherical shape, whereas points that are little below other points are almost completely occluded.  }
 \label{fig:point_sprites}
 \end{figure}
-
- 
-\section{Interaction Workflow}
-\section{Benchmarks}

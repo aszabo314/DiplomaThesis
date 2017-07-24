@@ -25,10 +25,8 @@ The task of precisely selecting regions or points of interest in point clouds ca
 select spatially neighboring points that follow the same curvature (e.g, points on a wall), as the system does not know the desired depth boundaries of the selection region. Interactions across multiple views are needed to achieve such a selection.  Methods that use 3D information, such as a volumetric brush by Weyrich et. al\cite{weyrich2004post}, can ease such tasks. By consulting the depth buffer each frame the brush follows the curvature of the geometry. However, by reading pixels from the GPU the rendering process is stalled. This technique reacts to occlusion such that the brush follows geometry in front of the wall, thus view changes are still required.
 
 
-%Point clouds often lack distinct geometric features such as normal vectors. Normal vectors are significant for shape detection, since they introduce information on the local curvature to the point cloud. Additional post-processing steps are needed to enrich the octree's nodes with additional information such as point density, centroids and a datastructure for efficient point queries. 
-
-
 \section{Contributions}
+
 The main contribution of this diploma thesis is the implementation of an alternative way of detecting shapes on multiple level-of-details in point clouds. Instead of performing shape detection on the complete point cloud at once, we use an approach that lets the user control the region in which shapes should be detected. By reducing those regions to a suitable size, a well-known shape detection algorithm can return meaningful results in interactive time, such that the user is presented with immediate feedback on his selection. 
 \\
 \\
@@ -38,11 +36,9 @@ Shapes are detected on multiple level-of-details in the point cloud. In order to
 This thesis proposes several improvements to commonly known user interactions. \textit{Point Picking} and \textit{Region Selection} are improved by consulting the local geometry of the point cloud to assist the user. By using a shape as support the interaction dimensions are reduced to the parameter space of the shapes, allowing to easily exclude unwanted points from interactions. 
 \\
 \\
-Additionally, we introduce a novel interaction technique that allows the user to locally increment the level-of-detail along a shape beyond the culling border. This helps the user to explore the structure of the point cloud in more detail. 
+Additionally,  a novel interaction technique that is introduced that allows the user to locally increment the \textit{level-of-detail} along a shape beyond what is currently rendered. This helps the user to explore the structure of the point cloud in more detail. 
 
 
 \section{Structure of the Work}
 
-TODO
-
-
+The structure of the work is as follows. Chapter \ref{chap:related_work} covers the related work for this thesis, including point-cloud rendering and out-of-core representations, shape detection, and segmentation and advanced user interactions on point clouds. Chapter \ref{chap:octree} provides a description of the octree used for the out-of-core representation of the point cloud, as well as some metrics that further describe the content of an octree node. Chapter \ref{chap:shapeDetection} describes the algorithms used to detect primitive shapes in a point cloud. Additionally, this chapter proposes a way to cluster similar shapes into one coherent shape cluster in order to be used for user interactions. Chapter \ref{chap:systemDesign} discusses the application's features including the user-controlled shape detection and assisted interactions that utilize the detected shapes as support shape. Chapter \ref{chap:implementation} focuses on implementation details in a functional context. Results of the application are presented in Chapter \ref{chap:results}. Chapter \ref{chap:conclusion} concludes this thesis with a reflection on the application and an outlook on future work. 
