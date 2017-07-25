@@ -14,6 +14,7 @@ While the research fields of representation and rendering of point-clouds, as we
 \\
 This thesis proposes an alternative approach for multi-scale shape detection on local regions in point clouds and presents several interaction techniques that utilize semantic information in order to assist the user's workflow. This thesis is developed using the Aardvark platform, which is a fully functional incremental rendering engine written in F\#. Therefore this thesis showcases some functional aspects for computer graphics as well. 
 
+
 \section{Problem Definition}
 
 The size of point clouds, obtained by laser scanners or photogrammetric networks, often exceeds several million points. 
@@ -21,8 +22,7 @@ Efficient out-of-core solutions for point clouds are discussed in numerous publi
 \\
 In scans of urban environments, many structures can be represented in a more memory-efficient way. Points that follow a wall, often can be represented by a few triangles, pillars often share similarities with cylinders. Detecting such shapes is an immense task that scales with the number of points and fails be executed in real-time. When exploring a point cloud, immediate feedback of local geometry is useful, since it introduces additional information to the user. This task cannot be achieved without heavy preprocessing of the point cloud. 
 \\
-The task of precisely selecting regions or points of interest in point clouds can be tedious and cumbersome. Using 2D-interaction metaphors only, it is challenging to
-select spatially neighboring points that follow the same curvature (e.g, points on a wall), as the system does not know the desired depth boundaries of the selection region. Interactions across multiple views are needed to achieve such a selection.  Methods that use 3D information, such as a volumetric brush by Weyrich et. al\cite{weyrich2004post}, can ease such tasks. By consulting the depth buffer each frame the brush follows the curvature of the geometry. However, by reading pixels from the GPU the rendering process is stalled. This technique reacts to occlusion such that the brush follows geometry in front of the wall, thus view changes are still required.
+The task of precisely selecting regions or points of interest in point clouds can be tedious and cumbersome. Using 2D-interaction metaphors only, it is challenging to select spatially neighboring points that follow the same curvature (e.g, points on a wall), as the system does not know the desired depth boundaries of the selection region. Interactions across multiple views are needed to achieve such a selection.  Methods that use 3D information, such as a volumetric brush by Weyrich et. al\cite{weyrich2004post}, can ease such tasks. By consulting the depth buffer each frame the brush follows the curvature of the geometry. However, by reading pixels from the GPU the rendering process is stalled. This technique reacts to occlusion such that the brush follows geometry in front of the wall, thus view changes are still required.
 
 
 \section{Contributions}
