@@ -17,9 +17,8 @@ The goal of the \textit{user-guided shape detection} is to provide meaningful re
 
 \begin{center}
 \begin{tabular}{ l | r | r | r }
-
-		& 										\textbf{\#Points} 				& \textbf{\#Nodes} 	& \textbf{max. LoD} \\
-		\hline
+																& \textbf{\#Points} 			& \textbf{\#Nodes} & \textbf{max. LoD} \\
+	\hline
   JB\_Haus.pts									& 620.722 								& 440 			& 15 \\
   Technologiezentrum\_Teil1.pts	& 11.762.924							& 8863 			& 15 \\
   Synthetic\_Primitives.pts 		& 472.000 								& 315	 			& 5 \\
@@ -46,11 +45,19 @@ The testing methodology works without user interaction. Instead, all octree node
 	\label{table:schnabel_benchmarks}
 \end{table}
 
+
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1\textwidth]{Results/shapes_vs_lod.png}
+    \includegraphics[width=1\textwidth]{Results/shapes_total_vs_lod.png}
     \caption{Plot of the number of shapes in correlation to the \textit{level-of-detail} of the node. All values are averaged over all nodes that share the same \textit{level-of-detail}.}
-    \label{fig:shapes_vs_lod}
+    \label{fig:shapes_total_vs_lod}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{Results/shapes_averaged_vs_lod.png}
+    \caption{Plot of the number of shapes in correlation to the \textit{level-of-detail} of the node. All values are averaged over all nodes that share the same \textit{level-of-detail}.}
+    \label{fig:shapes_averaged_vs_lod}
 \end{figure}
 
 \begin{figure}[h]
@@ -60,12 +67,11 @@ The testing methodology works without user interaction. Instead, all octree node
     \label{fig:time_vs_lod}
 \end{figure}
 
-Figure \ref{fig:shapes_vs_lod} shows a plot for each dataset that compares the average number of shapes per node to the \textit{level-of-detail}. The plot of the synthetic point cloud ends at 5 since it only contains 5 \textit{level-of-detail}. A trend can be seen in this plot, such that the number of shapes decreases the higher the \textit{level-of-detail} is. This comes as no surprise since the nodes with higher \textit{level-of-detail} are smaller in size, therefore containing less possible structures. 
+
+Figure \ref{fig:shapes_total_vs_lod} shows the total number of shapes per \textit{level-of-detail}. All three datasets share an increase in the number of shapes in the third quarter before rapidly a rapid decline for the highest \textit{level-of-detail}. Figure \ref{shapes_averaged_vs_lod} shows the number of shapes divided by the number of nodes per \textit{level-of-detail}. Both figures emphasizes that the majority of shapes is not found in the highest \textit{level-of-detail}, due to the fact that many nodes only contain a handful of points or really only contain a single structure. 
 \\
 
 Figure \ref{fig:time_vs_lod} shows the calculation time compared to the \textit{level-of-detail}. Shape detection for smaller, more dense nodes take less time than for larger nodes with lower \textit{level-of-detail}. 
-
-
 \subsection{Results}
 
 

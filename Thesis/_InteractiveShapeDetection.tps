@@ -12,7 +12,7 @@ MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
 NormalPos.right=1798
-NormalPos.bottom=807
+NormalPos.bottom=816
 Class=LaTeXView
 Document=_InteractiveShapeDetection.tex
 
@@ -30,12 +30,12 @@ MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
 NormalPos.right=1798
-NormalPos.bottom=807
+NormalPos.bottom=816
 Class=LaTeXView
 Document=Introduction\Introduction.tex
 
 [Frame1_View0,0]
-TopLine=17
+TopLine=34
 Cursor=2784
 
 [Frame2]
@@ -48,13 +48,13 @@ MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
 NormalPos.right=1798
-NormalPos.bottom=807
+NormalPos.bottom=816
 Class=LaTeXView
 Document=Results\Results.tex
 
 [Frame2_View0,0]
-TopLine=34
-Cursor=3290
+TopLine=82
+Cursor=7480
 
 [Frame3]
 Flags=0
@@ -66,7 +66,7 @@ MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
 NormalPos.right=1798
-NormalPos.bottom=807
+NormalPos.bottom=816
 Class=LaTeXView
 Document=Implementation\Implementation.tex
 
@@ -84,12 +84,12 @@ MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
 NormalPos.right=1798
-NormalPos.bottom=807
+NormalPos.bottom=816
 Class=LaTeXView
 Document=Shape_Detection\Shape_Detection.tex
 
 [Frame4_View0,0]
-TopLine=75
+TopLine=80
 Cursor=6225
 
 [SessionInfo]
