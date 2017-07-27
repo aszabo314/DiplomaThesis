@@ -26,7 +26,7 @@ The goal of the \textit{user-guided shape detection} is to provide meaningful re
 \end{tabular}
 \end{center}
 
-The testing methodology works without user interaction. Instead, all octree nodes are collected and fed into the shape detection routine sequentially in order to retrieve results for each node of the point cloud. Therefore, the shape detection is performed for the complete point cloud for each \textit{level-of-detail}. Each octree node contains at most 5000 points. The results are averaged over five runs. Table \ref{table:schnabel_benchmarks} shows the results averaged over all nodes. It can be seen that detecting planes only is significantly faster than detecting all types of primitive shapes. However, detecting all types of primitive shapes still produces results within interactive time. The synthetic point cloud is constructed from a set of primitives that are discretized to point sets, such that all types of primitives exist. 
+The tests are performed without user interaction. Instead, all octree nodes are collected and fed into the shape detection routine sequentially in order to retrieve results for each node of the point cloud. Therefore, the shape detection is performed for the complete point cloud for each \textit{level-of-detail}. Each octree node contains at most 5000 points. The results are averaged over five runs. Table \ref{table:schnabel_benchmarks} shows the results averaged over all nodes. It can be seen that detecting planes only is significantly faster than detecting all types of primitive shapes. However, detecting all types of primitive shapes still produces results within interactive time. The synthetic point cloud is constructed from a set of primitives that are discretized to point sets, such that all types of primitives exist. 
 
 \begin{table}
 	\centering
@@ -68,14 +68,14 @@ The testing methodology works without user interaction. Instead, all octree node
 \end{figure}
 
 
-Figure \ref{fig:shapes_total_vs_lod} shows the total number of shapes per \textit{level-of-detail}. All three datasets share an increase in the number of shapes in the third quarter before rapidly a rapid decline for the highest \textit{level-of-detail}. Figure \ref{shapes_averaged_vs_lod} shows the number of shapes divided by the number of nodes per \textit{level-of-detail}. Both figures emphasizes that the majority of shapes is not found in the highest \textit{level-of-detail}, due to the fact that many nodes only contain a handful of points or really only contain a single structure. 
+Figure \ref{fig:shapes_total_vs_lod} shows the total number of shapes per \textit{level-of-detail}. All three datasets share an increase in the number of shapes in the third quarter before a rapid decline for the highest \textit{level-of-detail}. Figure \ref{shapes_averaged_vs_lod} shows the number of shapes divided by the number of nodes per \textit{level-of-detail}. Both figures emphasizes that the majority of shapes is not found in the highest \textit{level-of-detail}. Reasons for this is that many nodes only contain a handful of points or really only contain a single structure. 
 \\
 
-Figure \ref{fig:time_vs_lod} shows the calculation time compared to the \textit{level-of-detail}. Shape detection for smaller, more dense nodes take less time than for larger nodes with lower \textit{level-of-detail}. 
+Figure \ref{fig:time_vs_lod} shows the calculation time compared to the \textit{level-of-detail}. Shape detection for smaller, more dense nodes take less time than for larger nodes with lower \textit{level-of-detail} as in larger nodes, usually more shapes are found. 
 \subsection{Results}
 
 
-\subsection{Errors and Crap \todo{}}
+\subsection{Problems and unwanted behaviour}
 
 A problem with the shape detection implementation by Schnabel et. al\cite{schnabel-2007-software} are reoccurring non-terminations for some octree nodes, causing the shape detection coroutine to stall. To circumvent this problem, all shape detection tasks that are dispatched to the \verb|sequential computation applicator| are assigned a timeout value of one second, after which the computation is interrupted. 
 \\
@@ -93,7 +93,7 @@ The reason such non-plausible shapes exist is the density-controlled $\epsilon$ 
   }    
 
   
-\caption{This figure shows a synthetic cylinder in the foreground whose points are classified as a torus instead of a cylinder. Eventough the points fit the torus, determined by the RANSAC options, the result is not plausible, since the user would expect a cylinder for this constellation of points. }
+\caption{This figure shows a synthetic cylinder in the foreground whose points are classified as a torus instead of a cylinder. Even tough the points fit the torus, determined by the RANSAC options, the result is not plausible, since the user would expect a cylinder for this constellation of points. }
 \label{fig:missfittedTorus}
 \end{figure}
 
