@@ -3,7 +3,7 @@
 
 This chapter gives an overview on implementation details for this thesis. the implementation of the application is guided by the \textit{functional-first} programming paradigm. \textit{Functional-first} takes inspiration from functional programming, as well as other paradigms, such as object-oriented programming. However, the majority of the application is written purely functional, with connections to non-functional components, such as .NET libraries for multi threading or Schnabel et. al's shape detection implementation\cite{schnabel-2007-software}. 
 \\
-This chapter starts with an introduction to functional programming and the programming language \verb|F#|\cite{FSharp} before introducing the key features of the Aardvark platform\cite{aardvark} that is used as rendering engine for this application in Section \ref{sec:aardvark}. The main data structure for in the application is an octree that stores point cloud and handles it's the out-of-core functionality. A set of functions that simplify querying with the octree is proposed in Section \ref{funcOctree}. 
+This chapter starts with an introduction to functional programming and the programming language \verb|F#|\cite{FSharp} before introducing the key features of the Aardvark platform\cite{aardvark} that is used as rendering engine for this application in Section \ref{sec:aardvark}. The main data structure for in the application is an octree that stores point cloud and handles it's the out-of-core functionality. A set of functions that simplify querying with the octree is proposed in Section \ref{sec:funcOctree}. 
 \\
 Multiple coroutines are performed in the background that produce a stream of data for the point cloud. The multi-threaded architecture of the application is discussed in Section \ref{sec:multithreading}. Section \ref{sec:rendering} concludes this chapter by briefly discussing implementation details of the point-cloud rendering system. 
 
@@ -39,7 +39,7 @@ Functional programming tries to mitigate mutations as much as possible. Mutation
 \section{Aardvark}
 \label{sec:aardvark}
 
-The Aardvark platform\cite{aardvark} is a functional-first incremental rendering engine in active development at the VRVis Zentrum für Virtual Reality und Visualisierung\cite{vrvis}. It is an implementation of research results on the field of incremental rendering \cite{, lazy} and semantic shader composition\cite{haaser2014cosmo, haaser2014semantic}. 
+The Aardvark platform\cite{aardvark} is a functional-first incremental rendering engine in active development at the VRVis Zentrum für Virtual Reality und Visualisierung\cite{vrvis}. It is an implementation of research results on the field of incremental rendering \cite{worister2013lazy, haaser2015incremental} and semantic shader composition\cite{haaser2014cosmo, haaser2014semantic}. 
 
 The key feature of the Aardvark platform is incremental rendering. In a conventional engine, updates are performed periodically. each object in the scene is reevaluated, even tough the simulation or user-input did not yield any changes. Incremental rendering counters this overhead by reacting to changes, such that only parts that depend on changed values are reevaluated. This section describes some of Aardvark's key features that are used throughout this thesis. Section \ref{sec:adaptive} shows the language-specific constructs on how to build adaptive blocks that react to changes. A \textit{scene graph} represents an object hierarchy in the scene. Section \ref{sec:isg} describes the composition of a scene graph using only a handful of lines of code. 
 
@@ -155,7 +155,7 @@ The octree's out-of-core capability is managed by an interleaved structure of th
 
 \subsection{Elemental functions}
 
-The interaction methods described in Section \ref{chap:interactions} heavily rely on the efficient collection of octree nodes that fulfill certain criteria, thus a set of routines is implemented that can easily be parameterized and reused. \verb|F#| collections contain several functions that use a lambda function as input and perform this function on elements in the collection. Some examples are \verb|map, filter| and \verb|choose|, all of which takes two arguments, an array and a function that takes an element as input. Even though the octree is not generic, such functions are implemented in a similar way, in order to provide efficient query functions for the octree. 
+The interaction methods described in Section \ref{sec:interactions} heavily rely on the efficient collection of octree nodes that fulfill certain criteria, thus a set of routines is implemented that can easily be parameterized and reused. \verb|F#| collections contain several functions that use a lambda function as input and perform this function on elements in the collection. Some examples are \verb|map, filter| and \verb|choose|, all of which takes two arguments, an array and a function that takes an element as input. Even though the octree is not generic, such functions are implemented in a similar way, in order to provide efficient query functions for the octree. 
 
 
 \subsubsection{Filter}
@@ -331,10 +331,10 @@ Popping effects occur when when the view changes and overlapping imposters chang
 
 \begin{figure}
 \centering
-\subcaptionbox{ \label{fig:picking_raycast}}{%
+\subcaptionbox{ \label{fig:point_circles}}{%
   \includegraphics[width=0.48\textwidth]{Implementation/pointCircles.png}%7
   }
-\subcaptionbox{ \label{fig:picking_conecast}}{%
+\subcaptionbox{ \label{fig:point_spheres}}{%
   \includegraphics[width=0.48\textwidth]{Implementation/pointSpheres.png}%
   }
   

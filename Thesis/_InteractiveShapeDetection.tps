@@ -11,8 +11,8 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1724
-NormalPos.bottom=816
+NormalPos.right=1562
+NormalPos.bottom=549
 Class=LaTeXView
 Document=_InteractiveShapeDetection.tex
 
@@ -29,13 +29,13 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1724
-NormalPos.bottom=816
+NormalPos.right=1562
+NormalPos.bottom=549
 Class=LaTeXView
 Document=Introduction\Introduction.tex
 
 [Frame1_View0,0]
-TopLine=34
+TopLine=26
 Cursor=2784
 
 [Frame2]
@@ -47,13 +47,13 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1724
-NormalPos.bottom=816
+NormalPos.right=1562
+NormalPos.bottom=549
 Class=LaTeXView
 Document=Results\Results.tex
 
 [Frame2_View0,0]
-TopLine=85
+TopLine=83
 Cursor=7192
 
 [Frame3]
@@ -65,8 +65,8 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1724
-NormalPos.bottom=816
+NormalPos.right=1562
+NormalPos.bottom=549
 Class=LaTeXView
 Document=Implementation\Implementation.tex
 
@@ -83,13 +83,13 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1724
-NormalPos.bottom=816
+NormalPos.right=1562
+NormalPos.bottom=549
 Class=LaTeXView
 Document=Shape_Detection\Shape_Detection.tex
 
 [Frame4_View0,0]
-TopLine=95
+TopLine=96
 Cursor=9277
 
 [Frame5]
@@ -101,14 +101,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1724
-NormalPos.bottom=816
+NormalPos.right=1562
+NormalPos.bottom=549
 Class=LaTeXView
 Document=Conclusion\Conclusion.tex
 
 [Frame5_View0,0]
-TopLine=13
-Cursor=2714
+TopLine=12
+Cursor=1367
 
 [Frame6]
 Flags=0
@@ -119,13 +119,13 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1724
-NormalPos.bottom=816
+NormalPos.right=1562
+NormalPos.bottom=549
 Class=LaTeXView
 Document=System_Design\System_Design.tex
 
 [Frame6_View0,0]
-TopLine=315
+TopLine=352
 Cursor=25930
 
 [SessionInfo]

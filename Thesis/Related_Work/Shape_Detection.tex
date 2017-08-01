@@ -1,8 +1,8 @@
 \section {Shape Detection}
 
-The objective of detecting structures in point clouds is a wide field of research. The term structure is very loosely defined. Structure can mean geometric structures, such as planes, cylinder and spheres, structure can also be interpreted more complex distinct components that represent a man-made or natural formations, such as cars or lanterns. 
+The objective of detecting structures in point clouds is a wide field of research. The term structure is very loosely defined. Structure can mean geometric structures, such as planes, cylinder, or spheres. Structure can also be interpreted as more complex components that represent distinct man-made or natural formations, such as cars or lanterns. 
 
-The 2D hough transform\cite{hough1962method} is a technique usually used in the field of image processing. This technique is able to detect straight lines such as building contours as well as curves. When extending the Hough transform to 3D by Maas et. al\cite{maas1999two} and later by Oda et. al\cite{oda2004automatic} and Overby et. al\cite{overby2004automatic}, the technique is able to detect planes and other geometric forms such as cylinders\cite{rabbani2005efficient}. 
+The 2D Hough transform\cite{hough1962method} is a technique usually used in the field of image processing. This method can detect straight lines such as building contours as well as curves. When extending the Hough transform to 3D by Maas et. al\cite{maas1999two} and later by Oda et. al\cite{oda2004automatic} and Overby et. al\cite{overby2004automatic}, the technique can detect planes and other geometric forms such as cylinders\cite{rabbani2005efficient}. 
 
 \begin{figure}
     \centering
@@ -26,7 +26,7 @@ Figure \ref{fig:hough_planes} shows a city model consisting of planes, detected 
 \end{figure}
 
 
-A more recent approach by Schnabel et. al\cite{schnabel-2007-efficient} utilizes RANSAC\cite{fischler1981random} to extract a minimal set of primitive shapes that approximates the global structure of the point cloud. The algorithm randomly selects a set of points that roughly follow the curvature of a shape. If a certain number of point follow this shape's curvature as well, the shape is considered to be valid. This approach is capable of detecting planes, cylinders, spheres, cones and tori and has evolved into one of the most prominent shape detection algorithms. 
+A more recent approach by Schnabel et. al\cite{schnabel-2007-efficient} utilizes RANSAC\cite{fischler1981random} to extract a minimal set of primitive shapes that approximate the global structure of the point cloud. The algorithm randomly selects a set of points that roughly follow the curvature of a shape. If a certain number of point follow this shape's curvature as well, the shape is considered to be valid. This approach is capable of detecting planes, cylinders, spheres, cones, and tori and has evolved into one of the most prominent shape detection algorithms. 
 
 \begin{figure}
     \centering
@@ -35,7 +35,7 @@ A more recent approach by Schnabel et. al\cite{schnabel-2007-efficient} utilizes
     \label{fig:schnabel_church}
 \end{figure}
 
-Figure \ref{fig:schnabel_church} shows the results of the RANSAC approach on a point cloud. Not only does this approach provide the geometry of the detected shapes, it also determines the membership of a point to a shape. This approach has evolved into one of the most prominent shape detection algorithms and is used in this thesis as well. 
+Figure \ref{fig:schnabel_church} shows the results of the RANSAC approach on a point cloud. Not only does this approach provide the geometry of the detected shapes, but it also determines the membership of a point to a shape. This method has evolved into one of the most prominent shape detection algorithms and is used in this thesis as well. 
 \\
 \\
 Tarsha-Kurdi \cite{tarsha2007hough} analyzes the performance of the 3D Hough transform and RANSAC for detecting roof planes from airborne laser data. RANSAC proves to be more robust to noise and more efficient.
@@ -44,7 +44,7 @@ Tarsha-Kurdi \cite{tarsha2007hough} analyzes the performance of the 3D Hough tra
 GlobFit is a system by Li et al. \cite{li2011globfit} that aims to recover a set of locally fitted primitives, obtained by RANSAC, along with their global mutual relations. The authors work under the assumption that primitives occur repeatedly and are man-made, so global relations are iteratively learned and enforced on the local relations. 
 \\
 \\
-Golvinskiy et al. \cite{golovinskiy2009shape} utilize graph-based methods to recognize shapes in urban environments in 3D point clouds. The authors are able to detect objects, such as cars, newspaper boxes and traffic lights. They create potential object locations by clustering nearby points, before the point cloud is segmented into foreground an background. For each cluster a feature vector is built, prior to using it as input for a trained classifier. 
+Golvinskiy et al. \cite{golovinskiy2009shape} utilize graph-based methods to recognize shapes in urban environments in 3D point clouds. This method can detect objects, such as cars, newspaper boxes and traffic lights. Potential object locations are identified by clustering nearby points before the point cloud is segmented into foreground and background. For each cluster, a feature vector is built, before using it as input for a trained classifier to obtain a final classification. 
 \\
 \\
-Oesau et al. \cite{oesau2016planar} propose an alternative approach to detect planar shapes in point clouds using region growing. A shape is represented as a set of points and an associated fitting plane. Points from the neighborhood are added consecutively to the plane or merging two shapes, thus growing the region. 
+Oesau et al. \cite{oesau2016planar} propose an alternative approach to detect planar shapes in point clouds using region growing. A shape is represented as a set of points and an associated fitting plane. Points or shapes from the neighborhood are added consecutively to the plane, thus growing the region. 

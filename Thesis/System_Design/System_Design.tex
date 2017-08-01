@@ -3,7 +3,7 @@
 
 This chapter discusses the design of the application developed for this thesis. The aim is to develop a stand-alone desktop application to view and interact with out-of-core point clouds. The application lets the user not only view point clouds, but also interact with the point cloud on multiple level. The application has three major components that interact together, all controlled by the user. 
 \\
-The first component describes a way on how to use the user's interaction to detect shapes in the point cloud and present the geometry within interactive time. Section \ref{sec:user_guided_sd} proposes an interactive technique to select a node from the octree that is a region of interest for the user and to detect primitive shapes in. 
+Shape detection is performed one small regions only. Section \ref{sec:user_guided_sd} describes an interactive heuristic that selects an octree node as region of interest, using the user's cursor position and camera view as input. This effectively changes the task of detecting shapes from an automated approach to an user-controlled interaction.
 \\
 Section \ref{sec:shapePicking} describes a picking algorithm to select a primitive shape from the octree that can later be used as support shape for assisted user interactions. 
 \\

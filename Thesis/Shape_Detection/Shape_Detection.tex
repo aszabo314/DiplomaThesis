@@ -8,8 +8,7 @@
 
 The shape detection runs automatically in the background. It is designed in such a way that the user receives imminent feedback of local geometry for the region under the mouse cursor. The approach utilizes an automated shape detection algorithm that is capable of detecting different types of primitive shapes. This algorithm is designed to find shapes in point clouds that consist of several million points within minutes. However, when looking at the performance for smaller samples, results can be achieved at interactive time rates. Section \ref{sec:schnabel} describes the shape detection algorithm in detail. 
 \\
-Shape detection is performed one small regions only. Section \ref{sec:candidateNodes} describes a heuristic on how to choose such a region, using the user's cursor position and camera view as input. This effectively changes the task of shape detection from an automated approach to an user-controlled interaction.
-\\ 
+
 In order to use the detected shapes for rendering and interactions, the shapes must be postprocessed. Since some of the shapes are of infinite size, they need to be refitted to  encapsulate the corresponding support points and create a minimal boundary. Section\ref{sec:Refitting} describes this task. 
 
 
