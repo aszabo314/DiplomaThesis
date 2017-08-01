@@ -12,13 +12,13 @@ MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
 NormalPos.right=1562
-NormalPos.bottom=549
+NormalPos.bottom=579
 Class=LaTeXView
-Document=_InteractiveShapeDetection.tex
+Document=Related_Work\Related_work.tex
 
 [Frame0_View0,0]
 TopLine=0
-Cursor=597
+Cursor=0
 
 [Frame1]
 Flags=0
@@ -30,13 +30,13 @@ MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
 NormalPos.right=1562
-NormalPos.bottom=549
+NormalPos.bottom=579
 Class=LaTeXView
-Document=Introduction\Introduction.tex
+Document=Related_Work\Out-of-Core_Pointclouds.tex
 
 [Frame1_View0,0]
-TopLine=26
-Cursor=2784
+TopLine=0
+Cursor=0
 
 [Frame2]
 Flags=0
@@ -48,13 +48,13 @@ MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
 NormalPos.right=1562
-NormalPos.bottom=549
+NormalPos.bottom=579
 Class=LaTeXView
-Document=Results\Results.tex
+Document=Related_Work\Shape_Detection.tex
 
 [Frame2_View0,0]
-TopLine=83
-Cursor=7192
+TopLine=0
+Cursor=0
 
 [Frame3]
 Flags=0
@@ -66,13 +66,13 @@ MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
 NormalPos.right=1562
-NormalPos.bottom=549
+NormalPos.bottom=579
 Class=LaTeXView
-Document=Implementation\Implementation.tex
+Document=Related_Work\Interactions.tex
 
 [Frame3_View0,0]
 TopLine=0
-Cursor=53
+Cursor=2585
 
 [Frame4]
 Flags=0
@@ -84,13 +84,13 @@ MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
 NormalPos.right=1562
-NormalPos.bottom=549
+NormalPos.bottom=579
 Class=LaTeXView
-Document=Shape_Detection\Shape_Detection.tex
+Document=Octree\Octree.tex
 
 [Frame4_View0,0]
-TopLine=96
-Cursor=9277
+TopLine=65
+Cursor=6781
 
 [Frame5]
 Flags=0
@@ -102,34 +102,16 @@ MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
 NormalPos.right=1562
-NormalPos.bottom=549
+NormalPos.bottom=579
 Class=LaTeXView
-Document=Conclusion\Conclusion.tex
+Document=Shape_Detection\Shape_Detection.tex
 
 [Frame5_View0,0]
-TopLine=12
-Cursor=1367
-
-[Frame6]
-Flags=0
-ShowCmd=1
-MinPos.x=-1
-MinPos.y=-1
-MaxPos.x=-1
-MaxPos.y=-1
-NormalPos.left=4
-NormalPos.top=26
-NormalPos.right=1562
-NormalPos.bottom=549
-Class=LaTeXView
-Document=System_Design\System_Design.tex
-
-[Frame6_View0,0]
-TopLine=352
-Cursor=25930
+TopLine=0
+Cursor=714
 
 [SessionInfo]
-FrameCount=7
+FrameCount=6
 ActiveFrame=5
 
 [Bookmarks]

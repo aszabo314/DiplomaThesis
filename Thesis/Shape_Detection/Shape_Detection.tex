@@ -6,61 +6,61 @@
 
 \section{Overview}
 
-The shape detection runs automatically in the background. It is designed in such a way that the user receives imminent feedback of local geometry for the region under the mouse cursor. The approach utilizes an automated shape detection algorithm that is capable of detecting different types of primitive shapes. This algorithm is designed to find shapes in point clouds that consist of several million points within minutes. However, when looking at the performance for smaller samples, results can be achieved at interactive time rates. Section \ref{sec:schnabel} describes the shape detection algorithm in detail. 
+The shape detection runs automatically in the background. It is designed in such a way that the user receives immediate feedback of local geometry for the region under the mouse cursor. The approach utilizes an automated shape detection algorithm that is capable of detecting different types of primitive shapes. This algorithm is designed to find shapes in point clouds that consist of several million points within minutes. However, when looking at the performance for smaller samples, results can be achieved at interactive time rates. Section \ref{sec:schnabel} describes the shape detection algorithm in detail. 
 \\
 
-In order to use the detected shapes for rendering and interactions, the shapes must be postprocessed. Since some of the shapes are of infinite size, they need to be refitted to  encapsulate the corresponding support points and create a minimal boundary. Section\ref{sec:Refitting} describes this task. 
+Before using the detected shapes for rendering or interactions, the shapes must be postprocesssed. Since some of the shapes are of infinite size, they need to be refitted to encapsulate the corresponding support points and create a minimal boundary. Section\ref{sec:Refitting} describes this task. 
 
 
 \section{Efficient RANSAC for Point-Cloud Shape Detection}
 \label{sec:schnabel}
 
 The section gives a brief overview over the algorithm used to detect primitive shapes. 
-Schnabel et. al\cite{schnabel-2007-efficient} propose an automated way for detecting simple primitive shapes in unstructured point clouds. The point cloud is decomposed into a set of shapes and a set of unused points. The algorithm supports detection of planes, spheres, cylinders, cones, and tori. 
+Schnabel et. al\cite{schnabel-2007-efficient} propose an automated way to detect simple primitive shapes in unstructured point clouds. The point cloud is decomposed into a set of shapes and a set of unused points. The algorithm supports detection of planes, spheres, cylinders, cones, and tori. 
 
 \textbf{RAN}dom \textbf{SA}mpling \textbf{C}onsens (RANSAC) was first discussed by Fischler and Bolles\cite{fischler1981random} as a paradigm for model fitting for image analysis and automated cartography. However, this approach can be generalized for points with an origin other than images. The shape detection utilizes RANSAC to repeatedly take a minimal set of points to build a primitive shape $\Psi$ and checks if the points in the region roughly follow the curvature of the shape. 
 
 \subsection{Minimal sets}
-A minimal set describes the set of points that is needed to construct a candidate shape. 
-For each type of shape the following rule applies: A shape is only considered as candidate shape if all points from the minimal set are within a distance $\epsilon$ to the shape and the normal does not deviate from the shape's normal by more than an angle $\alpha$. 
+A minimal set describes the set of points that are needed to construct a candidate shape. 
+For each type of shape, the following rule applies: A shape is only considered as candidate shape if all points from the minimal set are within a distance $\epsilon$ to the shape and the normal does not deviate from the shape's normal by more than an angle $\alpha$. 
 
 \begin{itemize}
-	\item \textbf{Plane}: A plane is constructed from three points $p_0, p_1, p_2$ whose normals do deviate from the plane's normal less than the angle $\alpha$. 
-	
-	\item \textbf{Sphere}: A sphere is fully defined by two points $p_0, p_1$ with corresponding normal vectors $n_0, n_1$. The center $c$ of the sphere is defined by the midpoint shortest line segment between the parametric lines $p_0 + tn_0$ and $p_1 + sn_1$. The radius is constructed by averaging the distance of $p_0$ and $p1$ to $c$.
+    \item \textbf{Plane}: A plane is constructed from three points $p_0, p_1, p_2$ whose normals do deviate from the plane's normal less than the angle $\alpha$. 
+    
+    \item \textbf{Sphere}: A sphere is fully defined by two points $p_0, p_1$ with corresponding normal vectors $n_0, n_1$. The center $c$ of the sphere is defined by the midpoint shortest line segment between the parametric lines $p_0 + tn_0$ and $p_1 + sn_1$. The radius is constructed by averaging the distance of $p_0$ and $p1$ to $c$.
 
-	\item \textbf{Cylinder}:
-	In order to create a cylinder a minimal set of two points  $p_0, p_1$ with corresponding normal vectors $n_0, n_1$ is used. The direction $d$ of the axis is established by $d = n_0 \times n_1$. The origin $c$ of the cylinder is created by projecting the parametric lines $p_0 + tn_0$ and $p_1 + sn_1$ onto the plane $d \cdot x = 0$ and taking their intersection as origin $c$. The radius is the shortest distance between $p_0$ and the axis $c + ud$
-	
-	\item \textbf{Cone}:
-	For simplicity, the minimal set for a cone consists of three points $p_0, p_1, p_2$, rather than two. For each point-normal pair, a plane is created. The intersection of the three planes defines the apex $c$. To describe the direction of the axis a plane is constructed from the points \{$c +  \frac{p_0 - c}{||p_0 - c||}$, $c +  \frac{p_1 - c}{||p_1 - c||}$, $c +  \frac{p_2 - c}{||p_2 - c||}$\}. The normal of this plane is the direction $d$ of the cone axis. The opening angle is given as $\omega = \frac{\sum_{i}^{max} (p_i - c)\cdot d}{3}$
-	
-	\item \textbf{Torus}:
-	A minimal set of four points with normals is used, one more than theoretically necessary However, this eases the computation.
-	Two possible rotational axis are found by intersecting the four point-normal lines $p_i +  \lambda n_i$\cite{marshall2001robust}. For each axis a full torus is estimated and the torus is chosen that causes the smaller error in respect to the four points. The minor radius is found by projecting the points onto a plane that rotates around the axis. A circle is constructed using three points, whose radius is the minor radius of the torus. The major radius is given as the the distance of the circle center to the axis. 
+    \item \textbf{Cylinder}:
+    In order to create a cylinder a minimal set of two points  $p_0, p_1$ with corresponding normal vectors $n_0, n_1$ is used. The direction $d$ of the axis is established by $d = n_0 \times n_1$. The origin $c$ of the cylinder is created by projecting the parametric lines $p_0 + tn_0$ and $p_1 + sn_1$ onto the plane $d \cdot x = 0$ and taking their intersection as origin $c$. The radius is the shortest distance between $p_0$ and the axis $c + ud$
+    
+    \item \textbf{Cone}:
+    For simplicity, the minimal set for a cone consists of three points $p_0, p_1, p_2$, rather than two. For each point-normal pair, a plane is created. The intersection of the three planes defines the apex $c$. To describe the direction of the axis a plane is constructed from the points \{$c +  \frac{p_0 - c}{||p_0 - c||}$, $c +  \frac{p_1 - c}{||p_1 - c||}$, $c +  \frac{p_2 - c}{||p_2 - c||}$\}. The normal of this plane is the direction $d$ of the cone axis. The opening angle is given as $\omega = \frac{\sum_{i}^{max} (p_i - c)\cdot d}{3}$
+    
+    \item \textbf{Torus}:
+    A minimal set of four points with normals is used, one more than theoretically necessary, However, this eases the computation.
+    Two possible rotational axis are found by intersecting the four point-normal lines $p_i +  \lambda n_i$\cite{marshall2001robust}. For each axis, a full torus is estimated, and the torus is chosen that causes the smaller error in respect to the four points. The minor radius is found by projecting the points onto a plane that rotates around the axis. A circle is constructed using three points, whose radius is the minor radius of the torus. The major radius is given as the distance from the circle center to the axis. 
 
 
 \end{itemize} 
 
 \subsection{Score function}
 \label{sec:scorefun}
-In order to only use points that roughly follow the curvature of a candidate shape, only points within a distance $\epsilon$ are taken into account Furthermore, each point must fulfill a score function in order to be considered a support point of the shape $\Psi$. 
+To only use points that roughly follow the curvature of a candidate shape, only points within a distance $\epsilon$ are taken into account. Furthermore, each point must fulfill a score function to be considered a support point of the shape $\Psi$. 
 The score function for each point consists of the following: 
 \begin{itemize}
-	\item The distance between the point and the shape must be smaller than $\epsilon$.
-	\item The normal of the point must not deviate from the normal of the shape more than a given angle $\alpha$.
-	\item Among all points that fulfill the previous two conditions, only the subset of points, that creates the largest connected component on the shape,  is considered.
+    \item The distance between the point and the shape must be smaller than $\epsilon$.
+    \item The normal of the point must not deviate from the normal of the shape more than a given angle $\alpha$.
+    \item Among all points that fulfill the previous two conditions, only the subset of points, which creates the largest connected component embedded in the shape,  is considered.
 \end{itemize}
 
-All points that are within a distance $\epsilon$ are taken into account. However, only those whose normals do not deviate from the normal of the shape more than a given angle $\alpha$ are considered support points. Additionally, the number of support points must exceed a threshold value $n$ in order for this shape to be valid. 
+All points that are within a distance $\epsilon$ are taken into account. However, only those whose normals do not deviate from the normal of the shape more than a given angle $\alpha$ are considered support points. Additionally, the number of support points must exceed a threshold value $n$ for this shape to be valid. 
 
 
 \subsection{Performance}
 \begin{table}
-	\centering
-	\includegraphics[width=0.7\textwidth]{Shape_Detection/schnabel-performance.png}
-	\caption{The original statistics by Schnabel et. al\cite{schnabel-2007-efficient} on processed models. $\epsilon$ is given as ration of maximum bounding box with. Results have been averaged over 5 runs and rounded.}
-	\label{table:schnabel_performance}
+    \centering
+    \includegraphics[width=0.7\textwidth]{Shape_Detection/schnabel-performance.png}
+    \caption{The original statistics by Schnabel et. al\cite{schnabel-2007-efficient} on processed models. $\epsilon$ is given as ration of maximum bounding box with. Results have been averaged over 5 runs and rounded.}
+    \label{table:schnabel_performance}
 \end{table}
 
 Table \ref{table:schnabel_performance} describes the statistical results for different models. $|P|$ is the number of points, $\epsilon$ the distance threshold, $\alpha$ the maximum normals deviation, $\tau$ is the minimum number of support points, $\|Psi|$ the number of shapes found, $|R|$ the number of RANSAC iterations. It can be seen that for small a small number of points and weaker constraints the algorithm returns plausible results within a fraction of a second. We utilize this feature the detect shapes in our application for small regions at a time to give immediate feedback to the user. 
@@ -69,7 +69,7 @@ Table \ref{table:schnabel_performance} describes the statistical results for dif
 \section{Refitting}
 \label{sec:Refitting}
 
-Planes, cylinder and cones are infinite shapes. Therefore, in order to use those shapes for rendering and interactions, it is necessary to create finite representations for each shape. Each shape comes with the corresponding set of support points that are used to refit the shape. Spheres and Tori are finite by definition. Therefore they do not require refitting. 
+Planes, cylinder, and cones are infinite shapes. Therefore, to use those shapes for rendering and interactions, it is necessary to create finite representations for each shape. Each shape comes with the corresponding set of support points that are used to refit the shape. Spheres and Tori are finite by definition. Therefore they do not require refitting. 
 
 
 \subsection{Refitting planes}
@@ -80,18 +80,18 @@ More complex polygons can be computed. However, for this purpose, a quad is suff
 
 \subsection{Refitting cylinder}
 
-A cylinder is defined by a center $p$, direction vector $v$ and a radius $r$. The height of the cylinder is infinite. To create a finite representation that encloses all support points, the two points whose difference in height is maximum. This is achieved by projecting all points onto the axis $a = p + vt$ of the cylinder, and select the points $p_{min}$, where $t$ is minimum and $p_{max}$, where $t$ is maximum. The distance $d$ between $p_{min}$ and $p_{max}$ is the height of the enclosing cylinder. The cylinder is refitted such that the new center is set to $p' = p_{min}$ and the $d$ is encoded in the length of the new direction vector:$v' = \frac{v}{|v|}d$. The radius stays the same. 
+A cylinder is defined by a center $p$, direction vector $v$ and a radius $r$. The height of the cylinder is chosen as the maximum distance between two support points on the axis of the cylinder. This is achieved by projecting all points onto the axis $a = p + vt$ of the cylinder, and select the points $p_{min}$, where $t$ is minimum and $p_{max}$, where $t$ is maximum. The distance $d$ between $p_{min}$ and $p_{max}$ is the height of the enclosing cylinder. The cylinder is refitted such that the new center is set to $p' = p_{min}$ and the $d$ is encoded in the length of the new direction vector:$v' = \frac{v}{|v|}d$. The radius stays the same. 
 
 
 \subsection{Refitting cones}
 
-A cone is defined by it's apex $c$, axis direction $v$ and opening angle $\theta$. Similar to the cylinder, all support points are projected to the axis and the points $p_{min}, p_{max}$ with minimum and maximum $t$ are selected. Since the apex of a cone is fixed, the range cannot be encoded using $c$ and $v$. The range is stored separately and range checks are performed when rendering or interacting with cones. 
+A cone is defined by its apex $c$, axis direction $v$, and opening angle $\theta$. Similar to the cylinder, all support points are projected onto the axis and the points $p_{min}, p_{max}$, with minimum and maximum $t$, are selected. Since the apex of a cone is fixed, the range cannot be encoded using $c$ and $v$. The range is stored separately. Range checks are performed when rendering or interacting with cones. 
 
 
 \section{Shape Detection Parameter Selection}
 \label{sec:shapeDetectionParameterSelection}
 
-This section briefly discusses the issue of selecting optimal parameter for the shape detection. The $\epsilon$ parameter creates an $\epsilon$-band that follows the curvature of the shape. All points within this $\epsilon$ band are considered to be candidates. The authors propose to use the point cloud's bounding boxes largest dimension times $0.1$ as $\epsilon$. However, using such a static parameter yields problems with extremely sparse regions and regions that are populated very densely. In this thesis, shape detection is performed dynamically on local region of the point cloud at a time. The local density of a octree node is chosen as $\epsilon$. The density is calculated per octree node by averaging the distance of each point to its nearest neighbor. Thus, nodes that are populated more densely, create finer geometry. 
+This section briefly discusses the issue of selecting optimal parameters for the shape detection. The $\epsilon$ parameter creates an $\epsilon$-band that follows the curvature of the shape. All points within this $\epsilon$ band are considered to be candidates. The authors propose to use the point cloud's bounding boxes largest dimension times $0.1$ as $\epsilon$. However, using such a static parameter yields problems with extremely sparse regions and regions that are populated very densely. In this thesis, shape detection is performed dynamically on local regions of the point cloud at a time. The local density of an octree node is chosen as $\epsilon$. The density is calculated per octree node by averaging the distance of each point to its nearest neighbor. Thus, nodes that are populated more densely create finer geometry. 
 
 The $\alpha$ parameter is used to determine the deviation between two directions. As the normals are the same at different level-of-detail, this parameter is static. We use an $\alpha$ value of $0.95$. 
 
