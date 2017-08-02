@@ -16,7 +16,7 @@ Before using the detected shapes for rendering or interactions, the shapes must 
 \label{sec:schnabel}
 
 The section gives a brief overview over the algorithm used to detect primitive shapes. 
-Schnabel et. al\cite{schnabel-2007-efficient} propose an automated way to detect simple primitive shapes in unstructured point clouds. The point cloud is decomposed into a set of shapes and a set of unused points. The algorithm supports detection of planes, spheres, cylinders, cones, and tori. 
+Schnabel et al.\cite{schnabel-2007-efficient} propose an automated way to detect simple primitive shapes in unstructured point clouds. The point cloud is decomposed into a set of shapes and a set of unused points. The algorithm supports detection of planes, spheres, cylinders, cones, and tori. 
 
 \textbf{RAN}dom \textbf{SA}mpling \textbf{C}onsens (RANSAC) was first discussed by Fischler and Bolles\cite{fischler1981random} as a paradigm for model fitting for image analysis and automated cartography. However, this approach can be generalized for points with an origin other than images. The shape detection utilizes RANSAC to repeatedly take a minimal set of points to build a primitive shape $\Psi$ and checks if the points in the region roughly follow the curvature of the shape. 
 
@@ -59,7 +59,7 @@ All points that are within a distance $\epsilon$ are taken into account. However
 \begin{table}
     \centering
     \includegraphics[width=0.7\textwidth]{Shape_Detection/schnabel-performance.png}
-    \caption{The original statistics by Schnabel et. al\cite{schnabel-2007-efficient} on processed models. $\epsilon$ is given as ration of maximum bounding box with. Results have been averaged over 5 runs and rounded.}
+    \caption{The original statistics by Schnabel et al.\cite{schnabel-2007-efficient} on processed models. $\epsilon$ is given as ration of maximum bounding box with. Results have been averaged over 5 runs and rounded.}
     \label{table:schnabel_performance}
 \end{table}
 

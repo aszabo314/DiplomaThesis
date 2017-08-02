@@ -11,7 +11,7 @@ Modern point clouds often consist of several billion points and consume several 
 
 \subsection{User-guided Shape Detection}
 
-This thesis shows a alternative use of the shape detection algorithm by Schnabel et. al\cite{schnabel-2007-efficient} which lets the user control the regions that are segmented. By pointing to a region with the mouse, the system selects the best candidate node to be segmented. The number of point in this region is chosen in such a way that the shape detection delivers results in interactive time. This immediate feedback allows the user to use the detected shapes as support shapes for improved interactions. 
+This thesis shows a alternative use of the shape detection algorithm by Schnabel et al.\cite{schnabel-2007-efficient} which lets the user control the regions that are segmented. By pointing to a region with the mouse, the system selects the best candidate node to be segmented. The number of point in this region is chosen in such a way that the shape detection delivers results in interactive time. This immediate feedback allows the user to use the detected shapes as support shapes for improved interactions. 
 
 
 \subsection{Improvement of Interaction Techniques}
@@ -26,9 +26,9 @@ The last task of this thesis was to design a novel interaction technique called 
 
 \section{Future Work}
 
-As the focus of this thesis was the design of the user-guided shape detection and the assisted interactions, future work will focus on performance and robustness improvements on various fronts. The usage of a selection data structure, such as Selection Octree\cite{scheiblauer2011out}, can improve the performance when selecting or editing the point cloud. Also, different ways can be explored to improve computation speed by taking advantage of the parallel architecture of the graphics card. 
+As the focus of this thesis was the design of the user-guided shape detection and the assisted interactions, future work will focus on performance and robustness improvements on various fronts. The usage of a selection data structure, such as a Selection Octree\cite{scheiblauer2011out}, can improve the performance when selecting or editing the point cloud. Also, different ways can be explored to improve computation speed by taking advantage of the parallel architecture of the graphics card. 
 \\
 
-Shape detection is performed using an external library by Schnabel et. al\cite{schnabel-2007-software}. Multiple problems occur, such as non-termination or non-plausible shape matching. More work must be carried out in order to limit or eliminate these problems. The robustness of the shape detection, especially when detecting non-planar primitive shapes, heavily suffers from the weak constraints. Alternatively the shape detection can be implemented in such a way, that certain types of shapes are prioritized in order to reduce the amount of non-plausible shapes. 
+Shape detection is performed using an external library by Schnabel et al.\cite{schnabel-2007-software}. Multiple problems occur, such as non-termination or non-plausible shape matching. More work must be carried out in order to limit or eliminate these problems. The robustness of the shape detection, especially when detecting non-planar primitive shapes, heavily suffers from the weak constraints. Alternatively the shape detection can be implemented in such a way, that certain types of shapes are prioritized in order to reduce the amount of non-plausible shapes. 
 \\
 

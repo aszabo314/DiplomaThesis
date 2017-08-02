@@ -13,7 +13,7 @@ The interactions proposed in this thesis heavily rely on the ability to detect m
 \section{Performance}
 \label{sec:shapedetectionperformance}
 
-The goal of the \textit{user-guided shape detection} is to provide meaningful results within interactive time, such that detected shapes can be used to support interactions immediately. The capabilities of the implementation by Schnabel et. al\cite{schnabel-2007-software} are benchmarked on three different datasets: 
+The goal of the \textit{user-guided shape detection} is to provide meaningful results within interactive time, such that detected shapes can be used to support interactions immediately. The capabilities of the implementation by Schnabel et al.\cite{schnabel-2007-software} are benchmarked on three different datasets: 
 
 \begin{center}
 \begin{tabular}{ l | r | r | r }
@@ -77,7 +77,7 @@ Figure \ref{fig:time_vs_lod} shows the calculation time compared to the \textit{
 
 \subsection{Problems and unwanted behaviour}
 
-A problem with the shape detection implementation by Schnabel et. al\cite{schnabel-2007-software} are reoccurring non-terminations for some octree nodes, causing the shape detection coroutine to stall. To circumvent this problem, all shape detection tasks that are dispatched to the \verb|sequential computation applicator| are assigned a timeout value of one second, after which the computation is interrupted. 
+A problem with the shape detection implementation by Schnabel et al.\cite{schnabel-2007-software} are reoccurring non-terminations for some octree nodes, causing the shape detection coroutine to stall. To circumvent this problem, all shape detection tasks that are dispatched to the \verb|sequential computation applicator| are assigned a timeout value of one second, after which the computation is interrupted. 
 \\
 Another reoccurring problem with the shape detection is the plausibility of detected shapes. The RANSAC options guarantee that shapes are found that fit the local geometry within a certain margin, $\alpha$ for the normal's angle and $\epsilon$ for the distance the the shape. So within theses two parameters, the shape is considered to be valid. However, certain constellation of points allow the shape detection to produce non-plausible results that valid in terms of the RANSAC shape detection, but are not plausible to the eye. A prominent example is a torus that is fitted onto a section that clearly describes a cylinder. The major radius of the torus is at such dimensions that the local cylinder fits within the curvature of the torus, thus a torus is detected, rather than the simpler cylinder. Figure \ref{fig:missfittedTorus} shows this behavior within an example scene that consists multiple primitives. Figure \ref{fig:missfittedTorus2} shows the size of the detected torus. 
 \\

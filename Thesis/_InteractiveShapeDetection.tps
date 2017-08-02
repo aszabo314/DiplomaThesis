@@ -11,14 +11,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1562
-NormalPos.bottom=579
+NormalPos.right=1724
+NormalPos.bottom=816
 Class=LaTeXView
-Document=Related_Work\Related_work.tex
+Document=Implementation\Implementation.tex
 
 [Frame0_View0,0]
 TopLine=0
-Cursor=0
+Cursor=1495
 
 [Frame1]
 Flags=0
@@ -29,14 +29,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1562
-NormalPos.bottom=579
+NormalPos.right=1724
+NormalPos.bottom=816
 Class=LaTeXView
-Document=Related_Work\Out-of-Core_Pointclouds.tex
+Document=Related_Work\Interactions.tex
 
 [Frame1_View0,0]
 TopLine=0
-Cursor=0
+Cursor=1036
 
 [Frame2]
 Flags=0
@@ -47,10 +47,10 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1562
-NormalPos.bottom=579
+NormalPos.right=1724
+NormalPos.bottom=816
 Class=LaTeXView
-Document=Related_Work\Shape_Detection.tex
+Document=Related_Work\Out-of-Core_Pointclouds.tex
 
 [Frame2_View0,0]
 TopLine=0
@@ -65,14 +65,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1562
-NormalPos.bottom=579
+NormalPos.right=1724
+NormalPos.bottom=816
 Class=LaTeXView
-Document=Related_Work\Interactions.tex
+Document=Related_Work\Related_work.tex
 
 [Frame3_View0,0]
 TopLine=0
-Cursor=2585
+Cursor=0
 
 [Frame4]
 Flags=0
@@ -83,14 +83,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1562
-NormalPos.bottom=579
+NormalPos.right=1724
+NormalPos.bottom=816
 Class=LaTeXView
-Document=Octree\Octree.tex
+Document=Related_Work\Shape_Detection.tex
 
 [Frame4_View0,0]
-TopLine=65
-Cursor=6781
+TopLine=0
+Cursor=1185
 
 [Frame5]
 Flags=0
@@ -101,14 +101,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1562
-NormalPos.bottom=579
+NormalPos.right=1724
+NormalPos.bottom=816
 Class=LaTeXView
-Document=Shape_Detection\Shape_Detection.tex
+Document=Results\Results.tex
 
 [Frame5_View0,0]
 TopLine=0
-Cursor=714
+Cursor=666
 
 [SessionInfo]
 FrameCount=6
