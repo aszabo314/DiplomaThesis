@@ -230,8 +230,19 @@ Figure \ref{fig:octreeReplace} shows an example on the replacement of a node. Th
 
 \subsection{Culling}
 
-Culling utilizes the octree's \verb|filter| function to create a new octree that only contains nodes that are currently rendered. The culling function performs view-frustum culling as well as a \verb|level-of-detail| culling heuristic based on the node's size and distance to the nearplane. 
-\todo{LoD function}
+Culling utilizes the octree's \verb|filter| function to create a new octree that only contains nodes that are currently rendered. The culling function performs view-frustum culling as well as a \verb|level-of-detail| culling heuristic based on the node's size and distance to the near plane. 
+\\
+Let $V$ be the volume of the node's bounding box, $win_x, win_y$ the dimensions of the window and $d_min$ be the smallest distance from the bounding box to the near plane in world space, clamped by the near and far plane. Furthermore, let $t$ be a user-controlled distance threshold. For this application, $t = 2$ is used. 
+\begin{center}
+$t_{win} = \frac{t}{max (win_x, win_y)}$ \\
+$g = \frac{\sqrt[3]{V}}{d_{min}}$ \\
+\end{center}
+The decision whether or not to render the node is determined by:
+\begin{center}
+$g > t_{win}$
+\end{center}
+
+The user-controlled threshold $t$ is divided by the largest window dimension to allows the \textit{level-of-detail} the adapt to the window size. $d_min$ is calculated by projecting all corners of the node's bounding box to view space and negating the $z$ value. The smallest value is then clamped to the view frustum, so the computation stays in visible view space. A smaller $t$ win allows for higher \textit{level-of-detail} to be displayed. The granularity $g$ of an octree node is controlled by the minimal distance and the size of the node. Nodes close to the camera have higher the granularity. Smaller nodes have smaller granularity. 
 
 \begin{figure}
     \centering
@@ -241,6 +252,7 @@ Culling utilizes the octree's \verb|filter| function to create a new octree that
 \end{figure}
 
 Figure \ref{fig:octreeCulling} shows an exemplary culling performed on a tree. The \textit{level-of-detail} decreases for nodes that are further away from the camera and only those nodes are used that intersect the view frustum. 
+
 
 \subsection{Diff}
 
