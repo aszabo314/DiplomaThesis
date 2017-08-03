@@ -11,8 +11,8 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1409
-NormalPos.bottom=344
+NormalPos.right=1724
+NormalPos.bottom=765
 Class=LaTeXView
 Document=Related_Work\Out-of-Core_Pointclouds.tex
 
@@ -29,14 +29,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1409
-NormalPos.bottom=344
+NormalPos.right=1724
+NormalPos.bottom=765
 Class=LaTeXView
 Document=Related_Work\Interactions.tex
 
 [Frame1_View0,0]
-TopLine=20
-Cursor=2591
+TopLine=2
+Cursor=1204
 
 [Frame2]
 Flags=0
@@ -47,8 +47,8 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1409
-NormalPos.bottom=344
+NormalPos.right=1724
+NormalPos.bottom=765
 Class=BibTeXView
 Document=intro.bib
 
@@ -56,9 +56,45 @@ Document=intro.bib
 TopLine=4
 Cursor=691
 
+[Frame3]
+Flags=0
+ShowCmd=1
+MinPos.x=-1
+MinPos.y=-1
+MaxPos.x=-1
+MaxPos.y=-1
+NormalPos.left=4
+NormalPos.top=26
+NormalPos.right=1724
+NormalPos.bottom=765
+Class=LaTeXView
+Document=Results\Results.tex
+
+[Frame3_View0,0]
+TopLine=125
+Cursor=8435
+
+[Frame4]
+Flags=0
+ShowCmd=1
+MinPos.x=-1
+MinPos.y=-1
+MaxPos.x=-1
+MaxPos.y=-1
+NormalPos.left=4
+NormalPos.top=26
+NormalPos.right=1724
+NormalPos.bottom=765
+Class=LaTeXView
+Document=Implementation\Implementation.tex
+
+[Frame4_View0,0]
+TopLine=437
+Cursor=31047
+
 [SessionInfo]
-FrameCount=3
-ActiveFrame=0
+FrameCount=5
+ActiveFrame=3
 
 [Bookmarks]
 Shape_Detection\Shape_Clustering.tex=79 

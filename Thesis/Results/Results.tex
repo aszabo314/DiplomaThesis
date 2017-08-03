@@ -5,13 +5,14 @@
 All results are obtained on a PC with an AMD FX-9590, 16 GB RAM and an AMD Radeon HD 7970. 
 
 
-\section{Shape Detection Benchmarking}
+\section{Shape Detection Results}
 
-The interactions proposed in this thesis heavily rely on the ability to detect meaningful shapes for regions of interest within interactive time. Therefore it must be assured that the shape detection provides results within interactive time such that the detected shapes can be used immediately for interactions. Section \ref{sec:shapedetectionperformance} discusses the performance obtained in the test computer. 
+The interactions proposed in this thesis heavily rely on the ability to detect meaningful shapes for regions of interest within interactive time. Therefore it must be assured that the shape detection provides results within interactive time such that the detected shapes can be used immediately for interactions. Section \ref{sec:shape_detection_performance} discusses the performance obtained in the test computer. 
 
 
-\section{Performance}
-\label{sec:shapedetectionperformance}
+\subsection{Performance}
+
+\label{sec:shape_detection_performance}
 
 The goal of the \textit{user-guided shape detection} is to provide meaningful results within interactive time, such that detected shapes can be used to support interactions immediately. The capabilities of the implementation by Schnabel et al.\cite{schnabel-2007-software} are benchmarked on three different datasets: 
 
@@ -72,30 +73,79 @@ Figure \ref{fig:shapes_total_vs_lod} shows the total number of shapes per \texti
 \\
 
 Figure \ref{fig:time_vs_lod} shows the calculation time compared to the \textit{level-of-detail}. Shape detection for smaller, more dense nodes take less time than for larger nodes with lower \textit{level-of-detail} as in larger nodes, usually more shapes are found. 
-\subsection{Results}
 
 
-\subsection{Problems and unwanted behaviour}
+\subsection{Problems and undesired Behavior}
 
 A problem with the shape detection implementation by Schnabel et al.\cite{schnabel-2007-software} are reoccurring non-terminations for some octree nodes, causing the shape detection coroutine to stall. To circumvent this problem, all shape detection tasks that are dispatched to the \verb|sequential computation applicator| are assigned a timeout value of one second, after which the computation is interrupted. 
 \\
 Another reoccurring problem with the shape detection is the plausibility of detected shapes. The RANSAC options guarantee that shapes are found that fit the local geometry within a certain margin, $\alpha$ for the normal's angle and $\epsilon$ for the distance the the shape. So within theses two parameters, the shape is considered to be valid. However, certain constellation of points allow the shape detection to produce non-plausible results that valid in terms of the RANSAC shape detection, but are not plausible to the eye. A prominent example is a torus that is fitted onto a section that clearly describes a cylinder. The major radius of the torus is at such dimensions that the local cylinder fits within the curvature of the torus, thus a torus is detected, rather than the simpler cylinder. Figure \ref{fig:missfittedTorus} shows this behavior within an example scene that consists multiple primitives. Figure \ref{fig:missfittedTorus2} shows the size of the detected torus. 
 \\
-The reason such non-plausible shapes exist is the density-controlled $\epsilon$ parameter, weakening the margin for octree nodes of larger volume. Even within a node, the density can strongly vary for different regions. 
+Such non-plausible shapes can exist due to the density-controlled $\epsilon$ parameter that weakens the margin for octree nodes of larger volume. Even within a node, the density can strongly vary for different regions. 
 
-\begin{figure}
+\begin{figure}[h]
 \centering
 \subcaptionbox{ \label{fig:missfittedTorus1}}{%
   \includegraphics[width=0.49\textwidth]{Results/missfittedTorus1.png}%7
   }%\par\medskip
 \subcaptionbox{ \label{fig:missfittedTorus2}}{%
   \includegraphics[width=0.49\textwidth]{Results/missfittedTorus2.png}%
-  }    
-
-  
-\caption{This figure shows a synthetic cylinder in the foreground whose points are classified as a torus instead of a cylinder. Even tough the points fit the torus, determined by the RANSAC options, the result is not plausible, since the user would expect a cylinder for this constellation of points. }
+  }      
+\caption{This figure shows a cylinder from the synthetic point cloud whose points are classified as a torus instead of a cylinder. Even tough the points fit the torus, determined by the RANSAC options, the result is not plausible, since the user would expect a cylinder for this constellation of points. }
 \label{fig:missfittedTorus}
 \end{figure}
+
+
+\subsection{Results}
+
+This section presents results for the RANSAC shape detection performed on three data sets. The results are obtained by by segmenting the point clouds as a whole. Results for the interactive shape detection can be found in Section \ref{sec:interaction_results}. 
+
+The synthetic test scene consists of two planes, three cylinders, three tori, and three cones.  Figure \ref{fig:synthetic_point_cloud_results} shows the synthetic point cloud, as well as the shapes that are detected within the point cloud. As the RANSAC approach randomly selects a subset of points, the results can be different for different runs. 
+
+\begin{figure}[h]
+\centering
+\subcaptionbox{ \label{fig:synthetic_point_cloud}}{%
+  \includegraphics[width=0.7\textwidth]{Results/synthetic_point_cloud.png}%7
+  }
+\subcaptionbox{ \label{fig:synthetic_point_cloud_shapes}}{%
+  \includegraphics[width=0.7\textwidth]{Results/synthetic_point_cloud_shapes.png}%
+  }
+\caption{(a) shows the synthetic point cloud, consisting of two planes, three cylinders, three tori, and three cones. (b) shows the detected shapes rendered as triangle meshes. For each shape in the point cloud, the RANSAC shape detection has found a suitable primitive shape. }
+\label{fig:synthetic_point_cloud_results}
+\end{figure}
+
+
+\begin{figure}
+\centering
+\subcaptionbox{ \label{fig:jb_haus}}{%
+  \includegraphics[width=\textwidth]{Results/jb_haus.png}%7
+  }
+\subcaptionbox{ \label{fig:jb_haus_shapes}}{%
+  \includegraphics[width=\textwidth]{Results/jb_haus_shapes.png}%
+  }
+\caption{JB\_haus rendered as point cloud in (a), (b) shows all shapes detected in the point cloud. }
+\label{fig:JB_haus_results}
+\end{figure}
+
+\begin{figure}
+\centering
+\subcaptionbox{ \label{fig:technologiezentrum}}{%
+  \includegraphics[width=\textwidth]{Results/technologiezentrum.png}%7
+  }
+\subcaptionbox{ \label{fig:technologiezentrum_shapes}}{%
+  \includegraphics[width=\textwidth]{Results/technologiezentrum_shapes.png}%
+  }
+\caption{Technologiezentrum rendered as point cloud in (a), (b) shows all shapes detected in the point cloud. }
+\label{fig:technologiezentrum_results}
+\end{figure}
+
+
+\section{Interaction Results}
+\label{sec:interaction_results}
+\todo{}
+
+
+
 
 
 

@@ -208,7 +208,6 @@ let choose (decisionFun : OctreeNode -> GridCell -> int[] -> Option<'T>*bool) (t
     \label{fig:octreeFuns}
 \end{figure}
 
-
 Figure \ref{fig:octreeFuns} shows the described functions and its' effects on an exemplary octree. The \verb|filter| function returns a new octree, the\verb|map| function returns an array of projected types, the \verb|choose| function is a combination of \verb|filter| and \verb|map| such that only those projections are returned that are of interest. 
 
 
@@ -228,11 +227,25 @@ When resolving the recursion, the content of all ancestor nodes changes as well,
 Figure \ref{fig:octreeReplace} shows an example on the replacement of a node. The nodes are labeled with their paths in the octree to identify them uniquely. The node with label \verb|[1,2]| is replaced. Thus, all ancestors in the octree are changed as well since the node got a new child. Nodes that changed are colored in orange. 
 
 
+\subsection{Raycast}
+
+An octree is an ideal data structure to accelerate ray casting. The hierarchical structure ensures that only a minimum set of nodes is tested for intersection. If the ray does not intersect the parent's bounding box, it does not intersect the children's bounding boxes as well. The raycast on the octree can be performed with logarithmic cost. The raycast is implemented using the octree's \verb|choose| function with a decision function that performs the intersection with the bounding box and returns a \verb|RaycastHit| structure containing all necessary information on the raycast hit. 
+
+
 \subsection{Culling}
 
-Culling utilizes the octree's \verb|filter| function to create a new octree that only contains nodes that are currently rendered. The culling function performs view-frustum culling as well as a \verb|level-of-detail| culling heuristic based on the node's size and distance to the near plane. 
-\\
+Culling utilizes the octree's \verb|filter| function to create a new octree that only contains nodes that are currently rendered. The culling function performs view-frustum culling as well as a \verb|level-of-detail| culling heuristic based on the node's size and distance to the near plane. Figure \ref{fig:octreeCulling} shows an exemplary culling performed on a tree. The \textit{level-of-detail} decreases for nodes that are further away from the camera and only those nodes are used that intersect the view frustum.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{Implementation/octreeCulling.png}
+    \caption{An exemplary culling is performed on a tree. Octree nodes that are darker with a thicker edge have a higher \textit{leve-of-detail}. Only close to the camera (red), the nodes with the highest \textit{level-of-detail} are rendered. Nodes that are outside the view frustum(orange) are discarded. }
+    \label{fig:octreeCulling}
+\end{figure}
+
+
 Let $V$ be the volume of the node's bounding box, $win_x, win_y$ the dimensions of the window and $d_min$ be the smallest distance from the bounding box to the near plane in world space, clamped by the near and far plane. Furthermore, let $t$ be a user-controlled distance threshold. For this application, $t = 2$ is used. 
+
 \begin{center}
 $t_{win} = \frac{t}{max (win_x, win_y)}$ \\
 $g = \frac{\sqrt[3]{V}}{d_{min}}$ \\
@@ -242,16 +255,22 @@ The decision whether or not to render the node is determined by:
 $g > t_{win}$
 \end{center}
 
-The user-controlled threshold $t$ is divided by the largest window dimension to allows the \textit{level-of-detail} the adapt to the window size. $d_min$ is calculated by projecting all corners of the node's bounding box to view space and negating the $z$ value. The smallest value is then clamped to the view frustum, so the computation stays in visible view space. A smaller $t$ win allows for higher \textit{level-of-detail} to be displayed. The granularity $g$ of an octree node is controlled by the minimal distance and the size of the node. Nodes close to the camera have higher the granularity. Smaller nodes have smaller granularity. 
+The user-controlled threshold $t$ is divided by the largest window dimension to allows the \textit{level-of-detail} the adapt to the window size. $d_min$ is calculated by projecting all corners of the node's bounding box to view space and negating the $z$ value. The smallest value is then clamped to the view frustum, so the computation stays in visible view space. A smaller $t$ win allows for higher \textit{level-of-detail} to be displayed. The granularity $g$ of an octree node is controlled by the minimal distance and the size of the node. Nodes close to the camera have higher the granularity. Smaller nodes have smaller granularity. Figure \ref{fig:targetpointDistance} 
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{Implementation/octreeCulling.png}
-    \caption{An exemplary culling is performed on a tree. Octree nodes that are darker with a thicker edge have a higher \textit{leve-of-detail}. Only close to the camera (red), the nodes with the highest \textit{level-of-detail} are rendered. Nodes that are outside the view frustum(orange) are discarded. }
-    \label{fig:octreeCulling}
+    \subcaptionbox{ \label{fig:targetpointDistance10}}{%
+        \includegraphics[width=0.6\textwidth]{Implementation/targetpointDistance10.png}%7
+        }\par\medskip
+    \subcaptionbox{ \label{fig:targetpointDistance25}}{%
+        \includegraphics[width=0.6\textwidth]{Implementation/targetpointDistance25.png}%
+        }\par\medskip        
+    \subcaptionbox{ \label{fig:targetpointDistance50}}{%
+        \includegraphics[width=0.6\textwidth]{Implementation/targetpointDistance50.png}%
+        }
+    \caption{This figure shows the Technologiezentrum rendered with a $t$ value of 2, 5, and 10 in (a) - (c). A smaller $t$ results in a denser visualization of the point cloud for the current view. }
+    \label{fig:targetpointDistance}
 \end{figure}
-
-Figure \ref{fig:octreeCulling} shows an exemplary culling performed on a tree. The \textit{level-of-detail} decreases for nodes that are further away from the camera and only those nodes are used that intersect the view frustum. 
 
 
 \subsection{Diff}
@@ -263,11 +282,6 @@ Let $t1, t2$ be two octrees where $t2$ is a sub tree of $t1$. The function \verb
 The \verb|diff| function takes nodes that are in the first octree and not in the second octree. In the case of the \textit{Shape-Assisted Local Level-of-Detail Increment}, interaction $t1$ is the complete octree, $t2$ is the culled octree that only contains nodes that are rendered. 
 \\
 Additionally, not only the children are collected, but depending on a depth value, the children's successors are collected as well. 
-
-
-\subsection{Raycast}
-
-An octree is an ideal data structure to accelerate ray casting. The hierarchical structure ensures that only a minimum set of nodes is tested for intersection. If the ray does not intersect the parent's bounding box, it does not intersect the children's bounding boxes as well. The raycast on the octree can be performed with logarithmic cost. The raycast is implemented using the octree's \verb|choose| function with a decision function that performs the intersection with the bounding box and returns a \verb|RaycastHit| structure containing all necessary information on the raycast hit. 
 
 
 \section{Sequential Computation Applicator}
@@ -307,7 +321,7 @@ The \textit{user-guided shape detection} in Section \ref{sec:user_guided_sd} is 
 \\
 The \textit{sequential computation applicator} performs changes on the octree. All tasks that are dispatched from multiple threads are executed in a sequential order in the background. The thread transacts the changes to the main thread once a computation has finished. 
 
-\begin{figure}
+\begin{figure}[b]
     \centering
     \includegraphics[width=0.6\textwidth]{Implementation/multiThreading.png}
     \caption{The main thread controls the rendering, mod evaluation and interactions. Point selections from interactions are handed to the applicator thread. The shape detection is invoked by a separate thread and dispatched on the applicator thread as well.  }

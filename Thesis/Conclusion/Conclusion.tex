@@ -35,3 +35,4 @@ As the selection processing is performed asynchronously, feedback is not display
 Shape detection is performed using an external library by Schnabel et al.\cite{schnabel-2007-software}. Multiple problems occur, such as non-termination or non-plausible shape matching. More work must be carried out to limit or eliminate these problems. The robustness of the shape detection, especially when detecting non-planar primitive shapes, suffers due to weak constraints. Alternatively, the shape detection can be implemented in such a way, that particular types of shapes are prioritized to reduce the amount of non-plausible shapes. 
 \\
 
+In the current application, edges between nodes with different \textit{level-of-detail} are visible. Thus, regions with sparse points are rendered as such. Adaptive point size can be used to reduce the visual artifacts that come with this type of \textit{level-of-detail} rendering. 
