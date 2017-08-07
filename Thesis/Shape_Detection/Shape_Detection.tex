@@ -1,16 +1,17 @@
 \chapter{Shape Detection}
 \label{chap:shapeDetection}
 
-\newpage
-
 
 \section{Overview}
 
-The shape detection runs automatically in the background. It is designed in such a way that the user receives immediate feedback of local geometry for the region under the mouse cursor. The approach utilizes an automated shape detection algorithm that is capable of detecting different types of primitive shapes. This algorithm is designed to find shapes in point clouds that consist of several million points within minutes. However, when looking at the performance for smaller samples, results can be achieved at interactive time rates. Section \ref{sec:schnabel} describes the shape detection algorithm in detail. 
+This thesis utilizes shape detection to automatically detect primitive shapes for small parts of the point cloud at a time. It is designed in such a way that the user receives immediate feedback of local geometry for the region under the mouse cursor. The approach utilizes an automated shape detection algorithm that is capable of detecting different types of primitive shapes. This algorithm is designed to find shapes in point clouds that consist of several million points within minutes. However, when looking at the performance for smaller samples, results can be achieved at interactive time rates. Section \ref{sec:schnabel} describes the shape detection algorithm in detail. 
 \\
 
 Before using the detected shapes for rendering or interactions, the shapes must be postprocesssed. Since some of the shapes are of infinite size, they need to be refitted to encapsulate the corresponding support points and create a minimal boundary. Section\ref{sec:Refitting} describes this task. 
+\\
 
+Section \ref{sec:shapeMatching} proposes a set of heuristics to determine if detected primitive shapes originate from the same geometric structure. Section \ref{sec:shapeClustering} explains the usage of this heuristics in order to create larger, homogeneous cluster of shapes, used for interactions. 
+ 
 
 \section{Efficient RANSAC for Point-Cloud Shape Detection}
 \label{sec:schnabel}
@@ -21,6 +22,7 @@ Schnabel et al.\cite{schnabel-2007-efficient} propose an automated way to detect
 \textbf{RAN}dom \textbf{SA}mpling \textbf{C}onsens (RANSAC) was first discussed by Fischler and Bolles\cite{fischler1981random} as a paradigm for model fitting for image analysis and automated cartography. However, this approach can be generalized for points with an origin other than images. The shape detection utilizes RANSAC to repeatedly take a minimal set of points to build a primitive shape $\Psi$ and checks if the points in the region roughly follow the curvature of the shape. 
 
 \subsection{Minimal sets}
+
 A minimal set describes the set of points that are needed to construct a candidate shape. 
 For each type of shape, the following rule applies: A shape is only considered as candidate shape if all points from the minimal set are within a distance $\epsilon$ to the shape and the normal does not deviate from the shape's normal by more than an angle $\alpha$. 
 
@@ -56,6 +58,7 @@ All points that are within a distance $\epsilon$ are taken into account. However
 
 
 \subsection{Performance}
+
 \begin{table}
     \centering
     \includegraphics[width=0.7\textwidth]{Shape_Detection/schnabel-performance.png}
