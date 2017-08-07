@@ -38,7 +38,7 @@ Cones consist of an axis, an apex, and an opening angle. Two cone shapes are mat
 \item \textbf{Matching sphere shapes}: 
 Two sphere shapes are matching if the center positions and the radii are matching. 
 \item \textbf{Matching torus shapes}: 
-A torus consists of a center position, an axis and a major and minor radius. Two torus shapes are matching if the center position, axes, major radii and minor radii are matching. 
+A torus consists of a center position, an axis and a major and minor radius. Two torus shapes are matching if the center position, axes, major radii, and minor radii are matching. 
 \end{itemize}
 
 The matching result heavily depends on the chosen threshold values. Table \ref{tab:matchingThresholds} shows the $\epsilon$ values that are used for this implementation. Plane matching uses a custom heuristic that is not depicted in the table. For this heuristic, $\epsilon_2 = 0.05$ is chosen. Note that matching floats is a relative measure, whereas matching positions and axes uses world space distances as the threshold. Matching vectors uses the angle between the two vectors to calculate a matching. 
@@ -62,7 +62,7 @@ The matching result heavily depends on the chosen threshold values. Table \ref{t
 \section{Shape Clustering}
 \label{sec:ShapeClustering}
 
-With the user interaction in mind, it is not sufficient to interact with a single shape only. To determine the global extent of a primitive shape, more information is needed. Section \ref{sec:primitiveShapeMatchingFuns} describes a set of heuristics to determine if two primitive shapes have the same origin. These heuristics are used in this section in order to create larger representations of a primitive shape. 
+With the user interaction in mind, it is not sufficient to interact with a single shape only. To determine the global extent of a primitive shape, more information is needed. Section \ref{sec:primitiveShapeMatchingFuns} describes a set of heuristics to determine if two primitive shapes originate from the same geometry. These heuristics are used in this section in order to create larger representations of a primitive shape. 
 \textit{Shape Clustering} aims to find matching primitive shapes for a base shape and build a larger coherent cluster of primitive shapes over multiple level-of-details. The types of primitive shapes can be categorized as finite and infinite shapes. Spheres and tori are finite objects per definition, thus it is sufficient enough to find a set of matching primitive shapes to create a cluster. For infinite shapes, such as planes, cones, and cylinder, additional computations are needed in order to create a coherent shape cluster. Figure \ref{fig:cuboids} shows the case of two cuboids, whose front face share a plane. By only using the matching functions to create a cluster, both front faces are packed into the cluster, even tough there is a visible gap between them.
 
 \begin{figure}

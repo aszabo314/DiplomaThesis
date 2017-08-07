@@ -2,7 +2,7 @@
 \label{chap:results}
 
 
-All results are obtained on a PC with an AMD FX-9590, 16 GB RAM and an AMD Radeon HD 7970. 
+All results are obtained on a PC with an AMD FX-9590, 16 GB RAM and an AMD Radeon HD 7970. The datasets Technologiezentrum and JB\_Haus are a courtesy of rmData\cite{rmdata}. 
 
 
 \section{Shape Detection Results}
@@ -98,7 +98,7 @@ Such non-plausible shapes can exist due to the density-controlled $\epsilon$ par
 
 \subsection{Results}
 
-This section presents results for the RANSAC shape detection performed on three data sets. The results are obtained by by segmenting the point clouds as a whole. Results for the interactive shape detection can be found in Section \ref{sec:interaction_results}. 
+This section presents results for the RANSAC shape detection performed on three data sets. The results in Figure \ref{fig:synthetic_point_cloud_results}, \ref{fig:JB_haus_results}, and \ref{fig:technologiezentrum_results} are obtained by segmenting the point clouds as a whole. Results for the interactive shape detection can be seen in Figure \ref{fig:technologiezentrum_interactive_shape_detection}. 
 
 The synthetic test scene consists of two planes, three cylinders, three tori, and three cones.  Figure \ref{fig:synthetic_point_cloud_results} shows the synthetic point cloud, as well as the shapes that are detected within the point cloud. As the RANSAC approach randomly selects a subset of points, the results can be different for different runs. 
 
@@ -113,7 +113,6 @@ The synthetic test scene consists of two planes, three cylinders, three tori, an
 \caption{(a) shows the synthetic point cloud, consisting of two planes, three cylinders, three tori, and three cones. (b) shows the detected shapes rendered as triangle meshes. For each shape in the point cloud, the RANSAC shape detection has found a suitable primitive shape. }
 \label{fig:synthetic_point_cloud_results}
 \end{figure}
-
 
 \begin{figure}
 \centering
@@ -139,12 +138,61 @@ The synthetic test scene consists of two planes, three cylinders, three tori, an
 \label{fig:technologiezentrum_results}
 \end{figure}
 
+\begin{figure}
+\centering
+\subcaptionbox{ \label{fig:technologiezentrum_interactive_shape_detection1}}{%
+  \includegraphics[width=\textwidth]{Results/technologiezentrum_interactive_shape_detection1.png}%7
+  }
+\subcaptionbox{ \label{fig:technologiezentrum_interactive_shape_detection2}}{%
+  \includegraphics[width=\textwidth]{Results/technologiezentrum_interactive_shape_detection2.png}%
+  }
+\caption{Based on the cursor's position a different shapes are selected. (a) and (b) show different shapes for different parts of the point cloud. Both shapes are a part of a wall. }
+\label{fig:technologiezentrum_interactive_shape_detection}
+\end{figure}
+
 
 \section{Interaction Results}
 \label{sec:interaction_results}
-\todo{}
+
+This section presents a set of figures that showcase the different interactions from Section \ref{sec:interactions}. The interactions are performed on the Technologiezentrum dataset, since the JB\_Haus point cloud is used as example throughout this thesis already. 
+
+\begin{figure}[h]
+\centering
+\subcaptionbox{ \label{fig:technologiezentrum_lasso1}}{%
+  \includegraphics[width=0.9\textwidth]{Results/technologiezentrum_lasso1.png}%7
+  }
+\subcaptionbox{ \label{fig:technologiezentrum_lasso2}}{%
+  \includegraphics[width=0.9\textwidth]{Results/technologiezentrum_lasso2.png}%
+  }
+\caption{A lasso selection is performed on the selected support shape in (a). Only points are selected that lie on the support shape as shown in (b). Point in front and back of the support shape are not selected. }
+\label{fig:technologiezentrum_lasso}
+\end{figure}
 
 
+\begin{figure}
+\centering
+\subcaptionbox{ \label{fig:technologiezentrum_brush1}}{%
+  \includegraphics[width=\textwidth]{Results/technologiezentrum_brush1.png}%7
+  }
+\subcaptionbox{ \label{fig:technologiezentrum_brush2}}{%
+  \includegraphics[width=\textwidth]{Results/technologiezentrum_brush2.png}%
+  }
+\caption{A volumetric brush selection is performed on the selected support shape in (a). Point are only selected if they belong to the support shape and intersect the brush. The result of the selection can be seen in (b).}
+\label{fig:technologiezentrum_brush}
+\end{figure}
+
+
+\begin{figure}
+\centering
+\subcaptionbox{ \label{fig:technologiezentrum_lod_increment1}}{%
+  \includegraphics[width=\textwidth]{Results/technologiezentrum_lod_increment1.png}%7
+  }
+\subcaptionbox{ \label{fig:technologiezentrum_lod_increment2}}{%
+  \includegraphics[width=\textwidth]{Results/technologiezentrum_lod_increment2.png}%
+  }
+\caption{The \textit{level-of-detail} is incremented along the support shape. (a) shows the original rendering model of the point cloud, (b) shows the point cloud with additional points. }
+\label{fig:technologiezentrum_lod_increment}
+\end{figure}
 
 
 
