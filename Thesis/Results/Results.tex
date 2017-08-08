@@ -14,36 +14,36 @@ The interactions proposed in this thesis heavily rely on the ability to detect m
 
 \label{sec:shape_detection_performance}
 
-The goal of the \textit{user-guided shape detection} is to provide meaningful results within interactive time, such that detected shapes can be used to support interactions immediately. The capabilities of the implementation by Schnabel et al.\cite{schnabel-2007-software} are benchmarked on three different datasets: 
+The goal of the \textit{user-guided shape detection} is to provide meaningful results within interactive time, such that detected shapes can be used to support interactions immediately. The capabilities of the implementation by Schnabel et al. \cite{schnabel-2007-software} are benchmarked on three different datasets: 
 
 \begin{center}
 \begin{tabular}{ l | r | r | r }
-																& \textbf{\#Points} 			& \textbf{\#Nodes} & \textbf{max. LoD} \\
-	\hline
-  JB\_Haus.pts									& 620.722 								& 440 			& 15 \\
-  Technologiezentrum\_Teil1.pts	& 11.762.924							& 8863 			& 15 \\
-  Synthetic\_Primitives.pts 		& 472.000 								& 315	 			& 5 \\
-	
+                                                                & \textbf{\#Points}             & \textbf{\#Nodes} & \textbf{max. LoD} \\
+    \hline
+  JB\_Haus.pts                                    & 620.722                                 & 440             & 15 \\
+  Technologiezentrum\_Teil1.pts    & 11.762.924                            & 8863             & 15 \\
+  Synthetic\_Primitives.pts         & 472.000                                 & 315                 & 5 \\
+    
 \end{tabular}
 \end{center}
 
-The tests are performed without user interaction. Instead, all octree nodes are collected and fed into the shape detection routine sequentially in order to retrieve results for each node of the point cloud. Therefore, the shape detection is performed for the complete point cloud for each \textit{level-of-detail}. Each octree node contains at most 5000 points. The results are averaged over five runs. Table \ref{table:schnabel_benchmarks} shows the results averaged over all nodes. It can be seen that detecting planes only is significantly faster than detecting all types of primitive shapes. However, detecting all types of primitive shapes still produces results within interactive time. The synthetic point cloud is constructed from a set of primitives that are discretized to point sets, such that all types of primitives exist. 
+The tests are performed without user interaction. Instead, all octree nodes are collected and fed into the shape detection routine sequentially to retrieve results for each node of the point cloud. Therefore, the shape detection is performed for the complete point cloud for each \textit{level-of-detail}. Each octree node contains at most 5000 points. The results are averaged over five runs. Table \ref{table:schnabel_benchmarks} shows the results averaged over all nodes. It can be seen that detecting planes only is significantly faster than detecting all types of primitive shapes. However, detecting all types of primitive shapes still produces results within interactive time. The synthetic point cloud is constructed from a set of primitives that are discretized to point sets, such that all types of primitives exist. 
 
 \begin{table}
-	\centering
-	\begin{tabular}{ l || r | r | r || r | r | r}
-			&\multicolumn{3}{c||}{\textbf{\#Shapes}} & \multicolumn{3}{c}{\textbf{Time (s)}}\\
-			&\textbf{min} & \textbf{max} & \textbf{avg}  & \textbf{min} & \textbf{max} & \textbf{avg}  \\
-			\hline
-			JB\_Haus*							& 0 & 6  & 1.31 & 0.000026 & 0.578664 & 0.022396 \\
-			JB\_Haus 							& 0 & 6  & 1.40 & 0.000024 & 0.741384 & 0.093264 \\
-			Technologiezentrum*		& 0 & 10 & 1.18 & 0.000023 & 0.440614 & 0.018781 \\
-			Technologiezentrum 		& 0 & 10 & 1.19 & 0.000024 & 0.991554 & 0.083180 \\
-			Synthetic*						& 0 & 7  & 1.89 & 0.000026 & 0.440064 & 0.029779 \\
-			Synthetic 						& 0 & 7  & 1.24 & 0.000024 & 0.753345 & 0.136474 \\
-		\end{tabular}
-	\caption{Performance measures for the different datasets averaged over all nodes. The number of shapes and duration are listed as minimum, maximum and average. Each dataset is benchmarked using plane detection only (items with *), as well as detecting all types of primitive shapes. }
-	\label{table:schnabel_benchmarks}
+    \centering
+    \begin{tabular}{ l || r | r | r || r | r | r}
+            &\multicolumn{3}{c||}{\textbf{\#Shapes}} & \multicolumn{3}{c}{\textbf{Time (s)}}\\
+            &\textbf{min} & \textbf{max} & \textbf{avg}  & \textbf{min} & \textbf{max} & \textbf{avg}  \\
+            \hline
+            JB\_Haus*                            & 0 & 6  & 1.31 & 0.000026 & 0.578664 & 0.022396 \\
+            JB\_Haus                             & 0 & 6  & 1.40 & 0.000024 & 0.741384 & 0.093264 \\
+            Technologiezentrum*        & 0 & 10 & 1.18 & 0.000023 & 0.440614 & 0.018781 \\
+            Technologiezentrum         & 0 & 10 & 1.19 & 0.000024 & 0.991554 & 0.083180 \\
+            Synthetic*                        & 0 & 7  & 1.89 & 0.000026 & 0.440064 & 0.029779 \\
+            Synthetic                         & 0 & 7  & 1.24 & 0.000024 & 0.753345 & 0.136474 \\
+        \end{tabular}
+    \caption{Performance measures for the different datasets averaged over all nodes. The number of shapes and duration are listed as minimum, maximum and average. Each dataset is benchmarked using plane detection only (items with *), as well as detecting all types of primitive shapes. }
+    \label{table:schnabel_benchmarks}
 \end{table}
 
 
@@ -69,7 +69,7 @@ The tests are performed without user interaction. Instead, all octree nodes are 
 \end{figure}
 
 
-Figure \ref{fig:shapes_total_vs_lod} shows the total number of shapes per \textit{level-of-detail}. All three datasets share an increase in the number of shapes in the third quarter before a rapid decline for the highest \textit{level-of-detail}. Figure \ref{fig:shapes_averaged_vs_lod} shows the number of shapes divided by the number of nodes per \textit{level-of-detail}. Both figures emphasizes that the majority of shapes is not found in the highest \textit{level-of-detail}. Reasons for this is that many nodes only contain a handful of points or really only contain a single structure. 
+Figure \ref{fig:shapes_total_vs_lod} shows the total number of shapes per \textit{level-of-detail}. All three datasets share increase in the number of shapes in the third quarter before a rapid decline for the highest \textit{level-of-detail}. Figure \ref{fig:shapes_averaged_vs_lod} shows the number of shapes divided by the number of nodes per \textit{level-of-detail}. Both figures emphasize that the majority of shapes is not found in the highest \textit{level-of-detail}. Reasons for this is that many nodes only contain a handful of points or only contain a single structure. 
 \\
 
 Figure \ref{fig:time_vs_lod} shows the calculation time compared to the \textit{level-of-detail}. Shape detection for smaller, more dense nodes take less time than for larger nodes with lower \textit{level-of-detail} as in larger nodes, usually more shapes are found. 
@@ -77,9 +77,9 @@ Figure \ref{fig:time_vs_lod} shows the calculation time compared to the \textit{
 
 \subsection{Problems and undesired Behavior}
 
-A problem with the shape detection implementation by Schnabel et al.\cite{schnabel-2007-software} are reoccurring non-terminations for some octree nodes, causing the shape detection coroutine to stall. To circumvent this problem, all shape detection tasks that are dispatched to the \verb|sequential computation applicator| are assigned a timeout value of one second, after which the computation is interrupted. 
+A problem with the shape detection implementation by Schnabel et al. \cite{schnabel-2007-software} are reoccurring non-terminations for some octree nodes, causing the shape detection coroutine to stall. To circumvent this problem, all shape detection tasks that are dispatched to the \verb|sequential computation applicator| are assigned a timeout value of one second, after which the computation is interrupted. 
 \\
-Another reoccurring problem with the shape detection is the plausibility of detected shapes. The RANSAC options guarantee that shapes are found that fit the local geometry within a certain margin, $\alpha$ for the normal's angle and $\epsilon$ for the distance the the shape. So within theses two parameters, the shape is considered to be valid. However, certain constellation of points allow the shape detection to produce non-plausible results that valid in terms of the RANSAC shape detection, but are not plausible to the eye. A prominent example is a torus that is fitted onto a section that clearly describes a cylinder. The major radius of the torus is at such dimensions that the local cylinder fits within the curvature of the torus, thus a torus is detected, rather than the simpler cylinder. Figure \ref{fig:missfittedTorus} shows this behavior within an example scene that consists multiple primitives. Figure \ref{fig:missfittedTorus2} shows the size of the detected torus. 
+Another reoccurring problem with the shape detection is the plausibility of detected shapes. The RANSAC options guarantee that shapes are found that fit the local geometry within a certain margin, $\alpha$ for the normal's angle and $\epsilon$ for the distance the shape. So within theses two parameters, the shape is considered to be valid. However, certain constellations of points allow the shape detection to produce non-plausible results that are accurate regarding the RANSAC parameters but are not plausible to the eye. A prominent example is a torus that is fitted onto a section that describes a cylinder. The major radius of the torus is of such dimensions that the local cylinder fits within the curvature of the torus. Thus, a torus is detected, rather than the simpler cylinder. Figure \ref{fig:missfittedTorus} shows this behavior within an example scene that consists multiple primitives. Figure \ref{fig:missfittedTorus2} shows the size of the detected torus. 
 \\
 Such non-plausible shapes can exist due to the density-controlled $\epsilon$ parameter that weakens the margin for octree nodes of larger volume. Even within a node, the density can strongly vary for different regions. 
 
@@ -154,7 +154,7 @@ The synthetic test scene consists of two planes, three cylinders, three tori, an
 \section{Interaction Results}
 \label{sec:interaction_results}
 
-This section presents a set of figures that showcase the different interactions from Section \ref{sec:interactions}. The interactions are performed on the Technologiezentrum dataset, since the JB\_Haus point cloud is used as example throughout this thesis already. 
+This section presents a set of figures that showcase the different interactions from Section \ref{sec:interactions}. The interactions are performed on the Technologiezentrum dataset since the JB\_Haus point cloud is used as an example throughout this thesis already. 
 
 \begin{figure}[h]
 \centering
