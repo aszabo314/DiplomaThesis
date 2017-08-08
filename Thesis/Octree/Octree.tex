@@ -16,7 +16,7 @@ Having a consistent number of points in an octree node allows for little variati
 \\
 \\
 If a node is partitioned, its elements are replaced by a random subset of points of size $n$ from its children, thus creating an efficient \textit{level-of-detail} representation of the point cloud on multiple scales. 
-Other implementations, such as Potree\cite{SCHUETZ-2016-POT}, where some points remain in the parent instead of being stored in a child node, are more efficient regarding disc space. However, in this application, each node can be viewed as self-contained, such that no points from predecessor nodes are needed to represent the point cloud for this region and \textit{level-of-detail} entirely. 
+Other implementations, such as Potree \cite{SCHUETZ-2016-POT}, where some points remain in the parent instead of being stored in a child node, are more efficient regarding disc space. However, in this application, each node can be viewed as self-contained, such that no points from predecessor nodes are needed to represent the point cloud for this region and \textit{level-of-detail} entirely. 
 
 
 \section{Out-of-core Functionalities}
@@ -32,12 +32,12 @@ Point clouds often only contain information on position and color and lack disti
 
 \subsection{rkd-Tree}
 
-A rkd-tree by Tobler\cite{tobler2011rkd} is an efficient datastructure for point queries. While the octree partitions the space into somewhat small regions, the rkd-tree is used to find distinct points within a node at a specified location quickly. 
+A rkd-tree by Tobler \cite{tobler2011rkd} is an efficient datastructure for point queries. While the octree partitions the space into somewhat small regions, the rkd-tree is used to find distinct points within a node at a specified location quickly. 
 
 
 \subsection{Normals}
 
-For lighting and shape detection, each point must possess a normal vector. The local neighborhood determines a point's normal. Using the node's rkd-tree a $k$-nearest-neighbor search is performed to get the $k$ closest neighbors. Principal Component Analysis\cite{jolliffe2002principal} is used to fit a plane into the neighborhood whose normal vector is used as the point's normal.
+For lighting and shape detection, each point must possess a normal vector. The local neighborhood determines a point's normal. Using the node's rkd-tree a $k$-nearest-neighbor search is performed to get the $k$ closest neighbors. Principal Component Analysis \cite{jolliffe2002principal} is used to fit a plane into the neighborhood whose normal vector is used as the point's normal.
 
 
 \subsection{Centroid}
