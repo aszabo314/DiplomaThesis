@@ -11,18 +11,36 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=861
-NormalPos.bottom=756
+NormalPos.right=1724
+NormalPos.bottom=765
 Class=LaTeXView
-Document=_InteractiveShapeDetection.tex
+Document=Related_Work\Interactions.tex
 
 [Frame0_View0,0]
-TopLine=165
-Cursor=7731
+TopLine=0
+Cursor=482
+
+[Frame1]
+Flags=0
+ShowCmd=1
+MinPos.x=-1
+MinPos.y=-1
+MaxPos.x=-1
+MaxPos.y=-1
+NormalPos.left=4
+NormalPos.top=26
+NormalPos.right=1724
+NormalPos.bottom=765
+Class=LaTeXView
+Document=Results\Results.tex
+
+[Frame1_View0,0]
+TopLine=197
+Cursor=12237
 
 [SessionInfo]
-FrameCount=1
-ActiveFrame=0
+FrameCount=2
+ActiveFrame=1
 
 [Bookmarks]
 Shape_Detection\Shape_Clustering.tex=79 
