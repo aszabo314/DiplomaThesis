@@ -35,8 +35,8 @@ Class=LaTeXView
 Document=Results\Results.tex
 
 [Frame1_View0,0]
-TopLine=197
-Cursor=12237
+TopLine=0
+Cursor=555
 
 [SessionInfo]
 FrameCount=2

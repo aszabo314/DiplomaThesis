@@ -1,12 +1,12 @@
 \chapter{Results}
 \label{chap:results}
 
-
 All results are obtained on a PC with an AMD FX-9590, 16 GB RAM and an AMD Radeon HD 7970. The datasets Technologiezentrum and JB\_Haus are a courtesy of rmData\cite{rmdata}. Section \ref{sec:shape_detection_results} shows benchmarks for the shape detection and verifies the capability of the user-guided shape detection to be performed in interactive time. Section \ref{sec:interaction_results} provides a set of screenshots that show the workflow of the user-guided interactions on a different data set. 
 
 
 \section{Shape Detection Results}
 \label{sec:shape_detection_results}
+
 The interactions proposed in this thesis heavily rely on the ability to detect meaningful shapes for regions of interest within interactive time. Therefore it must be assured that the shape detection provides results within interactive time such that the detected shapes can be used immediately for interactions. Section \ref{sec:shape_detection_performance} discusses the performance obtained in the test computer. 
 
 
@@ -18,11 +18,11 @@ The goal of the \textit{user-guided shape detection} is to provide meaningful re
 
 \begin{center}
 \begin{tabular}{ l | r | r | r }
-                                                                & \textbf{\#Points}             & \textbf{\#Nodes} & \textbf{max. LoD} \\
+																	& \textbf{\#Points}	& \textbf{\#Nodes}	& \textbf{max. LoD} \\
     \hline
-  JB\_Haus.pts                                    & 620.722                                 & 440             & 15 \\
-  Technologiezentrum\_Teil1.pts    & 11.762.924                            & 8863             & 15 \\
-  Synthetic\_Primitives.pts         & 472.000                                 & 315                 & 5 \\
+  JB\_Haus.pts                    & 620.722           & 440             	& 15 \\
+  Technologiezentrum\_Teil1.pts   & 11.762.924        & 8863             	& 15 \\
+  Synthetic\_Primitives.pts     	& 472.000           & 315               & 5 \\
     
 \end{tabular}
 \end{center}
@@ -35,12 +35,12 @@ The tests are performed without user interaction. Instead, all octree nodes are 
             &\multicolumn{3}{c||}{\textbf{\#Shapes}} & \multicolumn{3}{c}{\textbf{Time (s)}}\\
             &\textbf{min} & \textbf{max} & \textbf{avg}  & \textbf{min} & \textbf{max} & \textbf{avg}  \\
             \hline
-            JB\_Haus*                            & 0 & 6  & 1.31 & 0.000026 & 0.578664 & 0.022396 \\
-            JB\_Haus                             & 0 & 6  & 1.40 & 0.000024 & 0.741384 & 0.093264 \\
-            Technologiezentrum*        & 0 & 10 & 1.18 & 0.000023 & 0.440614 & 0.018781 \\
-            Technologiezentrum         & 0 & 10 & 1.19 & 0.000024 & 0.991554 & 0.083180 \\
-            Synthetic*                        & 0 & 7  & 1.89 & 0.000026 & 0.440064 & 0.029779 \\
-            Synthetic                         & 0 & 7  & 1.24 & 0.000024 & 0.753345 & 0.136474 \\
+            JB\_Haus*           & 0 & 6  & 1.31 & 0.000026 & 0.578664 & 0.022396 \\
+            JB\_Haus            & 0 & 6  & 1.40 & 0.000024 & 0.741384 & 0.093264 \\
+            Technologiezentrum*	& 0 & 10 & 1.18 & 0.000023 & 0.440614 & 0.018781 \\
+            Technologiezentrum  & 0 & 10 & 1.19 & 0.000024 & 0.991554 & 0.083180 \\
+            Synthetic*          & 0 & 7  & 1.89 & 0.000026 & 0.440064 & 0.029779 \\
+            Synthetic           & 0 & 7  & 1.24 & 0.000024 & 0.753345 & 0.136474 \\
         \end{tabular}
     \caption{Performance measures for the different datasets averaged over all nodes. The number of shapes and duration are listed as minimum, maximum and average. Each dataset is benchmarked using plane detection only (items with *), as well as detecting all types of primitive shapes. }
     \label{table:schnabel_benchmarks}
