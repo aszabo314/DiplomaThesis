@@ -147,7 +147,19 @@ mutable, if, then, else, cloud, async, static, use, abstract, interface, inherit
 %\end{danksagung*}
 
 \begin{acknowledgements*}
-\todo{Enter your text here.}
+
+This thesis would not have been possible without the help of a handful engaged people. 
+My first and foremost gratitude goes out to the VRVis Zentrum für Virtual Reality und Visualisierung for providing me with the opportunity to serve an internship and in consequence conduct this thesis. Within the VRVis, I would like to thank the Semantic Modeling and Acquisition (SMAQ) group for integrating me into their team, both on a professional level and amicably. A special thank you goes out to my Aardvark, and F\# Gurus Harald Steinlechner, Georg Haaser, and Attila Szabo, whose help and expertise eased the execution of this thesis enormously. 
+I would also like to thank Stefan Maierhofer, leader of the SMAQ group, and my project manager Michael Schwärzler for their ideas and continuous support. 
+\\
+A big thank you goes out to Michael Wimmer from the Technische Universität Wien for his supervision on not only this thesis but all preceding courses and practica. 
+
+Thanks to Lisa Kellner, who accompanied me through this thesis on a daily basis as she sat next to me and continuously provided me with feedback on my work. 
+
+Thanks to Phillip Erler, a fellow diploma student, for all the exchange of knowledge on both our thesis’s. 
+
+Last but not least, I would like to thank my friends and family that endured my ongoing talks about my thesis for the bigger part of a year and encouraged me to pursue an academic career.  
+
 \end{acknowledgements*}
 
 %\begin{kurzfassung}
@@ -156,10 +168,12 @@ mutable, if, then, else, cloud, async, static, use, abstract, interface, inherit
 
 \begin{abstract}
 
-This thesis presents an interactive method of shape detection in point clouds. Based on the results of the shape detection, this thesis introduces improvements to existing two-dimensional interaction metaphors and proposes a novel interaction. Usually, shape detection is performed on the whole point cloud, thus results are obtained after a long period of time. Instead, the point cloud is split into chunks chunks of neighboring point that can be processed efficiently in near real-time. %The combination of chunks of data, as well as the user's mouse position identifies a region of interest on which shape detection can deliver reults almost immediately. 
+This thesis presents an interactive method of shape detection for out-of-core point clouds. By utilizing the results of the shape detection, improvements are proposed to existing two-dimensional interaction metaphors. Usually, shape detection is performed on the whole point cloud. Thus results are obtained after an extended period of time. Instead, the point cloud is split into chunks of neighboring points that can be processed efficiently in near real-time. The user can select such a region of interest for it to be segmented and is provided with feedback within a fraction of a second, thus making the detected geometry usable almost immediately. This geometry, called primitive shapes, is used to improve existing two-dimensional interaction metaphors. Lasso Selection, as well as Volumetric Brush Selection, benefit from the use of primitive shapes to support the interaction, such that only points are selected that lie roughly follow the curvature of the shape. Thus, the selection of unwanted points in the foreground or background is reduced. Point Picking is improved by the use of a primitive shape as support, as only points are pickable that also belong to the detected primitive shape.\textit{Local Level-of-Detail Increment} is a novel interaction that increases the level-of-detail along a primitive shape, such that additional points that would otherwise be culled are rendered as well. 
+\\
 
- user-assisted shape detection can deliver results for a region of interest almost immediately to the user. 
-\todo{Enter your text here.}
+As modern point clouds can contain billions of points and the memory capacity of consumer PCs is usually insufficient to store all points at all time, a level-of-detail data structure is used to store the point cloud on the hard disc and data is loaded into memory only on use. This thesis uses a functional octree as data structure to store all points and create a level-of-detail representation of the point cloud. The level-of-detail representation of the point cloud, based on the camera's relative position, is used for interactions and rendering of the point cloud, such that distant regions are presented to the user at lower point resolutions. 
+This work was enabled by the Competence Centre VRVis. 
+
 \end{abstract}
 
 % Select the language of the thesis, e.g., english or naustrian.
