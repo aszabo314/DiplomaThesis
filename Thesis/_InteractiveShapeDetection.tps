@@ -11,14 +11,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1724
+NormalPos.right=1588
 NormalPos.bottom=765
 Class=LaTeXView
-Document=Related_Work\Interactions.tex
+Document=Results\Results.tex
 
 [Frame0_View0,0]
-TopLine=0
-Cursor=482
+TopLine=212
+Cursor=13466
 
 [Frame1]
 Flags=0
@@ -29,14 +29,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1724
+NormalPos.right=1588
 NormalPos.bottom=765
 Class=LaTeXView
-Document=Results\Results.tex
+Document=System_Design\System_Design.tex
 
 [Frame1_View0,0]
-TopLine=0
-Cursor=555
+TopLine=280
+Cursor=23187
 
 [SessionInfo]
 FrameCount=2

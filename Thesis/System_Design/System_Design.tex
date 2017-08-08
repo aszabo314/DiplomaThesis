@@ -55,7 +55,7 @@ All nodes from the raycast result are eliminated that do not fulfill the previou
             npd $\leftarrow$ currentNpd\;                            
         }
     }
-\caption{selectCandidateNode}
+\caption[A heuristic that chooses the most suitable candidate node]{selectCandidateNode}
 \label{alg:candidateNodeHeuristic}
 \end{algorithm}
 
@@ -72,7 +72,7 @@ $$key = level + 1 - depth$$
 
 The primitive shape with the highest key is chosen as support shape. The composition of the key ensures that a shape with the highest \textit{level-of-detail} that is closest to the camera is picked.
 \\
-As a primitive shape only spans over a small local region and user interactions usually are performed on larger areas, a single primitive shape is not sufficient to provide semantic information to the user. Therefore, once a shape is picked, a cluster is created from this shape using primitive shapes that are similar to this shape. This clustering is described in Section \ref{sec:ShapeClustering} in depth. Shape clustering creates a homogenous cluster of shapes from different octree nodes. The cluster has the property that each of its shapes has a neighbor within $\epsilon$,
+As a primitive shape only spans over a small local region and user interactions usually are performed on larger areas, a single primitive shape is not sufficient to provide semantic information to the user. Therefore, once a shape is picked, a cluster is created from this shape using primitive shapes that are similar to this shape. This clustering is described in Section \ref{sec:shapeClustering} in depth. Shape clustering creates a homogenous cluster of shapes from different octree nodes. The cluster has the property that each of its shapes has a neighbor within $\epsilon$,
  as described in Chapter\ref{chap:shapeDetection}. Thus, a cluster can be seen as a single, larger shape that is referred to as \textit{support shape}.
 
 
@@ -134,7 +134,9 @@ This technique comes not only with interaction benefits; computation time is red
 \subcaptionbox{ \label{fig:picking_assisted}}{%
   \includegraphics[width=0.6\textwidth]{System_Design/picking_assisted.png}%
   }
-\caption{Two-dimensional illustration of various picking methods. Candidate points are colored in green; other points are colored in red. The areas in red describe the different volumes in which candidate points are located. (a) showcases a picking process using a simple raycast. The ray combined with a radius constructs a cylinder in world space which contains all candidate points, (b) uses a cone instead. (c) utilizes a selected shape (dark blue) to filter candidate points that follow the curvature of the shape. A spherecast is then performed on the filtered points using the unprojected pick radius to obtain the final set of candidate points. }
+\caption
+[Illustration on different picking methods. (a) shows a simple raycast, (b) a cone cast, (c) shows the use of a support shape combined with a sphere cast]
+{Two-dimensional illustration of various picking methods. Candidate points are colored in green; other points are colored in red. The areas in red describe the different volumes in which candidate points are located. (a) showcases a picking process using a simple raycast. The ray combined with a radius constructs a cylinder in world space which contains all candidate points, (b) uses a cone instead. (c) utilizes a selected shape (dark blue) to filter candidate points that follow the curvature of the shape. A sphere cast is then performed on the filtered points using the unprojected pick radius to obtain the final set of candidate points. }
 \label{fig:picking_overview}
 \end{figure}
 
@@ -145,7 +147,8 @@ Figure \ref{fig:picking_overview} shows the different picking methods, described
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{System_Design/picking_assisted_screenshot.png}%7
-    \caption{\textit{Shape-assisted Point Picking} is performed on a shape cluster that represents the wall in the foreground. The cross hair indicates the picked point. Note that the cross hair does not jump to a point in the background even though they would be closer to the cursor in screen space. }
+    \caption[Screenshot of Shape-assisted Point Picking]
+		{\textit{Shape-assisted Point Picking} is performed on a shape cluster that represents the wall in the foreground. The cross hair indicates the picked point. Note that the cross hair does not jump to a point in the background even though they would be closer to the cursor in screen space. }
     \label{fig:picking_assisted_screenshot}
 \end{figure}
 
@@ -169,7 +172,8 @@ Note that this interaction is computed asynchronously and the selection is perfo
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{System_Design/lasso_sketch.png}%7
-    \caption{The user draws a polygon(red) on the screen(light blue). The constructed three-dimensional area(yellow) contains all points, whose projection lie inside the lasso polygon. }
+    \caption[Illustration of the creation of a lasso selection]
+		{The user draws a polygon(red) on the screen(light blue). The constructed three-dimensional area(yellow) contains all points, whose projection lie inside the lasso polygon. }
     \label{fig:lasso_sketch}
 \end{figure}
 
@@ -185,7 +189,8 @@ Note that this interaction is computed asynchronously and the selection is perfo
 \subcaptionbox{ \label{fig:lasso3}}{%
   \includegraphics[width=0.5\textwidth]{System_Design/lasso3.png}%
   }
-\caption{(a) - (c) show a lasso selection performed on a point cloud. In (a) the user draws a polygon onto the screen. In (b) the selected points are visualized in red. Figure (c) showcases the selection from a different angle. All points that are projected to the area of the polygon are selected.The unintentional selection of points that are obscured by objects in the foreground is a byproduct of the \textit{Lasso Selection}. }
+\caption[Screenshots of the workflow of a lasso selection. (a) shows the lasso, (b) the selected points, (c) shows the selected points from a different angle. ]
+{(a) - (c) show a lasso selection performed on a point cloud. In (a) the user draws a polygon onto the screen. In (b) the selected points are visualized in red. Figure (c) showcases the selection from a different angle. All points that are projected to the area of the polygon are selected.The unintentional selection of points that are obscured by objects in the foreground is a byproduct of the \textit{Lasso Selection}. }
 \label{fig:lasso}
 \end{figure}
 
@@ -210,7 +215,8 @@ Figure \ref{fig:lasso_assisted} shows the workflow for selecting points on a sha
 \subcaptionbox{ \label{fig:lasso_assisted3}}{%
   \includegraphics[width=0.5\textwidth]{System_Design/lasso_assisted3.png}%
 }
-\caption{(a) - (c) show a \textit{Shape-Assisted Lasso Selection} performed on a point cloud. The front facing wall is selected as support shape by the user. The shape cluster is visualized in light red. In (a) the user draws a polygon onto the screen after selecting a shape as support shape. (b) shows the selected points visualized in red from the same point of view. Upon view change, it can be seen that this interaction only selects points that belong the shape cluster. }
+\caption[Screenshots of the workflow of a Shape-Assisted Lasso Selection. (a) shows the lasso and the support shape, (b) the selected points, (c) shows that only points are selected on the support shape.]
+{(a) - (c) show a \textit{Shape-Assisted Lasso Selection} performed on a point cloud. The front facing wall is selected as support shape by the user. The shape cluster is visualized in light red. In (a) the user draws a polygon onto the screen after selecting a shape as support shape. (b) shows the selected points visualized in red from the same point of view. Upon view change, it can be seen that this interaction only selects points that belong the shape cluster. }
 \label{fig:lasso_assisted}
 \end{figure}
 
@@ -235,7 +241,8 @@ Figure \ref{fig:brush} shows a \textit{Shape-Assisted Volumetric Brush} interact
 \subcaptionbox{ \label{fig:brush_assisted2}}{%
   \includegraphics[width=0.8\textwidth]{System_Design/brush2.png}%
   }
-\caption{This figure shows a \textit{Shape-Assisted Volumetric Brush} selection performed shape cluster (transparent red) detected in a point cloud. In (a) the trajectory of the brush is shown as subsequently rendered spheres(grey). (b) shows the selected points for this brush interaction. Even tough some points of the roof structure are intersecting the brush, they are not selected. }
+\caption[Workflow of the Shape-Assisted Volumetric Brush. (a) shows the trajectory of the brush, (b) shows the selected points. ]
+{This figure shows a \textit{Shape-Assisted Volumetric Brush} selection performed shape cluster (transparent red) detected in a point cloud. In (a) the trajectory of the brush is shown as subsequently rendered spheres(grey). (b) shows the selected points for this brush interaction. Even tough some points of the roof structure are intersecting the brush, they are not selected. }
 \label{fig:brush}
 \end{figure}
 
@@ -261,7 +268,8 @@ By adding smaller nodes of higher level-of-detail, the overall detail in the sce
 \subcaptionbox{ \label{fig:lod_increment2}}{%
   \includegraphics[width=0.8\textwidth]{System_Design/lod_Increase2.png}%
   }
-\caption{This figure shows the benefits of \textit{Shape-Assisted Level-of-Detail Increment} for a point cloud. (a) shows the currently rendered structure, as well as as shape cluster that is currently selected (red). (b) shows the scene with amplified details along the structure. The additional points are rendered without lighting to appear brighter.}
+\caption[Comparison of a scene with and without Shape-Assisted Level-of-Detail Increment.]
+{This figure shows the benefits of \textit{Shape-Assisted Level-of-Detail Increment} for a point cloud. (a) shows the currently rendered structure, as well as as shape cluster that is currently selected (red). (b) shows the scene with amplified details along the structure. The additional points are rendered without lighting to appear brighter.}
 \label{fig:lod_increment}
 \end{figure}
 

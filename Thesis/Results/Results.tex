@@ -42,7 +42,8 @@ The tests are performed without user interaction. Instead, all octree nodes are 
             Synthetic*          & 0 & 7  & 1.89 & 0.000026 & 0.440064 & 0.029779 \\
             Synthetic           & 0 & 7  & 1.24 & 0.000024 & 0.753345 & 0.136474 \\
         \end{tabular}
-    \caption{Performance measures for the different datasets averaged over all nodes. The number of shapes and duration are listed as minimum, maximum and average. Each dataset is benchmarked using plane detection only (items with *), as well as detecting all types of primitive shapes. }
+    \caption[Shape-detection performance measure for different datasets]
+		{Performance measures for the different datasets averaged over all nodes. The number of shapes and duration are listed as minimum, maximum and average. Each dataset is benchmarked using plane detection only (items with *), as well as detecting all types of primitive shapes. }
     \label{table:schnabel_benchmarks}
 \end{table}
 
@@ -50,26 +51,29 @@ The tests are performed without user interaction. Instead, all octree nodes are 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{Results/shapes_total_vs_lod.png}
-    \caption{Plot of the number of shapes in correlation to the \textit{level-of-detail} of the node. All values are averaged over all nodes that share the same \textit{level-of-detail}.}
+    \caption[Plot of the total number of shapes vs. to the level-of-detail of the node]
+		{Plot of the total number of shapes vs. the \textit{level-of-detail} of the node. All values are averaged over all nodes that share the same \textit{level-of-detail}.}
     \label{fig:shapes_total_vs_lod}
 \end{figure}
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{Results/shapes_averaged_vs_lod.png}
-    \caption{Plot of the number of shapes in correlation to the \textit{level-of-detail} of the node. All values are averaged over all nodes that share the same \textit{level-of-detail}.}
+    \caption[Plot of the average number of shapes per node vs. the \textit{level-of-detail} of the node]
+		{Plot of the average number of shapes per node vs. the \textit{level-of-detail} of the node. All values are averaged over all nodes that share the same \textit{level-of-detail}.}
     \label{fig:shapes_averaged_vs_lod}
 \end{figure}
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{Results/time_vs_lod.png}
-    \caption{Plot of the number of shapes in correlation to the \textit{level-of-detail} of the node. All values are averaged over all nodes that share the same \textit{level-of-detail}.}
+    \caption[Plot of the number of shapes vs. the computation time]
+		{Plot of the number of shapes vs. the computation time. All values are averaged over all nodes that share the same \textit{level-of-detail}.}
     \label{fig:time_vs_lod}
 \end{figure}
 
 
-Figure \ref{fig:shapes_total_vs_lod} shows the total number of shapes per \textit{level-of-detail}. All three datasets share increase in the number of shapes in the third quarter before a rapid decline for the highest \textit{level-of-detail}. Figure \ref{fig:shapes_averaged_vs_lod} shows the number of shapes divided by the number of nodes per \textit{level-of-detail}. Both figures emphasize that the majority of shapes is not found in the highest \textit{level-of-detail}. Reasons for this is that many nodes only contain a handful of points or only contain a single structure. 
+Figure \ref{fig:shapes_total_vs_lod} shows the total number of shapes per \textit{level-of-detail}. All three datasets share an increase in the number of shapes in the third quarter before a rapid decline for the highest \textit{level-of-detail}. Figure \ref{fig:shapes_averaged_vs_lod} shows the number of shapes divided by the number of nodes per \textit{level-of-detail}. Both figures emphasize that the majority of shapes is not found in the highest \textit{level-of-detail}. Reasons for this is that many nodes only contain a handful of points or only contain a single structure. 
 \\
 
 Figure \ref{fig:time_vs_lod} shows the calculation time compared to the \textit{level-of-detail}. Shape detection for smaller, more dense nodes take less time than for larger nodes with lower \textit{level-of-detail} as in larger nodes, usually more shapes are found. 
@@ -91,7 +95,8 @@ Such non-plausible shapes can exist due to the density-controlled $\epsilon$ par
 \subcaptionbox{ \label{fig:missfittedTorus2}}{%
   \includegraphics[width=0.49\textwidth]{Results/missfittedTorus2.png}%
   }      
-\caption{This figure shows a cylinder from the synthetic point cloud whose points are classified as a torus instead of a cylinder. Even tough the points fit the torus, determined by the RANSAC options, the result is not plausible, since the user would expect a cylinder for this constellation of points. }
+\caption[Implausible torus is detected instead of a more plausible cylinder. ]
+{This figure shows a cylinder from the synthetic point cloud whose points are classified as a torus instead of a cylinder. Even tough the points fit the torus, determined by the RANSAC options, the result is not plausible, since the user would expect a cylinder for this constellation of points. }
 \label{fig:missfittedTorus}
 \end{figure}
 
@@ -110,7 +115,8 @@ The synthetic test scene consists of two planes, three cylinders, three tori, an
 \subcaptionbox{ \label{fig:synthetic_point_cloud_shapes}}{%
   \includegraphics[width=0.7\textwidth]{Results/synthetic_point_cloud_shapes.png}%
   }
-\caption{(a) shows the synthetic point cloud, consisting of two planes, three cylinders, three tori, and three cones. (b) shows the detected shapes rendered as triangle meshes. For each shape in the point cloud, the RANSAC shape detection has found a suitable primitive shape. }
+\caption[Rendering of the synthetic point cloud in (a), rendering of the detected shapes in (b)]
+{(a) shows the synthetic point cloud, consisting of two planes, three cylinders, three tori, and three cones. (b) shows the detected shapes rendered as triangle meshes. For each shape in the point cloud, the RANSAC shape detection has found a suitable primitive shape. }
 \label{fig:synthetic_point_cloud_results}
 \end{figure}
 
@@ -122,7 +128,8 @@ The synthetic test scene consists of two planes, three cylinders, three tori, an
 \subcaptionbox{ \label{fig:jb_haus_shapes}}{%
   \includegraphics[width=\textwidth]{Results/jb_haus_shapes.png}%
   }
-\caption{JB\_haus rendered as point cloud in (a), (b) shows all shapes detected in the point cloud. }
+\caption[Rendering of JB\_haus in (a), rendering of the detected shapes in (b)]
+{JB\_haus rendered as point cloud in (a), (b) shows all shapes detected in the point cloud. }
 \label{fig:JB_haus_results}
 \end{figure}
 
@@ -134,7 +141,8 @@ The synthetic test scene consists of two planes, three cylinders, three tori, an
 \subcaptionbox{ \label{fig:technologiezentrum_shapes}}{%
   \includegraphics[width=\textwidth]{Results/technologiezentrum_shapes.png}%
   }
-\caption{Technologiezentrum rendered as point cloud in (a), (b) shows all shapes detected in the point cloud. }
+\caption[[Rendering of the Technologiezentrum in (a), rendering of the detected shapes in (b)]]
+{Technologiezentrum rendered as point cloud in (a), (b) shows all shapes detected in the point cloud. }
 \label{fig:technologiezentrum_results}
 \end{figure}
 
@@ -146,7 +154,8 @@ The synthetic test scene consists of two planes, three cylinders, three tori, an
 \subcaptionbox{ \label{fig:technologiezentrum_interactive_shape_detection2}}{%
   \includegraphics[width=\textwidth]{Results/technologiezentrum_interactive_shape_detection2.png}%
   }
-\caption{Based on the cursor's position a different shapes are selected. (a) and (b) show different shapes for different parts of the point cloud. Both shapes are a part of a wall. }
+\caption[Two examples of user-guided shape detection]
+{Based on the cursor's position a different shapes are selected. (a) and (b) show different shapes for different parts of the point cloud. Both shapes are a part of a wall. }
 \label{fig:technologiezentrum_interactive_shape_detection}
 \end{figure}
 
@@ -164,7 +173,8 @@ This section presents a set of figures that showcase the different interactions 
 \subcaptionbox{ \label{fig:technologiezentrum_lasso2}}{%
   \includegraphics[width=0.9\textwidth]{Results/technologiezentrum_lasso2.png}%
   }
-\caption{A lasso selection is performed on the selected support shape in (a). Only points are selected that lie on the support shape as shown in (b). Point in front and back of the support shape are not selected. }
+\caption[Example of an improved lasso selection]
+{A lasso selection is performed on the selected support shape in (a). Only points are selected that lie on the support shape as shown in (b). Point in front and back of the support shape are not selected. }
 \label{fig:technologiezentrum_lasso}
 \end{figure}
 
@@ -177,7 +187,8 @@ This section presents a set of figures that showcase the different interactions 
 \subcaptionbox{ \label{fig:technologiezentrum_brush2}}{%
   \includegraphics[width=\textwidth]{Results/technologiezentrum_brush2.png}%
   }
-\caption{A volumetric brush selection is performed on the selected support shape in (a). Point are only selected if they belong to the support shape and intersect the brush. The result of the selection can be seen in (b).}
+\caption[Example of an improved volumetric brush selection]
+{A volumetric brush selection is performed on the selected support shape in (a). Point are only selected if they belong to the support shape and intersect the brush. The result of the selection can be seen in (b).}
 \label{fig:technologiezentrum_brush}
 \end{figure}
 
@@ -190,7 +201,8 @@ This section presents a set of figures that showcase the different interactions 
 \subcaptionbox{ \label{fig:technologiezentrum_lod_increment2}}{%
   \includegraphics[width=\textwidth]{Results/technologiezentrum_lod_increment2.png}%
   }
-\caption{The \textit{level-of-detail} is incremented along the support shape. (a) shows the original rendering model of the point cloud, (b) shows the point cloud with additional points. }
+\caption[Example of the local increment of level-of-detail]
+{The \textit{level-of-detail} is incremented along the support shape. (a) shows the original rendering model of the point cloud, (b) shows the point cloud with additional points. }
 \label{fig:technologiezentrum_lod_increment}
 \end{figure}
 

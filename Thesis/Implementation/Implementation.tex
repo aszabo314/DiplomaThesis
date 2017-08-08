@@ -204,7 +204,8 @@ let choose (decisionFun : OctreeNode -> GridCell -> int[] -> Option<'T>*bool) (t
     \subcaptionbox{ \label{fig:octreeChoose}}{%
         \includegraphics[width=0.55\textwidth]{Implementation/octreeChoose.png}%
         }
-    \caption{This figure shows an exemplary octree, on which the filter, map and choose function is applied. In (a) the filter function creates a new octree that only contains the nodes that are filtered. (b) shows the result of the map function. Each node in the octree is projected to a new type $t_{i}$ and the result is returned as an array. (c) shows the choose function. Only nodes are returned that fulfill the decision function and are projected to a new type $t_{i}$. }
+    \caption[Filter, map, and choose applied to an exemplary octree]
+		{This figure shows an exemplary octree, on which the filter, map and choose function is applied. In (a) the filter function creates a new octree that only contains the nodes that are filtered. (b) shows the result of the map function. Each node in the octree is projected to a new type $t_{i}$ and the result is returned as an array. (c) shows the choose function. Only nodes are returned that fulfill the decision function and are projected to a new type $t_{i}$. }
     \label{fig:octreeFuns}
 \end{figure}
 
@@ -220,7 +221,8 @@ When resolving the recursion, the content of all ancestor nodes changes as well,
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\textwidth]{Implementation/octreeReplace.png}
-    \caption{Replacing an octree node subsequently changes the node's ancestors as well. The left tree shows the original octree, the right tree is the new octree after the node [1,0] was replaced. The replaced node is highlighted with a red border, all nodes that changed due to the replacement are colored in orange. }
+    \caption[Example on replacing an octree node]
+		{Replacing an octree node subsequently changes the node's ancestors as well. The left tree shows the original octree, the right tree is the new octree after the node [1,0] was replaced. The replaced node is highlighted with a red border, all nodes that changed due to the replacement are colored in orange. }
     \label{fig:octreeReplace}
 \end{figure}
 
@@ -239,7 +241,8 @@ Culling utilizes the octree's \verb|filter| function to create a new octree that
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{Implementation/octreeCulling.png}
-    \caption{An exemplary culling is performed on a tree. Octree nodes that are darker with a thicker edge have a higher \textit{leve-of-detail}. Only close to the camera (red), the nodes with the highest \textit{level-of-detail} are rendered. Nodes that are outside the view frustum(orange) are discarded. }
+    \caption[Exemplary octree culling]
+		{An exemplary culling is performed on a tree. Octree nodes that are darker with a thicker edge have a higher \textit{leve-of-detail}. Only close to the camera (red), the nodes with the highest \textit{level-of-detail} are rendered. Nodes that are outside the view frustum(orange) are discarded. }
     \label{fig:octreeCulling}
 \end{figure}
 
@@ -268,7 +271,8 @@ The user-controlled threshold $t$ is divided by the largest window dimension to 
     \subcaptionbox{ \label{fig:targetpointDistance50}}{%
         \includegraphics[width=0.6\textwidth]{Implementation/targetpointDistance50.png}%
         }
-    \caption{This figure shows the Technologiezentrum rendered with a $t$ value of 2, 5, and 10 in (a) - (c). A smaller $t$ results in a denser visualization of the point cloud for the current view. }
+    \caption[Different $t$ values for Technologiezentrum]
+		{This figure shows the Technologiezentrum rendered with a $t$ value of 2, 5, and 10 in (a) - (c). A smaller $t$ results in a denser visualization of the point cloud for the current view. }
     \label{fig:targetpointDistance}
 \end{figure}
 
@@ -324,7 +328,8 @@ The \textit{sequential computation applicator} performs changes on the octree. A
 \begin{figure}[b]
     \centering
     \includegraphics[width=0.6\textwidth]{Implementation/multiThreading.png}
-    \caption{The main thread controls the rendering, mod evaluation and interactions. Point selections from interactions are handed to the applicator thread. The shape detection is invoked by a separate thread and dispatched on the applicator thread as well.  }
+    \caption[Overview on the multi-threaded environment of the application]
+		{The main thread controls the rendering, mod evaluation and interactions. Point selections from interactions are handed to the applicator thread. The shape detection is invoked by a separate thread and dispatched on the applicator thread as well.  }
     \label{fig:multiThreading}
 \end{figure}
 
@@ -364,6 +369,7 @@ Popping effects occur when the view changes and overlapping imposters change the
   \includegraphics[width=0.48\textwidth]{Implementation/pointSpheres.png}%
   }
   
-\caption{This figure shows a direct comparison of using (a) circular splats and (b) sphere imposters with depth displacement. In (b) the intersections between points are visible due to the spherical shape, whereas points that are little below other points are occluded almost entirely.}
+\caption[Comparison of (a) circular splats and (b) sphere imposters]
+{This figure shows a direct comparison of using (a) circular splats and (b) sphere imposters with depth displacement. In (b) the intersections between points are visible due to the spherical shape, whereas points that are little below other points are occluded almost entirely.}
 \label{fig:point_sprites}
 \end{figure}

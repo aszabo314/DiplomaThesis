@@ -54,13 +54,14 @@ The matching result heavily depends on the chosen threshold values. Table \ref{t
     Axis             & $\epsilon_2 = 0.05$, $\epsilon_1 = 0.95$ \\  
 
 \end{tabular}
-\caption{The different threshold values for parameter matching.}
+\caption[Different threshold values for parameter matching]
+{The different threshold values for parameter matching.}
 \label{tab:matchingThresholds}
 \end{table}
 
 
 \section{Shape Clustering}
-\label{sec:ShapeClustering}
+\label{sec:shapeClustering}
 
 With the user interaction in mind, it is not sufficient to interact with a single shape only. To determine the global extent of a primitive shape, more information is needed. Section \ref{sec:primitiveShapeMatchingFuns} describes a set of heuristics to determine if two primitive shapes originate from the same geometry. These heuristics are used in this section in order to create larger representations of a primitive shape. 
 \textit{Shape Clustering} aims to find matching primitive shapes for a base shape and build a larger coherent cluster of primitive shapes over multiple level-of-details. The types of primitive shapes can be categorized as finite and infinite shapes. Spheres and tori are finite objects per definition, thus it is sufficient enough to find a set of matching primitive shapes to create a cluster. For infinite shapes, such as planes, cones, and cylinder, additional computations are needed in order to create a coherent shape cluster. Figure \ref{fig:cuboids} shows the case of two cuboids, whose front face share a plane. By only using the matching functions to create a cluster, both front faces are packed into the cluster, even tough there is a visible gap between them.
@@ -68,7 +69,8 @@ With the user interaction in mind, it is not sufficient to interact with a singl
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{Shape_Detection/cuboids.png}
-    \caption{A generic point cloud of two cuboids. The detected planes are rendered in grey.}
+    \caption[Point cloud consisting of two cuboids.]
+		{A generic point cloud of two cuboids. The detected planes are rendered in grey.}
     \label{fig:cuboids}
 \end{figure}
 
@@ -98,7 +100,8 @@ A cluster is created by growing a region in a graph, adding only vertices that c
 \begin{figure}
     \centering
     \includegraphics[width=0.5\textwidth]{Shape_Detection/regionGrowingPlanes.png}
-    \caption{A cluster of plane shapes created by computing the $\epsilon$-connected component. Planes that belong to the cluster are colored in turquoise.}
+    \caption[Exemplary $\epsilon$-connected plane cluster]
+		{A cluster of plane shapes created by computing the $\epsilon$-connected component. Planes that belong to the cluster are colored in turquoise.}
     \label{fig:regionGrowingPlanes}
 \end{figure}
 
@@ -112,7 +115,8 @@ Figure \ref{fig:regionGrowingPlanes} shows an exemplary illustration on region g
 \subcaptionbox{ \label{fig:regionGrowingCone}}{%
   \includegraphics[width=0.5\textwidth]{Shape_Detection/regionGrowingCone.png}%
   }
-    \caption{This figure shows a cylinder cluster and a cone cluster build from matching shapes. Shapes that belong to the cluster are colored in turquoise.}
+    \caption[Exemplary cylinder and clone cluster]
+		{This figure shows a cylinder cluster and a cone cluster build from matching shapes. Shapes that belong to the cluster are colored in turquoise.}
     \label{fig:regionGrowingConeCylinder}
 \end{figure}
 
