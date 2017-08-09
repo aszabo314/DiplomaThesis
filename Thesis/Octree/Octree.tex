@@ -11,7 +11,7 @@ An octree is a hierarchical datastructure in which each node represents a spatia
 
 \section{Node Split Ruling}
 
-Numerous decision rules exist that determine whether a node is split or not. A node is partitioned if the point count exceeds a threshold $n$.  For various reason, a decision based on the number of points in a node is favored. 
+Numerous decision rules exist that determine whether a node is split or not. A node is partitioned if the point count exceeds a threshold $n$.  A decision based on the number of points in a node is favored. 
 Having a consistent number of points in an octree node allows for little variation in loading time and data size. With nodes of consistent size, the runtime of procedures for different nodes is similar as well. Therefore, such methods can be used in a context where immediate feedback is useful, such as user interactions, since the execution time can be estimated. In this thesis, a point count $n = 5000$ is chosen. 
 \\
 \\
@@ -32,7 +32,7 @@ Point clouds often only contain information on position and color and lack disti
 
 \subsection{rkd-Tree}
 
-A rkd-tree by Tobler \cite{tobler2011rkd} is an efficient datastructure for point queries. While the octree partitions the space into somewhat small regions, the rkd-tree is used to find distinct points within a node at a specified location quickly. 
+An rkd-tree by Tobler \cite{tobler2011rkd} is an efficient datastructure for point queries. While the octree partitions the space into somewhat small regions, the rkd-tree is used to find distinct points within a node at a specified location quickly. 
 
 
 \subsection{Normals}
@@ -67,7 +67,7 @@ A simple, yet powerful culling heuristic is view frustum culling. Nodes that are
 \end{figure}
 
 
-The \textit{Render horizon} describes a cut that separates the octree into a rendered part and an unrendered part. The nodes of which some of the children are affected by the cut create the render horizon. Nodes along the render horizon share the property that one of its direct children contains points that are are not rendered anymore. This property is useful when additional information should be displayed. 
+The \textit{Render horizon} describes a cut that separates the octree into a rendered part and an unrendered part. The nodes of which some of the children are affected by the cut create the render horizon. Nodes along the render horizon share the property that one of its direct children contains points that are are not rendered anymore. This property is useful when additional [ // what? ] information should be displayed. 
 \\
 Figure \ref{fig:renderHorizon} showcases an example of a cut, displayed as a dashed line, through an octree along with its created render horizon. Rendered nodes are colored in turquoise. A dashed line originating from a node indicates that the node contains children who are not rendered. Nodes whose border is colored in magenta belong to the set of nodes of the render horizon. These nodes contain edges that are intersected by the cut. 
 \\

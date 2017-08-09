@@ -16,7 +16,7 @@ Most interactions presented in this thesis share similar techniques and naming c
 \label{sec:termDefinitions}
 
 The base of all interactions is the user's cursor on the screen. The \textit{pick ray} is a ray that goes from the cursor’s position in world space in the view direction. 
-Each interaction iteratively filters the octree's data as such that coarse filtering is carried out before finer adjustments are performed on the dataset before choosing a final candidate. Data that survives the coarse filtering is referred to as \textit{candidate} data, e.g. candidate nodes or candidate points. 
+Each interaction iteratively filters the octree's data as such that coarse filtering is carried out before finer adjustments are performed on the dataset before choosing a final candidate. Data that survives the coarse filtering is referred to as \textit{candidate} data, e.g. candidate nodes or candidate points.  [// eine skizze wäre hier sehr gut]
 
 
 \section{User-guided Shape Detection}
@@ -32,11 +32,11 @@ The \textit{User-guided shape detection} is performed continuously in the backgr
     \item The node must not already contain detected shapes.
 \end{itemize}
 
-Since the user guides the shape detection, it makes sense that the user only interacts with what is presented on screen. Therefore the node must currently be rendered and visible. To reduce the amount of redundant computation, only nodes that contain enough points to fit at least one shape, are considered to be candidates. Lastly, the shape detection algorithm works under the probabilistic assumption that, once it terminates, all shapes in this region are detected. Therefore, nodes that already contain detected shapes do not qualify as candidates as well. 
+Since the user guides the shape detection, it makes sense that the user only interacts with what is presented on screen. Therefore the node must currently be rendered and visible. To reduce the amount of redundant computation, only nodes that contain enough points to fit at least one shape, are considered to be candidates. Lastly, the shape detection algorithm works under the optimistic assumption that, once it terminates, all shapes in this region are detected. Therefore, nodes that already contain detected shapes do not qualify as candidates as well. 
 \\
 The culling operation on the octree, described in Section \ref{sec:renderHorizon}, returns an octree that only contains nodes that are rendered. Thus, all nodes in this tree already are visible to the user. Only a single raycast must be performed on the culled octree to obtain the set of candidate nodes. 
 \\
-All nodes from the raycast result are eliminated that do not fulfill the previous constraints. The heuristic favors nodes with higher \textit{level-of-detail}, such that the user receives geometric information for the most detailed parts of the currently explored region first. The projected distance to the nearplane is used to select between nodes with the same \textit{level-of-detail}. Algorithm ~\ref{alg:candidateNodeHeuristic} showcases the selection heuristic that is executed for each node that intersects the pick ray. The most suitable node for shape detection is the node with the highest \textit{level-of-detail}, closest to the nearplane. Algorithm 
+All nodes from the raycast result are eliminated that do not fulfill the previous constraints. The heuristic favors nodes with higher \textit{level-of-detail}, such that the user receives geometric information for the most detailed parts of the currently explored region first. The projected distance to the nearplane is used to select between nodes with the same \textit{level-of-detail}. Algorithm ~\ref{alg:candidateNodeHeuristic} showcases the selection heuristic that is executed for each node that intersects the pick ray. The most suitable node for shape detection is the node with the highest \textit{level-of-detail}, closest to the nearplane. 
 
 \begin{algorithm}
     
@@ -81,7 +81,7 @@ As a primitive shape only spans over a small local region and user interactions 
 
 Creating new interactions is a key topic in this thesis. Classic two-dimensional interaction metaphors, such as \textit{Lasso Selection} and \textit{Point Picking} are limited due to the lack of information on the desired depth. Therefore those interactions must either guess the desired depth boundaries or ignore them. Furthermore, such interactions lack the possibility to mask out unwanted points from a selection. Unwanted points are selected on a regular basis. Hence, many view changes are necessary to select points that are of interest only. Using a primitive shape as support, the user can easily interact with the point cloud, such that only points are considered which belong the support shape. 
 \\
-Sections \ref{sec:pointPicking} and \ref{sec:regionSelection} describe the pros and cons of current state-of-the-art two-dimensional interactions and propose improvements using a detected primitive shape as support shape. Furthermore, Section \ref{sec:lod_increment} proposes a technique to locally increment the \textit{level-of-detail} along structures of interest to amplify details. 
+Sections \ref{sec:pointPicking} and \ref{sec:regionSelection} describe the pros and cons of current state-of-the-art two-dimensional interactions and propose improvements using a detected primitive shape as support shape. Furthermore, Section \ref{sec:lod_increment} proposes a technique to locally increment the rendered \textit{level-of-detail} along structures of interest to amplify details. 
 
 
 \subsection{Shape-Assisted Point Filtering}
@@ -102,9 +102,9 @@ The first explored technique is to use a fixed pick radius in world space. The p
 A more consistent way of picking a point is to only use the screen space information for each point. The mouse position $p$ in screen space combined with the pick radius $r$ create the pick circle $c$. This circle corresponds to a projection of a cone. All points that intersect this cone are treated as candidate points. To calculate this intersection, all points are projected to the screen space. The cone intersects a point if $c$ contains the point in screen space. Then the point with the projection closest to the mouse position is picked. This technique works consistently for different depth values. However, since all points are treated equally, the method does not distinguish between foreground and background points, thus introducing possible depth ambiguities. 
 \\
 The projection of points can be executed on the GPU by rendering the projected points, paired with an identifier, to a texture. From this texture, a window around the mouse cursor is downloaded, and the closest point is determined. Reading pixels from a texture forces the CPU and GPU to sync and stalls the graphics pipeline. 
+\\ [// auch hier wären skizzen super]
 \\
-\\
-The user interacts with points that are presented on the screen only. Moreover, only points are of interest, whose projection on the nearplane lie in proximity to the mouse position. Since this interaction cannot be computed for all points in real-time, unneeded octree nodes must be filtered beforehand. This pre-filtering can easily be achieved by performing a raycast through the octree and collecting all nodes whose bounding boxes intersect the pick ray. However, consider the case, that the pick ray does not intersect a node's bounding box, but the distance of the box to the ray is smaller than the pick radius. Some points might exist that should be considered candidates, but due to the nature of a raycast, are discarded. Therefore, the possibility exists that points that can be the picking result, are not considered, introducing inconsistency to the pick interaction. One solution to overcome this problem is to use a conecast instead. 
+The user interacts with points that are presented on the screen only. Moreover, only points are of interest, whose projection on the nearplane lie in proximity to the mouse position. Since this interaction cannot be computed for all points in real-time, unneeded octree nodes must be filtered beforehand. This pre-filtering can easily be achieved by performing a raycast through the octree and collecting all nodes whose bounding boxes intersect the pick ray. However, consider the case that the pick ray does not intersect a node's bounding box, but the distance of the box to the ray is smaller than the pick radius. Some points might exist that should be considered candidates, but due to the nature of a raycast, are discarded. Therefore, the possibility exists that points that can be the picking result, are not considered, introducing inconsistency to the pick interaction. One solution to overcome this problem is to use a conecast instead. 
 \\
 A circle on the nearplane is the projection of a cone in world space. The corners of the box are projected onto the nearplane, and the convex hull polygon is calculated. The intersection then is determined by the intersection of the polygon with the pick circle $c$. 
 
@@ -116,11 +116,14 @@ Picking comes with the disadvantage that some constellations of points can influ
 \\ 
 Instead of using a cone- or raycast to collect all candidate nodes, only nodes whose bounding boxes intersect the support shape are of interest. Furthermore, only points are considered that belong to the support shape. The intersecting points of the octree nodes and are filtered as described in Section \ref{sec:pointFiltering}, leaving only a handful of nodes and points on which the interaction is performed. 
 \\
+\subsubsection{Backface elimination}
+\\
 Due to shapes possibly having front and back sides, such as cylinders and spheres, points on the back of a shape are projected near the mouse position as well. By using the projected distances, points that lie on the back side of the shape might get favored over points that are on the front side of the shape (facing the user). 
 \\
 Therefore, the point picking is performed in world space using a pick sphere. The sphere's position is the intersection point of the pick ray with the support shape. The sphere's radius is calculated by unprojecting the pick radius to the intersection point. Only points are considered that lie in the pick sphere, constructed by the intersection point and the pick radius. The point closest to the intersection point is then selected. 
 \\
-
+\subsubsection{Performance}
+\\
 This technique comes not only with interaction benefits; computation time is reduced as well. Usually, a shape cluster intersects fewer nodes than a raycast result since the cluster's extension is limited to a region in the point cloud. The number of points per node is reduced as well, and distance measures are computed only for candidate points. 
 \\
 \begin{figure}
@@ -164,7 +167,7 @@ The design for the \textit{Shape-Assisted Region Selection} is guided by one see
 
 \subsubsection{Lasso Selection}
 
-The \textit{Lasso Selection} is a common two-dimensional interaction metaphor used for multiple geometry-based applications. While it is a useful technique to selected regions in 2D, drawbacks appear when porting the interaction to 3D. The user draws a polygon onto the screen. All points, whose projection lie inside this polygon, are selected. Much like \textit{Point Picking}, points are projected onto the nearplane, the intersection between the point and the lasso polygon in screen space determines whether a point is selected. The lasso polygon in combination with the camera view creates a three-dimensional volume, whose area contains all points whose projection lie inside the lasso polygon. Figure \ref{fig:lasso_sketch} showcases the volume created by a lasso polygon drawn onto the screen.
+The \textit{Lasso Selection} is a common two-dimensional interaction metaphor used for multiple geometry-based applications. While it is a useful technique to selected regions in 2D, drawbacks appear when porting the interaction to 3D. The user draws a polygon onto the screen. All points whose projection lie inside this polygon are selected. Much like \textit{Point Picking}, points are projected onto the nearplane, the intersection between the point and the lasso polygon in screen space determines whether a point is selected. The lasso polygon in combination with the camera view creates a three-dimensional volume, whose area contains all points whose projection lie inside the lasso polygon. Figure \ref{fig:lasso_sketch} showcases the volume created by a lasso polygon drawn onto the screen.
 
 Note that this interaction is computed asynchronously and the selection is performed on the complete octree. Therefore, it is essential that octree nodes, whose \textit{level-of-detail} are too high and therefore are not rendered, are still included in this interaction as well. 
 
@@ -250,7 +253,7 @@ Figure \ref{fig:brush} shows a \textit{Shape-Assisted Volumetric Brush} interact
 \subsection{Shape-Assisted Local Level-of-Detail Increment}
 \label{sec:lod_increment}
 
-To further investigate the local structures of a point cloud, the currently rendered maximum level-of-detail might not suffice. The highest \textit{level-of-detail} is chosen such, that the GPU is not overloaded and the balance between detail and performance is retained. However, temporarily adding a handful of additional nodes is sufficient enough to provide more detailed information, that can be presented without an enormous impact on performance.
+To further investigate the local structures of a point cloud, the currently rendered maximum level-of-detail might not suffice. The highest \textit{level-of-detail} is chosen such that the GPU is not overloaded and the balance between detail and performance is retained. However, temporarily adding a handful of additional nodes is sufficient to provide more detailed information, and doesn't pose an enormous impact on performance.
 \\
 
 Section \ref{sec:renderHorizon} describes the set of nodes that are still rendered, but where some of the children are not rendered anymore, as \textit{render horizon}. 
@@ -258,7 +261,7 @@ Increasing the \textit{level-of-detail} is only useful for nodes that lie on the
 By adding smaller nodes of higher level-of-detail, the overall detail in the scene is amplified. However, by plainly adding additional nodes, noise and unwanted structures are amplified as well. 
 \\
 
-\textit{Shape-Assisted Local Level-of-Detail Increment} utilizes a selected shape cluster to amplify detail only on structures of interest. The user selects a primitive shape as support shape. Instead of performing a raycast, the nodes on the render horizon that intersect the support shape, are collected. From these nodes, only those points that belong to the support shape, are added to the scene. The membership of a point to the shale cluster is determined by the score function described in Section \ref{sec:scorefun}. 
+\textit{Shape-Assisted Local Level-of-Detail Increment} utilizes a selected shape cluster to amplify detail only on structures of interest. The user selects a primitive shape as support shape. Instead of performing a raycast, the nodes on the render horizon that intersect the support shape, are collected. From these nodes, only those points that belong to the support shape, are added to the scene. The membership of a point to the shape cluster is determined by the score function described in Section \ref{sec:scorefun}. 
 
 \begin{figure}
 \centering
@@ -269,7 +272,7 @@ By adding smaller nodes of higher level-of-detail, the overall detail in the sce
   \includegraphics[width=0.8\textwidth]{System_Design/lod_Increase2.png}%
   }
 \caption[Comparison of a scene with and without Shape-Assisted Level-of-Detail Increment.]
-{This figure shows the benefits of \textit{Shape-Assisted Level-of-Detail Increment} for a point cloud. (a) shows the currently rendered structure, as well as as shape cluster that is currently selected (red). (b) shows the scene with amplified details along the structure. The additional points are rendered without lighting to appear brighter.}
+{This figure shows the benefits of \textit{Shape-Assisted Level-of-Detail Increment} for a point cloud. (a) shows the currently rendered structure, as well as as shape cluster that is currently selected (red). (b) shows the scene with amplified details along the structure. The additional points are rendered without lighting to appear brighter. [// die bilder gehören vergrößert - das rundherum wegschneiden und nur das in der mitte groß zeigen]}
 \label{fig:lod_increment}
 \end{figure}
 

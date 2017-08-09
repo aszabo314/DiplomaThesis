@@ -10,7 +10,7 @@ This thesis utilizes shape detection to automatically detect primitive shapes fo
 Before using the detected shapes for rendering or interactions, the shapes must be postprocesssed. Since some of the shapes are of infinite size, they need to be refitted to encapsulate the corresponding support points and create a minimal boundary. Section \ref{sec:Refitting} describes this task. 
 \\
 
-Section \ref{sec:shapeMatching} proposes a set of heuristics to determine if detected primitive shapes originate from the same geometric structure. Section \ref{sec:shapeClustering} explains the usage of this heuristics in order to create larger, homogeneous cluster of shapes, used for interactions. 
+Section \ref{sec:shapeMatching} proposes a set of heuristics to determine if detected primitive shapes originate from the same geometric structure. Section \ref{sec:shapeClustering} //kaputt explains the usage of this heuristics in order to create larger, homogeneous cluster of shapes, used for interactions. 
 
 
 \section{Efficient RANSAC for Point-Cloud Shape Detection}
@@ -54,7 +54,7 @@ The score function for each point consists of the following:
     \item Among all points that fulfill the previous two conditions, only the subset of points, which creates the largest connected component embedded in the shape,  is considered.
 \end{itemize}
 
-All points that are within a distance $\epsilon$ are taken into account. However, only those whose normals do not deviate from the normal of the shape more than a given angle $\alpha$ are considered support points. Additionally, the number of support points must exceed a threshold value $n$ for this shape to be valid. 
+All points that are within a distance $\epsilon$ are taken into account. However, only those whose normals do not deviate from the normal of the hypothesized shape more than a given angle $\alpha$ are considered support points. Additionally, the number of support points must exceed a threshold value $n$ for this shape to be valid. 
 
 
 \subsection{Performance}
@@ -66,7 +66,7 @@ All points that are within a distance $\epsilon$ are taken into account. However
     \label{table:schnabel_performance}
 \end{table}
 
-Table \ref{table:schnabel_performance} describes the statistical results for different models. $|P|$ is the number of points, $\epsilon$ the distance threshold, $\alpha$ the maximum normals deviation, $\tau$ is the minimum number of support points, $\|Psi|$ the number of shapes found, $|R|$ the number of RANSAC iterations. It can be seen that for small a small number of points and weaker constraints the algorithm returns plausible results within a fraction of a second. We utilize this feature the detect shapes in our application for small regions at a time to give immediate feedback to the user. 
+Table \ref{table:schnabel_performance} describes the statistical results for different models. $|P|$ is the number of points, $\epsilon$ the distance threshold, $\alpha$ the maximum normals deviation, $\tau$ is the minimum number of support points, $\|\Psi|$ the number of shapes found, $|R|$ the number of RANSAC iterations. It can be seen that for small a small number of points and weaker constraints the algorithm returns plausible results within a fraction of a second. We utilize this feature the detect shapes in our application for small regions at a time to give immediate feedback to the user. 
 
 
 \section{Refitting}

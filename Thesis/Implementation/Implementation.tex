@@ -3,7 +3,7 @@
 
 This chapter gives an overview of implementation details for this thesis. the implementation of the application is guided by the \textit{functional-first} programming paradigm. \textit{Functional-first} takes inspiration from functional programming, as well as other paradigms, such as object-oriented programming. However, the majority of the application is written purely functional, with connections to non-functional components, such as .NET libraries for multi threading or Schnabel et al.'s shape detection implementation\cite{schnabel-2007-software}. 
 \\
-This chapter starts with an introduction to functional programming and the programming language \verb|F#|\cite{FSharp} before introducing the key features of the Aardvark platform\cite{aardvark}  in Section \ref{sec:aardvark}. The Aardvark is used as rendering engine for this application. The primary data structure for in the application is an octree that stores point cloud and handles it's the out-of-core functionality. A set of functions that simplify querying with the octree is proposed in Section \ref{sec:funcOctree}. 
+This chapter starts with an introduction to functional programming and the programming language \verb|F#|\cite{FSharp} before introducing the key features of the Aardvark platform\cite{aardvark}  in Section \ref{sec:aardvark}. The Aardvark Platform is used as rendering engine for this application. The primary data structure used for organizing the point cloud data is an octree with out-of-core capability. A set of functions that simplify querying  the octree is proposed in Section \ref{sec:funcOctree}. 
 \\
 Multiple coroutines are performed in the background that produces a stream of data for the point cloud. The multi-threaded architecture of the application is discussed in Section \ref{sec:multithreading}. Section \ref{sec:rendering} concludes this chapter by briefly discussing implementation details of the point-cloud rendering system. 
 
@@ -11,13 +11,13 @@ Multiple coroutines are performed in the background that produces a stream of da
 \section{Functional Programming}
 \label{sec:funprog}
 
-Functional programming is a paradigm that views every expression as a mathematical function. The result of each expression is either an elemental data type or a functional type. A core difference to other programming paradigms is the equality of function and data, such that functions can be used as input for other functions and have a distinct type defined by its parameters and result. A simple example of a function in \verb|F#|: 
+Functional programming is a paradigm that views every expression as a mathematical function. The result of each expression is either an elemental data type or a functional type. A core difference to other programming paradigms is the type-level representation of functions (same as data). Functions can be used as input for other functions and have a distinct type defined by its parameters and result. A simple example of a function in \verb|F#|: 
 
 \begin{lstlisting}[language=FSharp]
 let square (i : float) : float = i * i 
 \end{lstlisting}
 
-This function is of type \verb|float -> float|. It takes a \verb|float| as input and returns a \verb|float|. This functional type can be used as input parameter as well. A definition for a function that takes a function as parameter looks as follows: 
+This function is of type \verb|float -> float|. It takes a \verb|float| as input and returns a \verb|float|. This function type can be used as input parameter as well. A definition for a function that takes a function as parameter looks as follows: 
 
 \begin{lstlisting}[language=FSharp]
 let compute (i: float)(f : float -> float) : float = f i
@@ -30,10 +30,14 @@ let result = compute 10.0 square
 \verb|result| is an expression that executes the \verb|compute| function with arguments $10.0$ of type \verb|float| and \verb|square| of type \verb|float -> float|. Even though this is just a simple example, it showcases the strength of functional programming.  Using functions as input allows the user to create complex and dynamic computations with ease. 
 \\
 
-Functional programming tries to mitigate mutations as much as possible. Mutation, e.g. change of a variable's state, introduces several risks to the program. While each expression in a functional context is mathematically defined, such that parameter space and result space are fully known, no values are returned that the program does not expect, thus mitigating undefined behavior. Moreover, mutation of an expression can change the behavior of expressions that depend on the mutated field, thus changing the result, without changing the input directly. 
-\\
+Each expression in a functional context is mathematically defined, parameter space and result space are fully known and must be fully defined on type level. No values that the program does not expect ever occur, thus eliminating undefined behavior. 
 
-\verb|F#|\cite{FSharp} is a functional programming language developed and maintained by Microsoft\cite{Microsoft}. F\# is fully integrated into the .NET framework\cite{DotNet} and is built upon the Common Language Infrastructure\cite{CLI}, thus allowing it to use resources written in other languages, such as C\#\cite{CSharp}. Even though F\# is a functional language, it also supports object-oriented programming, such that types with member functions can be used as well. 
+Functional programming tries to limit mutation, e.g. change of an external variable's value (program state), as much as possible. A program without mutation is called "`pure"'. Each call to a pure expression with the same parameters must produce the same results. External mutation can change the behavior of expressions that depend on the mutated field, thus changing the result without changing the input. Therefore, avoiding mutation means avoiding undefined behavior.
+
+Finally, strict purity and full type level specification make it possible to reason and construct proofs about programs. This gives the programmer tools to manage very high complexity and reduces the need for debugging significantly.
+
+\\
+\verb|F#|\cite{FSharp} is a functional programming language developed and maintained by Microsoft\cite{Microsoft}. F\# is fully integrated into the .NET framework\cite{DotNet} and is built upon the Common Language Infrastructure\cite{CLI}, thus allowing it to use resources written in other languages, such as C\#\cite{CSharp}. Even though F\# is a functional language, it also supports object-oriented programming, such that classes with members can be used as well. 
 
 
 \section{Aardvark}
@@ -47,7 +51,9 @@ The key feature of the Aardvark platform is incremental rendering. In a conventi
 \subsection{Adaptive - IMod - transact}
 \label{sec:adaptive}
 
-As mentioned in Section \ref{sec:funprog} mutations are often the cause of undefined behavior and bugs. To introduce state-changeable variables into a functional environment, Aardvark provides the \verb|IMod<'a>| type. This generic type is a wrapper around a particular value, whose value might change over time. The platform contains an extensive implementation for a three-dimensional transformation, called \verb|Trafo3d|. The type \verb|IMod<Trafo3d>| listens to changes of the transformation. The following example shows the composition of a model transformation from a position, scale, and rotation, all of which can might their value over time. 
+As mentioned in Section \ref{sec:funprog} mutations are often the cause of undefined behavior and bugs. To introduce state-changeable variables into a functional environment, Aardvark provides the \verb|IMod<'a>| generic type. This generic type is a wrapper around a particular value, whose value might change over time. The programmer does not care about the concrete value, and only specifies the computation applied to the value instead. This lifting of computation makes the interface pure.
+
+Aardvark contains an extensive implementation for a three-dimensional transformation, called \verb|Trafo3d|. The type \verb|IMod<Trafo3d>| listens to changes of the transformation. The following example shows the composition of a model transformation from a position, scale, and rotation, all of which can might their value over time. 
 
 \begin{lstlisting}[language = FSharp]
 
@@ -71,10 +77,11 @@ let trafo : IMod<Trafo3d> =
     }
 \end{lstlisting}
 
-The \verb|adaptive| block allows the system to keep track of the state of all IMods that are accessed using the \verb|let!| operator and reacts to their changes. The result of the adaptive block, again, is an IMod<Trafo3d>. If one of the accessed IMods changes its value, the code below, including the \verb|let!| statement, is reevaluated using the previously cached values. 
+The \verb|adaptive| computation expression builder allows the system to keep track of the state of all IMods that are accessed using the \verb|let!| operator. This is called the "`binding operator"', which makes a computation react to their changes. The result of the adaptive block, again, is an IMod<Trafo3d>. If one of the accessed IMods changes its value, the code below, including the \verb|let!| statement, is reevaluated. The computation is kept minimal using caching.
 \\
 
-To actively change a value, a subtype of \verb|IMod<'a>|, \verb|ModRef<'a>| is needed. The type \verb|ModRef<'a>| contains the functionality to allow changes to the value, thus causing re-evaluation. All state transactions are collected and executed sequentially, thus reducing the number of re-evaluations and circumventing race-conditions. Therefore, each change must be wrapped in a \verb|transact| type. 
+To actively change a value, a subtype of \verb|IMod<'a>|, \verb|ModRef<'a>| is needed. The type \verb|ModRef<'a>| contains the functionality to allow changes to the value, thus causing re-evaluation. All state transactions are collected and executed sequentially, thus reducing the number of re-evaluations and circumventing race-conditions. Each change must be wrapped in a \verb|transact| function, representing transactional logic. 
+\\
 The following example uses the Aardvark-specific mouse callback function to trigger a reevaluation based on mouse movement. The Move-callback is called each time the mouse moves and provides the user with the old position and the new position. The difference on the x-axis controls the y-value of the rotation. 
 
 \begin{lstlisting}[language = FSharp]
@@ -94,9 +101,9 @@ mouse.Move.Values.Add(fun (oldPos : PixelPosition, newPos : PixelPosition) ->
     )
 \end{lstlisting}
 
-The \verb|rotation| can then be used within an \verb|adaptive| block like an \verb|IMod|. 
+The \verb|ModRef| \verb|rotation| can then be bound within an \verb|adaptive| block. 
 \\
-Transactions are usually used to handle user input. However, asynchronous computations that produce results in parallel use transactions as well to mitigate race conditions on shared data and notify the rest of the program. 
+Transactions are usually used to handle user input. However, asynchronous computations that produce results in parallel use transactions as well to mitigate race conditions on shared data and notify the rest of the program on completion. 
 
 
 \subsection{Scene graph composition}
@@ -119,7 +126,7 @@ let renderPass : RenderPass = ...
 // The shader (surface) to render the geometry with
 let shader : IMod<ISurface> = ...
 // Create scenegraph
-let sg = geometry    |> Sg.ofIndexedGeometry
+let sg = geometry   |> Sg.ofIndexedGeometry
                     |> Sg.trafo trafo
                     |> Sg.viewTrafo view
                     |> Sg.projTrafo proj
@@ -127,7 +134,7 @@ let sg = geometry    |> Sg.ofIndexedGeometry
                     |> Sg.surface shader
 \end{lstlisting}
 
-The field \verb|sg| represents a scene graph with transformations, geometry, shader and render pass without the need of complicated constructors or setter functions. Furthermore, an own implementation of \verb|ISg| can easily extend the functionality without reimplemented procedures for this particular type. 
+The object \verb|sg| represents a scene graph with transformations, geometry, shader and render pass without the need of complicated constructors or setter functions. Furthermore, an own implementation of \verb|ISg| can easily extend the functionality without reimplemented procedures for this particular type. This extensibility is implemented using a dynamic object attribute mechanism.
 
 
 \subsection{Out-of-core capabilites}
@@ -140,7 +147,7 @@ The Aardvark platform contains functionality to handle out-of-core data. The typ
     
     let stored : thunk<'a> = db.ref data
 \end{lstlisting}
-When a \verb|thunk| is loaded from the database, its content is not loaded into memory yet. Only when accessing the data directly, it is loaded into memory. The data is held in memory as long as the thunk lives. Therefore it is crucial to keep track of unused thunks and dispose of them regularly, thus freeing memory. 
+When a \verb|thunk| is loaded from the database, its content is not loaded into memory yet. Only when accessing the data directly, it is loaded into memory. This is called "`lazy evaluation"'. The data is held in memory as long as the thunk lives. Therefore it is crucial to keep track of unused thunks and dispose of them regularly, thus freeing memory. 
 
 
 \section{Functional Out-of-core Octree}
@@ -154,9 +161,9 @@ Chapter \ref{chap:octree} already provides information on the capabilities of th
 The octree's out-of-core capability is managed by an interleaved structure of \verb|thunks|. Each \verb|OctreeNode| contains an array of points. However, the array is not stored directly; it is stored as a \verb|thunk<Point[]>|. Its children are stored in an array of thunks (\verb|thunk<OctreeNode>[]|). The points are stored as a single \verb|thunk|, the reason for storing the node's children in separate thunks is not to load all children into memory when only a subset of children is accessed. Other information such as the centroid, density, rkd tree, and the detected primitive shapes are stored as \verb|thunks| as well. 
 
 
-\subsection{Elemental functions}
+\subsection{Elementary functions}
 
-The interaction methods described in Section \ref{sec:interactions} heavily rely on the efficient collection of octree nodes that fulfill certain criteria. Thus, a set of routines is implemented that can easily be parameterized and reused. \verb|F#| collections contain several functions that use a lambda function as input and perform this function on elements in the collection. Some examples are \verb|map, filter| and \verb|choose|, all of which takes two arguments, an array and a function that takes an element as input. Even though the octree is not generic, such functions are implemented similarly, to provide a uniform interface to query the octree efficiently. 
+The interaction methods described in Section \ref{sec:interactions} heavily rely on the efficient collection of octree nodes that fulfill certain criteria. Thus, a set of routines is implemented that can easily be parameterized and reused. \verb|F#| collections contain several functions that use a lambda function as input and perform this function on elements in the collection. Some examples are \verb|map, filter| and \verb|choose|, all of which takes two arguments, an collection and a function that takes an element as input. All operations on collections can be composed from these basic functions. This is called the "`mapReduce pattern"'. Even though the octree is not generic, such functions are implemented similarly, to provide a uniform interface to query the octree efficiently. 
 
 
 \subsubsection{Filter}
@@ -209,7 +216,7 @@ let choose (decisionFun : OctreeNode -> GridCell -> int[] -> Option<'T>*bool) (t
     \label{fig:octreeFuns}
 \end{figure}
 
-Figure \ref{fig:octreeFuns} shows the described functions and its' effects on an exemplary octree. The \verb|filter| function returns a new octree, the\verb|map| function returns an array of projected types, the \verb|choose| function is a combination of \verb|filter| and \verb|map| such that only those projections are returned that are of interest. 
+Figure \ref{fig:octreeFuns} shows the described functions and its' effects on an exemplary octree. The \verb|filter| function returns a new octree, the\verb|map|  function returns an array of projected types, the \verb|choose| function is a combination of \verb|filter| and \verb|map| such that only those projections are returned that are of interest. 
 
 
 \subsubsection{Replacing nodes}
@@ -297,7 +304,7 @@ All changes to the octree are dependent on the state of the octree that, in the 
 The \verb|Sequential Computation Applicator| is a structure that provides a synchronized way of processing sequential operations. The applicator's functionality is synchronized such that multiple threads can dispatch operations on the octree. The \verb|Sequential Computation Applicator| is a wrapper around a \verb|ModRef<'T>| that invokes changes on the value regularly. 
 In this case, the type of the applicator wraps around a \verb|ModRef<Octree>|. 
 
-All dispatched operations are processed sequentially, and the \verb|ModRef|'s value is changed after an operation is completed, thus notifying the Aardvark engine. 
+All dispatched operations are processed sequentially, and the \verb|ModRef|'s value is changed after an operation is completed, thus notifying the Aardvark engine. Since Aardvark evaluates adaptives lazily, operation simply get aggregated as long as no results are requested (i.e. rendering is never stalled). 
 The applicator provides the interfaces to dispatch an operation, as well as to dispatch an operation with high priority to enqueue an operation on the front. 
 
 \begin{lstlisting}[language = FSharp]
@@ -308,7 +315,7 @@ The applicator provides the interfaces to dispatch an operation, as well as to d
    
 \end{lstlisting}
 
-The type \verb|'T| is the generic type of the \verb|Sequential Computation Applicator|, in this case, it is \verb|Octree|. A computation is dispatched that takes a \verb|'T|, and projects it to a new \verb|'T|. The input parameter on execution is the current value of the octree. 
+The type \verb|'T| is the generic type of the \verb|Sequential Computation Applicator|, in this case, it is \verb|Octree|. A computation is dispatched that takes a \verb|'T|, and projects it to a new \verb|'T| (i.e. all of the previously mentioned computations). The input parameter on execution is the current value of the octree. 
 Additionally, an operation can be shut down after a defined timeout in milliseconds. If this is the case the \verb|timeoutCallback| is invoked to allow clean up and error handling. 
 
 
@@ -317,7 +324,7 @@ Additionally, an operation can be shut down after a defined timeout in milliseco
 
 Multithreading can be achieved on multiple scales, depending on the tasks need. The application uses three primary threads that run in parallel. 
 \\
-The Aardvark rendering engine, combined with the \verb|IMod| evaluation system and user interactions build the main thread of the application. One pitfall of the \verb|IMod| system is that it only reacts to changes in the system, however, to invoke procedures after a particular time without changes is not possible directly. 
+The Aardvark rendering engine, combined with the \verb|IMod| evaluation system and user interactions build the main thread of the application. One pitfall of the \verb|IMod| system is that it only reacts to changes in the system, however, to invoke procedures after a particular time without changes is not possible directly (since that would by definition involve mutation). 
 \\
 
 
@@ -336,13 +343,13 @@ The \textit{sequential computation applicator} performs changes on the octree. A
 As Figure \ref{fig:multiThreading} shows, multiple threads are dispatching computations to the applicator thread. However, only this thread transacts changes to the main thread. The shape detection invoker thread works independently of the main thread. 
 \\
 
-The second parallelization technique used in this thesis is task-based multithreading. The goal is to identify tasks that are executable in parallel for multiple instances of the same type, such as per-point or per-node computations. As long as shared resources are accessed as read-only, tasks can be executed in parallel without race conditions and the need for locking. The input is an array of elements and a mapping function. The mapping function is executed for each element of the input array using the \verb|System.Threading.Tasks.Parallel.For| statement. The return type is a new array containing the results of the computation for each element at the original position. The function's signature looks as follows: 
+The second parallelization technique used in this thesis is task-based multithreading. The goal is to identify tasks that are executable in parallel for multiple instances of the same type, such as per-point or per-node computations. As long as shared resources are accessed as read-only, tasks can be executed in parallel without race conditions and the need for locking. The input is an array of elements and a mapping function. The mapping function is executed for each element of the input array using the \verb|System.Threading.Tasks.Parallel.For| statement (which is part of .NET). The return type is a new array containing the results of the computation for each element at the original position. The function's signature looks as follows: 
 \\
 \begin{lstlisting}[language = FSharp]
 module Parallel = 
   let map (computation : 'T1->'T2)(array : 'T1[]) : 'T2[]= ...
 \end{lstlisting}
-The technique is realized as an parallel implementation of f\#s \verb|map| function for arrays. 
+The technique is realized as an parallel implementation of F\#s  \verb|map| function for arrays. 
 
 \verb|Parallel.map| is used when point or node conversions are needed, such as projecting points to screen space or calculating the distances of points to a shape. 
 
@@ -352,7 +359,7 @@ The technique is realized as an parallel implementation of f\#s \verb|map| funct
 
 Modern point clouds often contain several billion points. Current GPUs are not able to handle such amounts of points. The culling heuristic in Section \ref{sec:renderHorizon} already reduces the octree to set of nodes that can be processed by the GPU and can be drawn in real time. However, the point data may still be located on the hard drive and must be loaded into memory. 
 \\
-The Aardvark platform already contains a \textit{level-of-detail} point cloud rendering system that can handle out-of-core datasets. The rendering system uses a cache to store nodes that were rendered previously. Once a frame is redrawn, all rendered nodes are collected, and for new nodes, the data is being loaded into the memory. New nodes are added to the cache, nodes that are not used for this frame, are kept in the cache until the memory consumption requires removal of unused data. For each node new to the cache, a thread is started to load the point data into memory. The frame is drawn even though not all nodes are loaded. The frame is redrawn once the outstanding data is loaded onto the GPU, thus popping effects occur when the view changes drastically. 
+The Aardvark platform already contains a \textit{level-of-detail} point cloud rendering system that can handle out-of-core datasets. The rendering system uses a cache to store nodes that were rendered previously. Once a frame is redrawn, all rendered nodes are collected, and for new nodes, the data is being loaded into the memory. New nodes are added to the cache, nodes that are not used for this frame, are kept in the cache until the memory consumption requires removal of unused data. For each node new to the cache, a queue entry is added for a worker thread to load the point data into memory. The frame is drawn even though not all nodes are loaded. The frame is redrawn once the outstanding data is loaded onto the GPU, thus popping effects occur when the view changes drastically. 
 \\
 \\
 Mathematically, a point has no extent. Therefore it cannot be depicted directly. A common way to draw points is to interpret them as splats of certain size and shape. In this thesis, the points are represented by a sphere imposter. For each point, a camera-aligned quad is created in a geometry shader, whose size is the diameter of the sphere, pixels that are outside the radius of the sphere are discarded. 
